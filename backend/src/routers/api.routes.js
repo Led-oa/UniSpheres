@@ -8,6 +8,8 @@ const yearRoute = require("./year.route");
 
 const classeRoute = require("./classe.route");
 
+const courseRoute = require("./course.route");
+
 const conversationRoute = require("./conversation.route");
 const messageRoute = require("./message.route");
 
@@ -20,6 +22,8 @@ api.use("/parcours", parcoursRoute); // ✅
 api.use("/year", yearRoute); // ✅
 
 api.use("/classe", classeRoute); // ✅
+
+api.use("/course", courseRoute);
 
 api.use("/conversations", conversationRoute);
 api.use("/messages", messageRoute);
