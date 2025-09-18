@@ -43,19 +43,31 @@ const ClasseService = {
 
   async getStudentFromClass(classId) {
     try {
-      console.log("Service classe teacher id : ", classId);
-
       const students = await ClasseModel.getStudentByClass(classId);
-
       // On ne nettoie que le champ profile_pic
       for (const student of students) {
         if (student.profile_pic) {
           student.profile_pic = FilePathToUrl.urlCleaner(student.profile_pic);
         }
       }
-
-      console.log("Service classe (cleaned profile_pic only): ", students);
       return students;
+    } catch (error) {
+      console.error("ClasseService.getStudentsFromClass error : ", error);
+    }
+  },
+
+  async getTeacherOfClass(classId) {
+    try {
+      console.log("Service classe class id : ", classId);
+      const teachers = await ClasseModel.getTeacherByClass(classId);
+      // On ne nettoie que le champ profile_pic
+      for (const teacher of teachers) {
+        if (teacher.profile_pic) {
+          teacher.profile_pic = FilePathToUrl.urlCleaner(teacher.profile_pic);
+        }
+      }
+      console.log("Service classe (cleaned profile_pic only): ", teachers);
+      return teachers;
     } catch (error) {
       console.error("ClasseService.getStudentsFromClass error : ", error);
     }

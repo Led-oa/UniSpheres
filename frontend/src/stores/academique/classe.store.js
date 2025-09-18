@@ -6,6 +6,7 @@ export const useClasseStore = defineStore("classeStore", () => {
   // états
   const classes = ref([]);
   const students = ref([]);
+  const teachers = ref([]);
   const currentClass = ref(null);
   const loading = ref(false);
   const error = ref(null);
@@ -46,7 +47,7 @@ export const useClasseStore = defineStore("classeStore", () => {
       loading.value = false;
     }
   }
-  
+
   async function getStudentFromClass(idClass) {
     loading.value = true;
     error.value = null;
@@ -56,6 +57,24 @@ export const useClasseStore = defineStore("classeStore", () => {
       console.log("Classe Store get students from class res : ", res.data);
 
       this.students = Array.isArray(res.data) ? res.data : [];
+      return res;
+    } catch (err) {
+      console.error("Erreur getStudentFromClass:", err);
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function getTeacherOfClass(idClass) {
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await ClasseService.getTeachersOfClass(idClass);
+
+      console.log("Classe Store get teachers of class res : ", res.data);
+
+      this.teachers = Array.isArray(res.data) ? res.data : [];
       return res;
     } catch (err) {
       console.error("Erreur getStudentFromClass:", err);
@@ -133,6 +152,7 @@ export const useClasseStore = defineStore("classeStore", () => {
   return {
     classes,
     students,
+    teachers,
     currentClass,
     loading,
     error,
@@ -140,6 +160,7 @@ export const useClasseStore = defineStore("classeStore", () => {
     fetchClasseTeacher,
     fetchClass,
     getStudentFromClass,
+    getTeacherOfClass,
     createClass,
     updateClass,
     deleteClass,

@@ -27,9 +27,7 @@ const ClasseController = {
     try {
       const teacherId = req.user.id_user;
       console.log("Teacher id : ", teacherId);
-
       const classes = await ClasseService.getClasseByTeacher(teacherId);
-
       res.json({ success: true, data: classes });
     } catch (error) {
       res.status(404).json({ error: error.message });
@@ -41,8 +39,18 @@ const ClasseController = {
       const classId = req.params.id;
       console.log("Classe Id : ", classId);
       const students = await ClasseService.getStudentFromClass(classId);
-
       res.json({ success: true, data: students });
+    } catch (error) {
+      res.status(404).json({ error: error.message });
+    }
+  },
+
+  async getTeacherOfClass(req, res) {
+    try {
+      const classId = req.params.id;
+      console.log("Classe Id : ", classId);
+      const teachers = await ClasseService.getTeacherOfClass(classId);
+      res.json({ success: true, data: teachers });
     } catch (error) {
       res.status(404).json({ error: error.message });
     }

@@ -53,6 +53,21 @@ const ClasseModel = {
     return rows;
   },
 
+  async getTeacherByClass(classId) {
+    const sql = `SELECT DISTINCT
+                    u.*
+                 FROM
+                    USER u
+                 INNER JOIN course c ON
+                    u.id_user = c.teach_by
+                 WHERE
+                    u.role = 'teacher' AND c.class_id = ?
+                 ORDER BY
+                    u.name;`;
+    const rows = await query(sql, [classId]);
+    return rows;
+  },
+
   // Créer une nouvelle classe
   async create(data) {
     const sql = `

@@ -84,8 +84,9 @@ const CourseService = {
     const res = await CourseModel.findByTeacher(teacherId);
     return res;
   },
-  async getByClass(classeId) {
-    return CourseModel.findByClass(classId);
+  async getByClass(classId) {
+    const res = await CourseModel.findByClass(classId);
+    return res;
   },
   async updateCourse(courseId, data) {
     return CourseModel.update(courseId, data);
