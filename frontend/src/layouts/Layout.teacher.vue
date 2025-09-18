@@ -4,12 +4,13 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth.store";
 
 const authStore = useAuthStore();
-// const router = useRouter();
+const router = useRouter();
 const mobileOpen = ref(false);
 
 const menuItems = [
   { name: "TableauDeBordsEnseignant", label: "Dashboard" },
   { name: "AnnoncesEnseignant", label: "Annonces" },
+  { name: "ListeDiscussionsEnseignant", label: "Messageries" },
   { name: "ListeCoursEnseignant", label: "Mes Cours" },
   { name: "ListeClasseEnseignant", label: "Mes Classes" },
   { name: "ProfileEnseignant", label: "Profile" },

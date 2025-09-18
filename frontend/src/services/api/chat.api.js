@@ -7,6 +7,13 @@ export const ChatService = {
     return response.data;
   },
 
+  async getConversationById(convoId) {
+    // console.log("In the api with convoId : ", convoId);
+
+    const response = await api.get(`/conversations/${convoId}`);
+    return response.data;
+  },
+
   async createConversation(data) {
     const response = await api.post("/conversations", data);
     return response.data;
@@ -46,15 +53,7 @@ export const ChatService = {
   },
 
   async sendMessage(data) {
-    const formData = new FormData();
-    formData.append("conversationId", data.conversationId);
-    formData.append("content", data.content);
-
-    if (data.file) {
-      formData.append("file", data.file);
-    }
-
-    const response = await api.post("/messages", formData, {
+    const response = await api.post("/messages", data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

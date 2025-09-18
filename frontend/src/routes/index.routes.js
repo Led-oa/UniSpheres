@@ -117,6 +117,16 @@ const routes = [
         component: TeacherPages.ListeCoursEnseignant,
       },
       {
+        path: "messageries",
+        name: "ListeDiscussionsEnseignant",
+        component: ChatPages.ListeDiscussions,
+      },
+      {
+        path: "messageries/:id",
+        name: "DiscussionEnseignant",
+        component: ChatPages.Discussion,
+      },
+      {
         path: "courses/:id/details",
         name: "CoursEnseignant",
         component: TeacherPages.CoursEnseignant,
@@ -214,8 +224,6 @@ const router = createRouter({
 
 // --- Garde globale refactorisée ---
 router.beforeEach(async (to, from, next) => {
-  // const userStore = useUserStore();
-
   const authStore = useAuthStore();
 
   if (to.meta.requiresAuth && !authStore.checkTokenPresence()) {

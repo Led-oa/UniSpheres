@@ -1,6 +1,7 @@
 // File: src/socket/message.socket.js
 const MessageService = require("../services/message.service");
 const FileService = require("../services/file.service");
+const FilePathToUrl = require("../utils/urlCleaner.utils");
 
 module.exports = (socket, io) => {
   console.log(`🟢 Message socket connected: ${socket.id}`);
@@ -19,8 +20,22 @@ module.exports = (socket, io) => {
 
   // Créer / envoyer un message
   socket.on("sendMessage", async (data) => {
+    console.log("sendMessage event received:", {
+      conversationId: data.conversationId,
+      hasContent: !!data.content,
+      hasFile: !!data.file,
+      senderId: data.senderId,
+    });
+
     try {
       const { conversationId, senderId, content, file } = data;
+
+      // Vérifier que senderId est bien fourni
+      if (!senderId) {
+        console.error("senderId is missing in socket data");
+        socket.emit("errorMessage", { message: "Sender ID is required" });
+        return;
+      }
 
       // Créer le message en BDD via le service
       const message = await MessageService.create({
@@ -29,19 +44,31 @@ module.exports = (socket, io) => {
         content,
       });
 
+      console.log("Message created in DB:", message.id_message);
+
       // Ajouter fichier si fourni
       if (file) {
-        await FileService.create({
+        // Attendre le traitement complet du fichier
+        console.log("Processing file:", file.originalname);
+        const fileRecord = await FileService.create({
           file_name: file.originalname,
           file_path: file.path,
           message_id: message.id_message,
         });
-        message.file = file.path;
+
+        // Ajouter les infos COMPLÈTES du fichier
+        message.file = FilePathToUrl.urlCleaner(file.path); // URL propre
+        message.file_path = file.path; // Chemin original
         message.file_name = file.originalname;
+        message.file_id = fileRecord.id_file;
+
+        console.log("File processed successfully");
       }
 
       // Diffuser le message à tous les membres de la conversation
       io.to(`conversation_${conversationId}`).emit("newMessage", message);
+
+      console.log("Message broadcasted to conversation:", conversationId);
     } catch (err) {
       console.error("sendMessage error:", err);
       socket.emit("errorMessage", { message: err.message });
@@ -50,8 +77,14 @@ module.exports = (socket, io) => {
 
   // Modifier un message
   socket.on("editMessage", async (data) => {
+    console.log("editMessage event received:", data);
     try {
       const { messageId, senderId, content, conversationId } = data;
+
+      // Vérifier les données requises
+      if (!messageId || !senderId || !content || !conversationId) {
+        throw new Error("Missing required fields");
+      }
 
       const updated = await MessageService.update({
         messageId,
@@ -70,6 +103,11 @@ module.exports = (socket, io) => {
   socket.on("deleteMessage", async (data) => {
     try {
       const { messageId, senderId, conversationId } = data;
+
+      // Vérifier les données requises
+      if (!messageId || !senderId || !conversationId) {
+        throw new Error("Missing required fields");
+      }
 
       await MessageService.remove({ messageId, senderId });
 

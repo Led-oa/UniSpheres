@@ -142,7 +142,13 @@ const closeCreateModal = () => {
 };
 
 const selectConversation = (conversation) => {
-  router.push(`/chat/${conversation.id_conversation}`);
+  // router.push(`/messageries/${conversation.id_conversation}`);
+  return {
+    name: "DiscussionEtudiant",
+    params: {
+      id: conversation.id_conversation,
+    },
+  };
 };
 
 const clearError = () => {
@@ -167,9 +173,9 @@ const createNewConversation = async () => {
     });
 
     if (result && result.exists) {
-      router.push(`/chat/${result.conversationId}`);
+      router.push(`/messageries/${result.conversationId}`);
     } else if (result && result.id_conversation) {
-      router.push(`/chat/${result.id_conversation}`);
+      router.push(`/messageries/${result.id_conversation}`);
     }
 
     closeCreateModal();
@@ -256,10 +262,10 @@ onUnmounted(() => {
 
     <!-- Liste des conversations -->
     <div v-else class="grid gap-4">
-      <div
+      <router-link
         v-for="conversation in sortedConversations"
         :key="conversation.id_conversation"
-        @click="selectConversation(conversation)"
+        :to="selectConversation(conversation)"
         class="bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-md transition-shadow"
       >
         <div class="flex items-center space-x-4">
@@ -300,7 +306,7 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
-      </div>
+      </router-link>
     </div>
 
     <!-- Modal de création de conversation -->

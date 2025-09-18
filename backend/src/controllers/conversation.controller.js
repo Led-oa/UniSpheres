@@ -172,6 +172,37 @@ const ConversationController = {
       res.status(500).json({ error: "Failed to leave conversation" });
     }
   },
+
+  // Récupérer une conversation spécifique
+  async getById(req, res) {
+    try {
+      const conversationId = req.params.conversationId;
+      const userId = req.user.id_user; // Supposant que l'utilisateur est authentifié
+
+      // console.log("[Controller] convoId : ", conversationId);
+      // console.log("[Controller] userId : ", userId);
+
+      const data = await ConversationService.getById(conversationId, userId);
+
+      // console.log("[Controller] convo data : ", data);
+
+      res.json({ conversation: data });
+    } catch (err) {
+      console.error("ConversationController.getById error:", err);
+
+      if (err.message === "CONVERSATION_NOT_FOUND") {
+        return res.status(404).json({ error: "Conversation non trouvée" });
+      }
+
+      if (err.message === "FORBIDDEN") {
+        return res.status(403).json({ error: "Accès non autorisé" });
+      }
+
+      res
+        .status(500)
+        .json({ error: "Erreur lors de la récupération de la conversation" });
+    }
+  },
 };
 
 module.exports = ConversationController;

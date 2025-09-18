@@ -17,6 +17,29 @@ const FileModel = {
     return { id_file: result.insertId, ...values };
   },
 
+  async findByOwner(ownerType, ownerId) {
+    let colonneOwner;
+
+    switch (ownerType) {
+      case "annonce":
+        colonneOwner = "annonce_id";
+        break;
+      case "message":
+        colonneOwner = "message_id";
+        break;
+      case "course":
+        colonneOwner = "course_id";
+        break;
+      default:
+        throw new Error("ownerType invalide");
+    }
+
+    // insérer directement le nom de la colonne validé
+    const sql = `SELECT * FROM file WHERE ${colonneOwner} = ?`;
+    const result = await query(sql, [ownerId]);
+    return result;
+  },
+
   async update(id_file, data) {
     const fields = [];
     const values = [];

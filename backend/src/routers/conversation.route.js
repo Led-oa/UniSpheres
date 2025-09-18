@@ -7,6 +7,7 @@ const router = express.Router();
 router.use(authenticateJWT);
 
 router.get("/", ConversationController.list);
+router.get("/:conversationId", ConversationController.getById);
 router.post("/", ConversationController.create);
 router.patch("/:conversationId", ConversationController.rename);
 router.post("/:conversationId/members", ConversationController.addMember);

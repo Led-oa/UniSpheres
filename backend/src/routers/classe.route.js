@@ -10,7 +10,7 @@ router.use(authenticateJWT);
 router.get("/", ClasseController.getAllClasses); // Récupérer toutes les classes
 router.get("/:id", ClasseController.getClasseById); // Récupérer une classe par ID
 router.post("/", ClasseController.createClasse); // Créer une nouvelle classe
-router.put("/:id", ClasseController.updateClasse); // Mettre à jour une classe
+router.patch("/:id", ClasseController.updateClasse); // Mettre à jour une classe
 router.delete("/:id", ClasseController.deleteClasse); // Supprimer une classe
 
 module.exports = router;

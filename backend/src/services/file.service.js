@@ -10,6 +10,14 @@ const FileService = {
     }
   },
 
+  async fetchByOwnerId(ownerType, ownerId) {
+    try {
+      return await FileModel.findByOwner(ownerType, ownerId);
+    } catch (err) {
+      console.error("FileService.fetchByOwnerId error : ", err);
+    }
+  },
+
   async update(id, data) {
     const updated = await FileModel.update(id, data);
     if (!updated) throw new Error("FILE_UPDATE_FAILED");
