@@ -37,7 +37,11 @@ export const useCourseStore = defineStore("course", () => {
     error.value = null;
     try {
       const response = await CourseService.getCourseById(id);
+
+      console.log("Response course store : ", response.data);
+
       currentCourse.value = response.data;
+      return response;
     } catch (err) {
       console.error("Erreur fetchCourseById:", err);
       error.value = err;

@@ -75,6 +75,8 @@ const CourseService = {
       }
     }
 
+    console.log("Course service : ", course)
+
     return course;
   },
   async getByTeacher(teacherId) {
