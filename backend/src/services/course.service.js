@@ -1,4 +1,5 @@
 const CourseModel = require("../models/course.model");
+const FilePathToUrl = require("../utils/urlCleaner.utils");
 
 const CourseService = {
   async createCourse(data) {
@@ -35,7 +36,7 @@ const CourseService = {
         coursesMap.get(courseId).files.push({
           id_file: row.id_file,
           file_name: row.file_name,
-          file_path: row.file_path,
+          file_path: FilePathToUrl.urlCleaner(row.file_path),
         });
       }
     }
@@ -70,17 +71,18 @@ const CourseService = {
         course.files.push({
           id_file: row.id_file,
           file_name: row.file_name,
-          file_path: row.file_path,
+          file_path: FilePathToUrl.urlCleaner(row.file_path),
         });
       }
     }
 
-    console.log("Course service : ", course)
+    console.log("Course service : ", course);
 
     return course;
   },
   async getByTeacher(teacherId) {
-    return CourseModel.findByTeacher(teacherId);
+    const res = await CourseModel.findByTeacher(teacherId);
+    return res;
   },
   async getByClass(classeId) {
     return CourseModel.findByClass(classId);

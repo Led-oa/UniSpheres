@@ -14,7 +14,10 @@ dist-ssr
 
 # Editor directories and files
 .vscode/*
-.uploads/*
+uploads/annonces
+uploads/cours
+uploads/message
+uploads/profile
 !.vscode/extensions.json
 *.sql
 .idea

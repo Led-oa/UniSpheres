@@ -1,96 +1,210 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useCourseStore } from "../../stores/course.store";
+// import ModalUploadCourse from "./ModalUploadCourse.teacher.vue";
+import ModalUploadCourseTeacher from "../../components/teacher/ModalUploadCourse.teacher.vue";
 
-const route = useRoute();
 const courseStore = useCourseStore();
+const route = useRoute();
 
-const courseId = route.params.id;
-const course = ref(null);
-const loading = ref(false);
+const isUploadModalOpen = ref(false);
+const isLoading = ref(false);
 
-// Charger le cours par son id
+const currentCourse = computed(() => courseStore.currentCourse);
+const files = computed(() => currentCourse.value?.files || []);
+
+const courseId = parseInt(route.params.id);
+
 const loadCourse = async () => {
-  loading.value = true;
+  isLoading.value = true;
   try {
-    const data = await courseStore.fetchCourseById(courseId);
-    // On suppose que fetchCourseById renvoie un tableau avec 1 élément
-    console.log("Response course composant : ", data.data);
-
-    course.value = data.data || null;
+    await courseStore.fetchCourseById(courseId);
   } catch (err) {
-    console.error("Erreur chargement cours :", err);
+    console.error("Erreur chargement cours:", err);
   } finally {
-    loading.value = false;
+    isLoading.value = false;
   }
 };
 
-onMounted(() => {
-  loadCourse();
-});
+onMounted(loadCourse);
+
+const handleUploaded = () => loadCourse();
+
+const formatDate = (dateString) => {
+  return new Date(dateString).toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
 </script>
 
 <template>
-  <div class="space-y-6">
-    <button @click="$router.back()" class="p-2 rounded-lg hover:bg-gray-100">
-      <svg
-        class="w-5 h-5 text-gray-600"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 19l-7-7 7-7"
-        />
-      </svg>
-    </button>
-
-    <div v-if="loading" class="text-gray-500">Chargement du cours...</div>
-
-    <div v-else-if="course">
-      <h1 class="text-2xl font-bold text-gray-800">Cours : {{ course.title }}</h1>
-
-      <div class="bg-white p-6 rounded-xl shadow border border-gray-100 space-y-2">
-        <p class="text-gray-700 mb-2">{{ course.content }}</p>
-        <p class="text-gray-600"><strong>Classe :</strong> {{ course.class_name }}</p>
-        <p class="text-gray-600">
-          <strong>Enseignant :</strong> {{ course.teacher_name }}
-          {{ course.teacher_lastname }}
-        </p>
-        <p class="text-gray-600">
-          <strong>Filière :</strong> {{ course.filiere_name }},
-          <strong>Parcours :</strong> {{ course.parcours_name }}
-        </p>
-        <p class="text-gray-600"><strong>Année :</strong> {{ course.year_value }}</p>
+  <div class="px-6 py-8">
+    <!-- Header -->
+    <div
+      class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8"
+    >
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">
+          {{ currentCourse?.title || "Cours" }}
+        </h1>
+        <p class="mt-2 text-gray-600">Gestion des fichiers du cours</p>
       </div>
 
-      <!-- Fichiers associés -->
-      <div
-        v-if="course.file_name"
-        class="bg-white p-6 rounded-xl shadow border border-gray-100 mt-4"
+      <button
+        @click="isUploadModalOpen = true"
+        class="mt-4 sm:mt-0 bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
       >
-        <h2 class="font-semibold text-gray-700 mb-2">Fichiers associés :</h2>
-        <ul class="list-disc list-inside text-gray-600 space-y-1">
-          <li v-for="f in course.files || [course]" :key="f.id_file">
-            <a :href="f.file_path" target="_blank" class="text-blue-600 hover:underline">
-              {{ f.file_name }}
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <router-link
-        :to="{ name: 'NoterCoursEnseignant', params: { id: course.id_course } }"
-        class="inline-block mt-4 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:opacity-90"
-      >
-        Gérer les notes
-      </router-link>
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          />
+        </svg>
+        Ajouter un fichier
+      </button>
     </div>
 
-    <div v-else class="text-red-500">Cours introuvable.</div>
+    <!-- Informations de la matière -->
+    <div class="bg-white rounded-lg shadow border border-gray-200 p-6 mb-8">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Informations du cours</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-4">
+          <div>
+            <span class="text-sm text-gray-600 block mb-1">Identifiant :</span>
+            <p class="font-medium text-gray-900">{{ currentCourse?.id_course }}</p>
+          </div>
+          <div>
+            <span class="text-sm text-gray-600 block mb-1">Titre :</span>
+            <p class="font-medium text-gray-900">{{ currentCourse?.title }}</p>
+          </div>
+          <div>
+            <span class="text-sm text-gray-600 block mb-1">Durée :</span>
+            <p class="font-medium text-gray-900">
+              {{ currentCourse?.duration ? currentCourse.duration + " heures" : "—" }}
+            </p>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <span class="text-sm text-gray-600 block mb-1">Description :</span>
+            <p class="text-gray-900">{{ currentCourse?.content }}</p>
+          </div>
+          <div>
+            <span class="text-sm text-gray-600 block mb-1">Classe associée :</span>
+            <div class="flex flex-wrap gap-2">
+              <span
+                v-if="currentCourse?.class_name"
+                class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full"
+              >
+                {{ currentCourse.class_name }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Liste des fichiers -->
+    <div class="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <h2 class="text-lg font-semibold text-gray-900">Fichiers du cours</h2>
+        <span class="text-sm text-white p-2 bg-blue-400 rounded-full">
+          {{ files.length }} fichiers
+        </span>
+      </div>
+
+      <div v-if="files.length" class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Fichier
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Taille
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Ajouté le
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr v-for="f in files" :key="f.id_file" class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <span class="text-lg mr-3">📄</span>
+                  <div>
+                    <p class="text-sm font-medium text-gray-900">{{ f.file_name }}</p>
+                    <p class="text-xs text-gray-500">{{ f.file_type?.toUpperCase() }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                {{ (f.file_size / 1024 / 1024).toFixed(2) }} MB
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                {{ formatDate(f.created_at) }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <a
+                  :href="f.file_path"
+                  target="_blank"
+                  class="text-blue-600 hover:text-blue-900 mr-4"
+                  title="Télécharger"
+                >
+                  ⬇️
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- État vide -->
+      <div v-else class="text-center py-12">
+        <div class="text-gray-400 text-6xl mb-4">📁</div>
+        <h3 class="text-lg font-semibold text-gray-600 mb-2">Aucun fichier</h3>
+        <p class="text-gray-500">Aucun fichier n'a encore été ajouté à ce cours.</p>
+      </div>
+    </div>
+
+    <!-- Modal Upload -->
+    <ModalUploadCourseTeacher
+      :course-id="courseId"
+      :is-open="isUploadModalOpen"
+      @close="isUploadModalOpen = false"
+      @uploaded="handleUploaded"
+    />
   </div>
 </template>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.3s ease;
+}
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+.border-dashed:hover {
+  border-color: #3b82f6;
+  background-color: #f8fafc;
+}
+</style>
