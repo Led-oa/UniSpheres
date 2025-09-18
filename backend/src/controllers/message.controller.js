@@ -1,5 +1,6 @@
 const MessageService = require("../services/message.service");
 const FileService = require("../services/file.service");
+const FilePathToUrl = require("../utils/urlCleaner.utils");
 const { getIO } = require("../socket/index.socket");
 
 const MessageController = {
@@ -8,6 +9,10 @@ const MessageController = {
     try {
       const { conversationId, content } = req.body;
       const senderId = req.user.id_user; // supposons que tu as middleware auth qui ajoute user
+
+      console.log("[Controller message create] ConvoId", conversationId);
+      console.log("[Controller message create] senderId", senderId);
+      console.log("[Controller message create] content", content);
 
       // Créer le message
       const message = await MessageService.create({
@@ -23,7 +28,7 @@ const MessageController = {
           file_path: req.file.path,
           message_id: message.id_message,
         });
-        message.file = req.file.path;
+        message.file = FilePathToUrl.urlCleaner(req.file.path);
         message.file_name = req.file.originalname;
       }
 
@@ -81,8 +86,6 @@ const MessageController = {
         conversationId,
         userId
       );
-
-      console.log("[Controller Messages ] get message by convo : ", messages);
 
       res.json(messages);
     } catch (err) {

@@ -134,6 +134,24 @@ export const useChatStore = defineStore("chat", {
       }
     },
 
+    // Récupérer une conversation par son ID
+    async getConversationById(conversationId) {
+      this.loading = true;
+      try {
+        const response = await ChatService.getConversationById(conversationId);
+        this.currentConversation = response.conversation[0];
+        this.error = null;
+        return this.currentConversation;
+      } catch (error) {
+        this.error =
+          error.response?.data?.error ||
+          "Erreur lors de la récupération de la conversation";
+        throw error;
+      } finally {
+        this.loading = false;
+      }
+    },
+
     // Créer une conversation
     async createConversation(data) {
       this.loading = true;
@@ -256,40 +274,71 @@ export const useChatStore = defineStore("chat", {
     },
 
     // Récupérer les messages d'une conversation
+    // async getMessages(conversationId) {
+    //   this.loading = true;
+    //   try {
+    //     const res = await ChatService.getMessages(conversationId);
+
+    //     console.log("Store getMessages : ", res);
+
+    //     this.messages = res;
+    //     this.error = null;
+
+    //     // Rejoindre la conversation via socket
+    //     this.joinConversation(conversationId);
+    //   } catch (error) {
+    //     this.error =
+    //       error.response?.data?.error ||
+    //       "Erreur lors de la récupération des messages";
+    //   } finally {
+    //     this.loading = false;
+    //   }
+    // },
+
     async getMessages(conversationId) {
       this.loading = true;
       try {
-        const messages = await ChatService.getMessages(conversationId);
-        this.messages = messages;
-        this.error = null;
-
-        // Rejoindre la conversation via socket
-        this.joinConversation(conversationId);
+        const res = await ChatService.getMessages(conversationId);
+        this.messages = res; // Stocker les messages dans le store
+        return res;
       } catch (error) {
         this.error =
           error.response?.data?.error ||
           "Erreur lors de la récupération des messages";
+        throw error;
       } finally {
         this.loading = false;
       }
     },
 
     // Envoyer un message
+    // async sendMessage(data) {
+    //   try {
+    //     const message = await ChatService.sendMessage(data);
+
+    //     // Émettre l'événement via socket
+    //     if (this.socket) {
+    //       this.socket.emit("sendMessage", {
+    //         conversationId: data.conversationId,
+    //         content: data.content,
+    //         file: data.file,
+    //       });
+    //     }
+
+    //     this.error = null;
+    //     return message;
+    //   } catch (error) {
+    //     this.error =
+    //       error.response?.data?.error || "Erreur lors de l'envoi du message";
+    //     throw error;
+    //   }
+    // },
+
     async sendMessage(data) {
       try {
-        const message = await ChatService.sendMessage(data);
-
-        // Émettre l'événement via socket
-        if (this.socket) {
-          this.socket.emit("sendMessage", {
-            conversationId: data.conversationId,
-            content: data.content,
-            file: data.file,
-          });
-        }
-
-        this.error = null;
-        return message;
+        // Juste l'envoi API, pas de modification du state
+        const response = await ChatService.sendMessage(data);
+        return response;
       } catch (error) {
         this.error =
           error.response?.data?.error || "Erreur lors de l'envoi du message";

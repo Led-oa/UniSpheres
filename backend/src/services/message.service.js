@@ -15,13 +15,19 @@ const MessageService = {
   // Modifier un message
   async update({ messageId, senderId, content }) {
     try {
+      console.log("Service : update message : messageId : ", messageId);
+      console.log("Service : update message : senderId : ", senderId);
+      console.log("Service : update message : content : ", content);
+
       const updated = await MessageModel.update({
         messageId,
         senderId,
         content,
       });
       if (!updated) throw new Error("MESSAGE_UPDATE_FORBIDDEN");
-      return updated;
+
+      const fullMessage = await MessageModel.getMessageById(messageId);
+      return fullMessage;
     } catch (err) {
       console.error("MessageService.update error:", err);
       throw new Error(err.message || "MESSAGE_UPDATE_FAILED");
@@ -35,10 +41,10 @@ const MessageService = {
       console.log("User id : ", userId);
       const data = await MessageModel.getByConversation(conversationId, userId);
       // console.log("[Service Messages ] get message by convo : ", data);
-      console.log(
-        "[Service Messages ] get message by convo length: ",
-        data.length
-      );
+      // console.log(
+      //   "[Service Messages ] get message by convo length: ",
+      //   data.length
+      // );
 
       // Transformer les chemins de fichier en URLs
       const cleanedData = data.map((item) => {

@@ -214,7 +214,7 @@ const router = createRouter({
 
 // --- Garde globale refactorisée ---
 router.beforeEach(async (to, from, next) => {
-  // const userStore = useUserStore();
+  
 
   const authStore = useAuthStore();
 

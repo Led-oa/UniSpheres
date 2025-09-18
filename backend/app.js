@@ -15,7 +15,6 @@ dotenv.config();
 const app = express();
 
 // Middleware CORS
-app.use(cors());
 app.use(
   cors({
     origin: "http://localhost:5173",

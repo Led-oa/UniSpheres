@@ -18,6 +18,7 @@ const initSockets = (server) => {
 
     // Importer les événements conversationnels
     conversationSockets(socket, io);
+    messageSockets(socket, io);
 
     socket.on("disconnect", () => {
       console.log("🔌 Client disconnected:", socket.id);

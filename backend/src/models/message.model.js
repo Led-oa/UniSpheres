@@ -20,13 +20,19 @@ const MessageModel = {
       "SELECT * FROM message WHERE id_message = ? AND sender_id = ?",
       [messageId, senderId]
     );
-    if (!check.length) return null;
+
+    if (!check) {
+      console.log("Checking member not pass check : ", check);
+      return null;
+    }
+
+    console.log("Checking member pass check: ", check);
 
     await query("UPDATE message SET content = ? WHERE id_message = ?", [
       content,
       messageId,
     ]);
-    const [rows] = await query("SELECT * FROM message WHERE id_message = ?", [
+    const rows = await query("SELECT * FROM message WHERE id_message = ?", [
       messageId,
     ]);
     return rows[0];
@@ -57,9 +63,20 @@ const MessageModel = {
       [conversationId]
     );
 
-    console.log("[Controller Messages ] get message by convo : ", rows);
-
     return rows;
+  },
+
+  async getMessageById(messageId) {
+    const sql = `
+      SELECT m.*, f.file_path, f.file_name, u.name as sender_name
+      FROM message m
+      LEFT JOIN file f ON m.id_message = f.message_id
+      LEFT JOIN user u ON m.sender_id = u.id_user
+      WHERE m.id_message = ?
+    `;
+
+    const [rows] = await query(sql, [messageId]);
+    return rows[0] || null;
   },
 
   // Supprimer un message
@@ -69,7 +86,7 @@ const MessageModel = {
       "SELECT * FROM message WHERE id_message = ? AND sender_id = ?",
       [messageId, senderId]
     );
-    if (!check.length) return false;
+    if (!check) return false;
 
     await query("DELETE FROM message WHERE id_message = ?", [messageId]);
     return true;

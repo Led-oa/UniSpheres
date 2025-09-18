@@ -24,10 +24,10 @@ const ConversationService = {
       }
     }
 
-    console.log("Controller Conversation create title: ", title);
-    console.log("Controller Conversation create type: ", type);
-    console.log("Controller Conversation create type: ", creatorId);
-    console.log("Controller Conversation create type: ", memberIds);
+    console.log("Service Conversation create title: ", title);
+    console.log("Service Conversation create type: ", type);
+    console.log("Service Conversation create creator Id: ", creatorId);
+    console.log("Service Conversation create memberId: ", memberIds);
 
     const id = await ConversationModel.createConversation(title, type);
     await ConversationModel.addMember(id, creatorId);
@@ -63,6 +63,45 @@ const ConversationService = {
 
   async leave({ conversationId, userId }) {
     await ConversationModel.removeMember(conversationId, userId);
+  },
+
+  // Récupérer une conversation par ID avec vérification des permissions
+  async getById(conversationId, userId) {
+    try {
+      // console.log("[Service] convoId : ", conversationId);
+      // console.log("[Service] userId : ", userId);
+
+      const conversation = await ConversationModel.getConversationById(
+        conversationId,
+        userId
+      );
+
+      if (!conversation) {
+        throw new Error("CONVERSATION_NOT_FOUND");
+      }
+
+      const verifyIsMember = await ConversationModel.isMember(
+        conversationId,
+        userId
+      );
+
+      // console.log("[Service] check member : ", verifyIsMember);
+
+      if (!verifyIsMember) {
+        throw new Error("FORBIDDEN");
+      }
+
+      // Récupérer les membres
+      const members = await ConversationModel.getConversationMembers(
+        conversationId
+      );
+      conversation.members = members;
+
+      return conversation;
+    } catch (err) {
+      console.error("ConversationService.getById error:", err);
+      throw new Error(err.message || "CONVERSATION_FETCH_FAILED");
+    }
   },
 };
 
