@@ -24,8 +24,33 @@ const ClasseModel = {
       JOIN year y ON c.year_id = y.id_year
       WHERE c.id_class = ?
     `;
-    const [rows] = await query(sql, [id]);
+    const rows = await query(sql, [id]);
     return rows[0];
+  },
+
+  async getByTeacher(teacherId) {
+    const sql = `
+        SELECT DISTINCT 
+      c.*,
+      f.name AS filiere_name,
+      p.name AS parcours_name,
+      y.year_value AS year_value
+    FROM classe c
+    INNER JOIN course co ON c.id_class = co.class_id
+    INNER JOIN filiere f ON c.filiere_id = f.id_filiere
+    INNER JOIN parcours p ON c.parcours_id = p.id_parcours
+    INNER JOIN year y ON c.year_id = y.id_year
+    WHERE co.teach_by = ?
+    ORDER BY c.name
+  `;
+    const rows = await query(sql, [teacherId]);
+    return rows;
+  },
+
+  async getStudentByClass(classId) {
+    const sql = `SELECT * FROM user WHERE class_id = ?`;
+    const rows = await query(sql, [classId]);
+    return rows;
   },
 
   // Créer une nouvelle classe
