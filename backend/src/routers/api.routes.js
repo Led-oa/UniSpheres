@@ -16,11 +16,15 @@ const noteRoute = require("./note.route");
 const conversationRoute = require("./conversation.route");
 const messageRoute = require("./message.route");
 
+const annonceRoute = require("./annonce.route");
+
 const api = express.Router();
 
 api.use("/user", userRoute); // ✅
 
 api.use("/file", fileRoute);
+
+api.use("/annonce", annonceRoute);
 
 api.use("/filiere", filiereRoute); // ✅
 api.use("/parcours", parcoursRoute); // ✅
