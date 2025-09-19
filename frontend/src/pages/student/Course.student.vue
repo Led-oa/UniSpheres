@@ -4,6 +4,8 @@ import { onMounted, computed, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useCourseStore } from "../../stores/course.store";
 
+import ModalNotesStudent from "../../components/student/ModalNotes.student.vue";
+
 // --- Stores & route ---
 const route = useRoute();
 const courseStore = useCourseStore();
@@ -26,6 +28,15 @@ onMounted(async () => {
 // Raccourcis réactifs
 const course = computed(() => courseStore.currentCourse);
 const files = computed(() => courseStore.currentCourse.files || []);
+
+// --- Modal Notes ---
+const showModalNotes = ref(false);
+function openModalNotes() {
+  showModalNotes.value = true;
+}
+function closeModalNotes() {
+  showModalNotes.value = false;
+}
 </script>
 
 <template>
@@ -146,7 +157,7 @@ const files = computed(() => courseStore.currentCourse.files || []);
             </div>
             <h3 class="ml-3 text-sm font-medium text-gray-900">Code</h3>
           </div>
-          <p class="text-lg font-semibold text-gray-800">{{ course.code || "N/A" }}</p>
+          <p class="text-lg font-semibold text-gray-800">{{ course.id_course || "N/A" }}</p>
         </div>
       </div>
 
@@ -271,6 +282,7 @@ const files = computed(() => courseStore.currentCourse.files || []);
       <!-- 4. Bouton modal (future implémentation) -->
       <section class="flex justify-end">
         <button
+          @click="openModalNotes"
           class="inline-flex items-center px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           <svg
@@ -320,6 +332,12 @@ const files = computed(() => courseStore.currentCourse.files || []);
         Le cours que vous recherchez n'existe pas ou n'est plus disponible.
       </p>
     </div>
+    <!-- Modal Notes -->
+    <ModalNotesStudent
+      v-if="showModalNotes"
+      :courseId="course.id_course"
+      :onClose="closeModalNotes"
+    />
   </div>
 </template>
 

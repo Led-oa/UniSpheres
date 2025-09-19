@@ -108,7 +108,7 @@ export const useClasseStore = defineStore("classeStore", () => {
     loading.value = true;
     error.value = null;
     try {
-      currentClass.value = await ClasseService.getById(id);
+      return currentClass.value = await ClasseService.getById(id);
     } catch (err) {
       console.error("Erreur fetchClass:", err);
       error.value = err;

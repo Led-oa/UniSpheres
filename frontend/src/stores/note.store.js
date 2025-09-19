@@ -54,7 +54,7 @@ export const useNoteStore = defineStore("note", () => {
     try {
       const res = await NoteService.fetchByCourse(courseId);
       notes.value = res.data || [];
-      return res;
+      return notes.value;
     } catch (err) {
       console.error("Erreur fetchByCourse :", err);
       error.value = err;

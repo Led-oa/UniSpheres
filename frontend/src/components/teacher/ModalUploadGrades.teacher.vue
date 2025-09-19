@@ -1,56 +1,53 @@
+<!-- components/teacher/ModalUploadGrades.teacher.vue -->
 <template>
   <div class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-lg w-full max-w-lg mx-auto overflow-hidden shadow-lg">
+    <div class="bg-white rounded-lg w-full max-w-2xl mx-auto shadow-lg">
       <!-- Header -->
       <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-        <h2 class="text-lg font-semibold text-gray-900">Importer les notes</h2>
-        <button @click="$emit('close')" class="text-gray-400 hover:text-gray-600">
-          &times;
-        </button>
+        <h2 class="text-lg font-semibold text-gray-900">
+          Importer les notes (CSV ou Excel)
+        </h2>
+        <button @click="close" class="text-gray-400 hover:text-gray-600">✕</button>
       </div>
 
       <!-- Body -->
       <div class="px-6 py-4 space-y-4">
-        <!-- Upload input -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1"
-            >Sélectionner un fichier (.csv / .xlsx)</label
-          >
-          <input
-            type="file"
-            accept=".csv,.xlsx"
-            @change="handleFileChange"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md"
-          />
+        <p class="text-sm text-gray-600">
+          Sélectionnez un fichier .csv ou .xlsx contenant les colonnes :
+          <strong>course</strong>, <strong>matricule</strong>, <strong>note_ds</strong>,
+          <strong>note_examen</strong>, <strong>note_final</strong>.
+        </p>
+
+        <!-- File input -->
+        <input
+          type="file"
+          accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          @change="onFileChange"
+          class="w-full border border-gray-300 px-3 py-2 rounded-md"
+        />
+
+        <!-- Preview -->
+        <div v-if="previewData.length" class="overflow-x-auto border rounded-md max-h-64">
+          <table class="min-w-full text-sm">
+            <thead class="bg-gray-100">
+              <tr>
+                <th v-for="(h, i) in previewHeaders" :key="i" class="px-2 py-1 text-left">
+                  {{ h }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row, r) in previewData" :key="r" class="border-t">
+                <td v-for="(h, i) in previewHeaders" :key="i" class="px-2 py-1">
+                  {{ row[h] }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <!-- Aperçu du fichier -->
-        <div v-if="previewData.length > 0">
-          <h3 class="text-sm font-semibold text-gray-800 mb-2">Aperçu des données</h3>
-          <div class="overflow-x-auto max-h-60 border border-gray-200 rounded-md p-2">
-            <table class="min-w-full divide-y divide-gray-200 text-sm text-gray-700">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th class="px-3 py-1 text-left">Matricule</th>
-                  <th class="px-3 py-1 text-left">Nom</th>
-                  <th class="px-3 py-1 text-left">Prénom</th>
-                  <th class="px-3 py-1 text-left">DS</th>
-                  <th class="px-3 py-1 text-left">Examen</th>
-                  <th class="px-3 py-1 text-left">Final</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(row, index) in previewData" :key="index">
-                  <td class="px-3 py-1">{{ row.matricule }}</td>
-                  <td class="px-3 py-1">{{ row.nom }}</td>
-                  <td class="px-3 py-1">{{ row.prenom }}</td>
-                  <td class="px-3 py-1">{{ row.note_ds }}</td>
-                  <td class="px-3 py-1">{{ row.note_examen }}</td>
-                  <td class="px-3 py-1">{{ row.note_final }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div v-if="errorMessage" class="text-sm text-red-600 mt-2">
+          {{ errorMessage }}
         </div>
       </div>
 
@@ -59,15 +56,21 @@
         class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end space-x-3"
       >
         <button
-          @click="$emit('close')"
+          @click="close"
           class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
         >
           Annuler
         </button>
+
         <button
+          :disabled="!canImport"
           @click="importGrades"
-          :disabled="previewData.length === 0"
-          class="px-4 py-2 text-sm text-white bg-green-600 rounded-md hover:bg-green-700 disabled:bg-gray-300"
+          :class="[
+            'px-4 py-2 text-sm text-white rounded-md',
+            canImport
+              ? 'bg-blue-600 hover:bg-blue-700'
+              : 'bg-gray-300 cursor-not-allowed',
+          ]"
         >
           Importer
         </button>
@@ -77,55 +80,108 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import * as XLSX from "xlsx"; // Pour parser Excel et CSV
+/**
+ * ModalUploadGrades.teacher.vue
+ * Fresh rewrite with heavy console logging
+ * - Select CSV/XLSX file
+ * - Preview content
+ * - Send parsed data to bulkUpsert
+ */
+
+import { ref, computed } from "vue";
 import { useNoteStore } from "../../stores/note.store";
+// import { parseNotesFile } from "../../utils/gradeFile.util";
+import { parseNotesFile } from "../../utils/parseNoteFile";
+
+console.log("[UploadModal] component created");
+
+const props = defineProps({
+  courseId: { type: [String, Number], required: true },
+});
+const emit = defineEmits(["close", "saved"]);
 
 const noteStore = useNoteStore();
 
-const previewData = ref([]);
+// Local state
 const selectedFile = ref(null);
+const previewData = ref([]);
+const previewHeaders = ref([]);
+const errorMessage = ref("");
 
-const handleFileChange = (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
+const close = () => {
+  console.log("[UploadModal] close()");
+  emit("close");
+};
 
+/**
+ * When file input changes
+ */
+const onFileChange = async (e) => {
+  console.log("[UploadModal] onFileChange fired");
+  const file = e.target.files[0];
   selectedFile.value = file;
+  errorMessage.value = "";
+  previewData.value = [];
+  previewHeaders.value = [];
 
-  const reader = new FileReader();
+  if (!file) {
+    console.log("[UploadModal] no file selected");
+    return;
+  }
 
-  reader.onload = (e) => {
-    const data = e.target.result;
-    const workbook = XLSX.read(data, { type: "binary" });
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-    const json = XLSX.utils.sheet_to_json(sheet, { defval: null });
-    // json doit avoir les colonnes : matricule, nom, prenom, note_ds, note_examen, note_final
-    previewData.value = json;
-  };
+  console.log("[UploadModal] file selected:", file.name, file.type, file.size);
 
-  if (file.name.endsWith(".csv")) {
-    reader.readAsText(file);
-  } else {
-    reader.readAsBinaryString(file);
+  try {
+    // parseNotesFile returns {notesData: [], headers: []}
+    const { notesData, headers } = await parseNotesFile(file);
+    console.log("[UploadModal] parseNotesFile success", notesData);
+
+    previewData.value = notesData.slice(0, 20); // show first 20 rows as preview
+    previewHeaders.value = headers;
+  } catch (err) {
+    console.error("[UploadModal] parse error:", err);
+    errorMessage.value = "Impossible de lire le fichier : " + err.message;
   }
 };
 
+const canImport = computed(() => {
+  const ok = previewData.value.length > 0 && !errorMessage.value;
+  console.log("[UploadModal] computed canImport =", ok);
+  return ok;
+});
+
+/**
+ * Send data to API
+ */
 const importGrades = async () => {
+  console.log("[UploadModal] importGrades called");
+  if (!canImport.value) {
+    console.log("[UploadModal] importGrades aborted: canImport is false");
+    return;
+  }
+
   try {
-    await noteStore.bulkUpsert(selectedFile.value);
-    previewData.value = [];
-    selectedFile.value = null;
-    alert("Import réussi !");
-    // Fermer le modal
-    $emit("close");
+    const payload = {
+      notes: previewData.value.map((n) => ({
+        course_id: props.courseId,
+        student_id: n.student_id,
+        note_ds: n.note_ds,
+        note_examen: n.note_examen,
+        note_final: n.note_final,
+      })),
+    };
+
+    console.log("[UploadModal] payload to bulkUpsert:", payload);
+
+    const res = await noteStore.bulkUpsert(payload);
+    console.log("[UploadModal] bulkUpsert result:", res);
+
+    emit("saved", res);
+    emit("close");
+    console.log("[UploadModal] emit saved + close");
   } catch (err) {
-    console.error(err);
-    alert("Erreur lors de l'import.");
+    console.error("[UploadModal] importGrades error:", err);
+    errorMessage.value = "Erreur lors de l'importation : " + err.message;
   }
 };
 </script>
-
-<style scoped>
-/* Modal animation */
-</style>

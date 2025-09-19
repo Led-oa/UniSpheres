@@ -33,7 +33,7 @@ const courseId = route.params.id;
 const calculateStats = () => {
   const grades = notes.value
     .filter((s) => s.note_final !== null)
-    .map((s) => s.note_final);
+    .map((s) => Number(s.note_final));
 
   if (grades.length > 0) {
     stats.value.average = grades.reduce((a, b) => a + b, 0) / grades.length;
@@ -280,6 +280,7 @@ onMounted(async () => {
     <ModalUploadGradesTeacher
       v-if="isImportModalOpen"
       @close="isImportModalOpen = false"
+      :course-id="courseId"
       @saved="handleNotesSaved"
     />
     <ModalAttributGradeTeacher
