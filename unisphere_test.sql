@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 15 sep. 2025 à 13:05
+-- Généré le : jeu. 18 sep. 2025 à 20:41
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.0.30
 
@@ -287,7 +287,8 @@ ALTER TABLE `note`
 -- Index pour la table `parcours`
 --
 ALTER TABLE `parcours`
-  ADD PRIMARY KEY (`id_parcours`);
+  ADD PRIMARY KEY (`id_parcours`),
+  ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Index pour la table `user`

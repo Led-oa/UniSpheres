@@ -2,6 +2,7 @@ import api from "../Connect.backend";
 
 export const ClasseService = {
   getAll: () => api.get("/classe").then((res) => res.data),
+  getAllRegister: () => api.get("/classe/register").then((res) => res.data),
   getById: (id) => api.get(`/classe/${id}`).then((res) => res.data),
   getByTeacher: () => api.get("/classe/teacher").then((res) => res.data),
   getStudentsFromClass: (id) =>

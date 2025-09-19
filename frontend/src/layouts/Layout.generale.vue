@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed,onMounted } from "vue";
 import { useAuthStore } from "../stores/auth.store";
 import { useRouter } from "vue-router";
 
@@ -11,6 +11,20 @@ const isOpen = ref(false);
 const isLoggedIn = computed(() => authStore.isLoggedIn);
 const user = computed(() => authStore.user);
 const userRole = computed(() => authStore.role);
+
+const loadUser = async () => {
+  if (authStore.token && !authStore.user) {
+    try {
+      await authStore.fetchUserData();
+    } catch (error) {
+      console.error("Failed to fetch user data");
+    }
+  }
+};
+
+onMounted(() => {
+  loadUser();
+});
 
 // Fonction de déconnexion
 const handleLogout = async () => {

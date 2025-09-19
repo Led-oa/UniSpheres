@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed,onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth.store";
 
@@ -14,6 +14,20 @@ const userName = computed(
   () => user.value?.name || user.value?.username || "Utilisateur"
 );
 const userInitial = computed(() => userName.value.charAt(0).toUpperCase());
+
+const loadUser = async () => {
+  if (authStore.token && !authStore.user) {
+    try {
+      await authStore.fetchUserData();
+    } catch (error) {
+      console.error("Failed to fetch user data");
+    }
+  }
+};
+
+onMounted(() => {
+  loadUser();
+});
 
 const menuItems = [
   { name: "TableauDeBordsEtudiant", label: "Tableau de bord", icon: "📊" },

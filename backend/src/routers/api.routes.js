@@ -11,6 +11,7 @@ const yearRoute = require("./year.route");
 const classeRoute = require("./classe.route");
 
 const courseRoute = require("./course.route");
+const noteRoute = require("./note.route");
 
 const conversationRoute = require("./conversation.route");
 const messageRoute = require("./message.route");
@@ -26,6 +27,7 @@ api.use("/parcours", parcoursRoute); // ✅
 api.use("/year", yearRoute); // ✅
 
 api.use("/classe", classeRoute); // ✅
+api.use("/note", noteRoute);
 
 api.use("/course", courseRoute);
 

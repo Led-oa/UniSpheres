@@ -4,6 +4,7 @@ const ClasseController = require("../controllers/classe.controller");
 
 const { authenticateJWT } = require("../middlewares/auth.middleware");
 
+router.get("/register", ClasseController.getAllClasses); // Récupérer toutes les classes
 router.use(authenticateJWT);
 
 // Routes CRUD pour les classes

@@ -23,6 +23,25 @@ export const useClasseStore = defineStore("classeStore", () => {
       console.log("Classe Store res : ", res);
 
       this.classes = Array.isArray(res.data) ? res.data : [];
+      return res;
+    } catch (err) {
+      console.error("Erreur fetchClasses:", err);
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function fetchClassesRegister() {
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await ClasseService.getAllRegister();
+
+      console.log("Classe Store res : ", res);
+
+      this.classes = Array.isArray(res.data) ? res.data : [];
+      return res;
     } catch (err) {
       console.error("Erreur fetchClasses:", err);
       error.value = err;
@@ -157,6 +176,7 @@ export const useClasseStore = defineStore("classeStore", () => {
     loading,
     error,
     fetchClasses,
+    fetchClassesRegister,
     fetchClasseTeacher,
     fetchClass,
     getStudentFromClass,

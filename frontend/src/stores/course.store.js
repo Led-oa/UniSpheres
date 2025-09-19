@@ -34,7 +34,7 @@ export const useCourseStore = defineStore("course", () => {
       console.log("Response course store : ", response.data);
 
       currentCourse.value = response.data;
-      return response;
+      return response.data;
     } catch (err) {
       console.error("Erreur fetchCourseById:", err);
       error.value = err;

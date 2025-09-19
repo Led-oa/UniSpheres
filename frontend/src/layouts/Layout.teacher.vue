@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "../stores/auth.store";
 
@@ -12,6 +12,20 @@ const mobileOpen = ref(false);
 const user = computed(() => authStore.user);
 const userName = computed(() => user.value?.name || user.value?.username || "Enseignant");
 const userInitial = computed(() => userName.value.charAt(0).toUpperCase());
+
+const loadUser = async () => {
+  if (authStore.token && !authStore.user) {
+    try {
+      await authStore.fetchUserData();
+    } catch (error) {
+      console.error("Failed to fetch user data");
+    }
+  }
+};
+
+onMounted(() => {
+  loadUser();
+});
 
 const menuItems = [
   {
@@ -102,7 +116,6 @@ const navigateTo = (routeName) => {
               "
             >
               {{ item.label }}
-              
             </router-link>
           </nav>
 
