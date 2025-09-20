@@ -1,15 +1,24 @@
 <script setup>
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, onMounted } from "vue";
 import { useAnnonceStore } from "../../stores/annonce.store";
+import { useClasseStore } from "../../stores/academique/classe.store";
+import { useFiliereStore } from "../../stores/academique/filiere.store";
+import { useYearStore } from "../../stores/academique/year.store";
 
 const props = defineProps({
   mode: { type: String, required: true }, // "add" | "edit" | "info"
   show: { type: Boolean, required: true },
   annonce: { type: Object, default: null },
+  postedBy: { type: Number, required: true },
 });
 const emit = defineEmits(["close", "saved", "updated"]);
-const store = useAnnonceStore();
 
+const store = useAnnonceStore();
+const classeStore = useClasseStore();
+const filiereStore = useFiliereStore();
+const yearStore = useYearStore();
+
+// --- Formulaire ---
 const form = reactive({
   title: "",
   content: "",
@@ -25,7 +34,40 @@ const form = reactive({
 const newFiles = ref([]);
 const removeFileIds = ref([]);
 
-// Pré-remplissage en mode edit/info
+// --- Listes dynamiques ---
+const classes = ref([]);
+const filieres = ref([]);
+const years = ref([]);
+
+// --- Reset form function ---
+const resetForm = () => {
+  Object.assign(form, {
+    title: "",
+    content: "",
+    type: "general",
+    priority: "medium",
+    deadline: "",
+    target_class_id: "",
+    target_filiere_id: "",
+    target_year_id: "",
+    is_visible: true,
+  });
+  newFiles.value = [];
+  removeFileIds.value = [];
+};
+
+// --- Charger les listes depuis les stores ---
+const loadLists = async () => {
+  await classeStore.fetchClasses();
+  await filiereStore.fetchFilieres();
+  await yearStore.fetchYears();
+
+  classes.value = classeStore.classes;
+  filieres.value = filiereStore.filieres;
+  years.value = yearStore.years;
+};
+
+// --- Pré-remplissage en mode edit/info ---
 watch(
   () => props.annonce,
   (a) => {
@@ -46,29 +88,49 @@ watch(
   { immediate: true }
 );
 
+// --- Watch for modal close to reset form ---
+watch(
+  () => props.show,
+  (isVisible) => {
+    if (!isVisible) {
+      // Reset form when modal closes
+      resetForm();
+    }
+  }
+);
+
+// --- Gestion fichiers ---
 const handleFiles = (e) => (newFiles.value = Array.from(e.target.files));
 const removeExistingFile = (id) =>
   !removeFileIds.value.includes(id) && removeFileIds.value.push(id);
 
+// --- Sauvegarde ---
 const saveAnnonce = async () => {
   try {
     if (props.mode === "add") {
-      await store.createAnnonce(form, newFiles.value);
-      emit("saved");
+      const payload = { ...form, posted_by: props.postedBy };
+      const newAnnonce = await store.createAnnonce(payload, newFiles.value);
+      emit("saved", newAnnonce);
     } else if (props.mode === "edit" && props.annonce) {
-      await store.updateAnnonce(
+      const updated = await store.updateAnnonce(
         props.annonce.id_annonce,
         form,
         newFiles.value,
         removeFileIds.value
       );
-      emit("updated");
+      emit("updated", updated);
     }
+    resetForm();
     emit("close");
   } catch (err) {
     alert("Erreur : " + err.message);
   }
 };
+
+// --- On mounted ---
+onMounted(() => {
+  loadLists();
+});
 </script>
 
 <template>
@@ -78,7 +140,7 @@ const saveAnnonce = async () => {
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
     >
       <div
-        class="bg-white rounded-2xl shadow-xl w-full max-w-3xl p-6 relative overflow-y-auto max-h-[90vh]"
+        class="bg-white rounded-2xl shadow-xl w-full max-w-4xl p-6 relative overflow-y-auto max-h-[90vh]"
       >
         <!-- HEADER -->
         <header class="flex justify-between items-center mb-4">
@@ -117,6 +179,7 @@ const saveAnnonce = async () => {
                   annonce.deadline ? new Date(annonce.deadline).toLocaleDateString() : "—"
                 }}
               </p>
+              <p><strong>Visible :</strong> {{ annonce.is_visible ? "Oui" : "Non" }}</p>
             </div>
 
             <div v-if="annonce.files?.length" class="space-y-2">
@@ -144,7 +207,8 @@ const saveAnnonce = async () => {
         <!-- MODE ADD / EDIT -->
         <template v-else>
           <form @submit.prevent="saveAnnonce" class="space-y-4">
-            <div class="grid md:grid-cols-2 gap-4">
+            <div class="grid md:grid-cols-3 gap-4">
+              <!-- Titre -->
               <div>
                 <label class="block font-medium">Titre</label>
                 <input
@@ -153,6 +217,8 @@ const saveAnnonce = async () => {
                   class="w-full border rounded-md px-3 py-2 mt-1 text-sm"
                 />
               </div>
+
+              <!-- Type -->
               <div>
                 <label class="block font-medium">Type</label>
                 <select
@@ -160,9 +226,12 @@ const saveAnnonce = async () => {
                   class="w-full border rounded-md px-3 py-2 mt-1 text-sm"
                 >
                   <option value="general">Général</option>
-                  <option value="urgent">Urgent</option>
+                  <option value="cours">Cours</option>
+                  <option value="evenement">Evenement</option>
                 </select>
               </div>
+
+              <!-- Priorité -->
               <div>
                 <label class="block font-medium">Priorité</label>
                 <select
@@ -174,6 +243,50 @@ const saveAnnonce = async () => {
                   <option value="high">Haute</option>
                 </select>
               </div>
+
+              <!-- Classe -->
+              <div>
+                <label class="block font-medium">Classe</label>
+                <select
+                  v-model="form.target_class_id"
+                  class="w-full border rounded-md px-3 py-2 mt-1 text-sm"
+                >
+                  <option value="">-- Choisir une classe --</option>
+                  <option v-for="c in classes" :key="c.id_class" :value="c.id_class">
+                    {{ c.name }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Filière -->
+              <div>
+                <label class="block font-medium">Filière</label>
+                <select
+                  v-model="form.target_filiere_id"
+                  class="w-full border rounded-md px-3 py-2 mt-1 text-sm"
+                >
+                  <option value="">-- Choisir une filière --</option>
+                  <option v-for="f in filieres" :key="f.id_filiere" :value="f.id_filiere">
+                    {{ f.name }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Année / Niveau -->
+              <div>
+                <label class="block font-medium"> Niveau</label>
+                <select
+                  v-model="form.target_year_id"
+                  class="w-full border rounded-md px-3 py-2 mt-1 text-sm"
+                >
+                  <option value="">-- Choisir un niveau --</option>
+                  <option v-for="y in years" :key="y.id_year" :value="y.id_year">
+                    {{ y.year_value }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Date limite -->
               <div>
                 <label class="block font-medium">Date limite</label>
                 <input
@@ -184,6 +297,7 @@ const saveAnnonce = async () => {
               </div>
             </div>
 
+            <!-- Contenu -->
             <div>
               <label class="block font-medium">Contenu</label>
               <textarea
@@ -193,6 +307,21 @@ const saveAnnonce = async () => {
               ></textarea>
             </div>
 
+            <!-- Visible - FIXED CHECKBOX BINDING -->
+            <div class="flex items-center gap-2 mt-2">
+              <input
+                type="checkbox"
+                id="is_visible"
+                :true-value="true"
+                :false-value="false"
+                v-model="form.is_visible"
+              />
+              <label for="is_visible" class="text-sm font-medium">
+                Visible publiquement
+              </label>
+            </div>
+
+            <!-- Fichiers -->
             <div>
               <label class="block font-medium">Fichiers</label>
               <input type="file" multiple @change="handleFiles" class="mt-1 text-sm" />
@@ -204,6 +333,7 @@ const saveAnnonce = async () => {
               </ul>
             </div>
 
+            <!-- Fichiers existants (edit) -->
             <div v-if="mode === 'edit' && annonce?.files?.length">
               <h4 class="font-medium">Fichiers existants</h4>
               <ul class="space-y-1 text-sm">
@@ -216,9 +346,8 @@ const saveAnnonce = async () => {
                     :href="`/${f.file_path}`"
                     target="_blank"
                     class="text-blue-600 underline"
+                    >{{ f.file_name }}</a
                   >
-                    {{ f.file_name }}
-                  </a>
                   <button
                     type="button"
                     class="text-red-500 hover:underline text-xs"
@@ -230,6 +359,7 @@ const saveAnnonce = async () => {
               </ul>
             </div>
 
+            <!-- Boutons -->
             <div class="flex justify-end gap-3 mt-6">
               <button
                 type="button"
@@ -241,16 +371,20 @@ const saveAnnonce = async () => {
               <button
                 v-if="mode === 'add'"
                 type="submit"
+                :disabled="store.isLoading"
                 class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
-                Créer
+                <span v-if="store.isLoading">Création...</span>
+                <span v-else>Créer</span>
               </button>
               <button
                 v-else-if="mode === 'edit'"
                 type="submit"
+                :disabled="store.isLoading"
                 class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
-                Mettre à jour
+                <span v-if="store.isLoading">Mise à jour...</span>
+                <span v-else>Mettre à jour</span>
               </button>
             </div>
           </form>

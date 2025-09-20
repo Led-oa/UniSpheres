@@ -1,9 +1,11 @@
 <script setup>
 import { onMounted, ref, computed } from "vue";
 import { useAnnonceStore } from "../../stores/annonce.store";
+import { useAuthStore } from "../../stores/auth.store";
 import ModalAnnonceAdmin from "../../components/admin/ModalAnnonce.admin.vue";
 
 const annonceStore = useAnnonceStore();
+const authStore = useAuthStore();
 
 const loading = ref(false);
 const annonces = ref([]);
@@ -12,6 +14,8 @@ const annonces = ref([]);
 const showModal = ref(false);
 const modalMode = ref("add"); // "add" | "edit" | "info"
 const selectedAnnonce = ref(null); // annonce en cours (edit/info)
+
+const currentUser = computed(() => authStore.user);
 
 // --- Filtres ---
 const searchTitle = ref("");
@@ -63,6 +67,36 @@ const filteredAnnonces = computed(() =>
   })
 );
 
+const handleSaved = () => {
+  loadAnnonce(); // Refresh the list for new items
+  closeModal();
+};
+
+const handleUpdated = (updatedAnnonce) => {
+  // Update the local state without refetching everything
+  const index = annonces.value.findIndex(
+    (a) => a.id_annonce === updatedAnnonce.id_annonce
+  );
+  if (index !== -1) {
+    // Create a new array to maintain reactivity
+    annonces.value = [
+      ...annonces.value.slice(0, index),
+      updatedAnnonce,
+      ...annonces.value.slice(index + 1),
+    ];
+  }
+  closeModal();
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  selectedAnnonce.value = null;
+  // Add a small delay to allow modal animation to complete
+  setTimeout(() => {
+    modalMode.value = "add";
+  }, 300);
+};
+
 // --- Actions Modal ---
 const openAddModal = () => {
   modalMode.value = "add";
@@ -80,10 +114,6 @@ const openEditModal = (annonce) => {
   modalMode.value = "edit";
   selectedAnnonce.value = annonce;
   showModal.value = true;
-};
-
-const closeModal = () => {
-  showModal.value = false;
 };
 
 // --- Suppression ---
@@ -195,9 +225,10 @@ const handleDelete = async (id) => {
       :show="showModal"
       :mode="modalMode"
       :annonce="selectedAnnonce"
+      :postedBy="currentUser.id_user"
       @close="closeModal"
-      @saved="loadAnnonce"
-      @updated="loadAnnonce"
+      @saved="handleSaved"
+      @updated="handleUpdated"
     />
   </section>
 </template>

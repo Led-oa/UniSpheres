@@ -8,7 +8,12 @@ const AnnonceService = {
       throw new Error("Title, content et posted_by sont obligatoires");
     }
 
+    console.log("Service annonce : data from controller : ", data);
+
     const id = await AnnonceModel.create(data);
+
+    console.log("Service annonce : Id from DB : ", id);
+
     let annonce = await AnnonceModel.fetchById(id);
 
     // nettoyer les file_path
@@ -18,6 +23,8 @@ const AnnonceService = {
         file_path: FilePathToUrl.urlCleaner(file.file_path),
       }));
     }
+
+    console.log("Service Annonce after create : ", annonce);
 
     return annonce;
   },
@@ -33,7 +40,7 @@ const AnnonceService = {
       }
     });
 
-    console.log("Annonces : ", annonces);
+    console.log("Service Annonces : ", annonces);
 
     return annonces;
   },
@@ -52,6 +59,8 @@ const AnnonceService = {
       }));
     }
 
+    console.log("Service Annonce get by id : ", annonce);
+
     return annonce;
   },
 
@@ -61,8 +70,12 @@ const AnnonceService = {
       throw new Error(`Annonce avec ID ${id} non trouvée`);
     }
 
+    console.log("Service update data : ", data);
+
     await AnnonceModel.update(id, data);
     let updatedAnnonce = await AnnonceModel.fetchById(id);
+
+    console.log("After update : ", updatedAnnonce);
 
     // nettoyer les file_path
     if (updatedAnnonce.files && updatedAnnonce.files.length) {

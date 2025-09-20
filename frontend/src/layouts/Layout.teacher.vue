@@ -10,7 +10,10 @@ const mobileOpen = ref(false);
 
 // Récupérer les informations de l'utilisateur
 const user = computed(() => authStore.user);
-const userName = computed(() => user.value?.name || user.value?.username || "Enseignant");
+
+console.log("Current User Layout : ", user.value.email);
+
+const userName = computed(() => user.value?.email || user.value?.username || "Enseignant");
 const userInitial = computed(() => userName.value.charAt(0).toUpperCase());
 
 const loadUser = async () => {
@@ -122,7 +125,7 @@ const navigateTo = (routeName) => {
           <!-- User menu desktop -->
           <div class="hidden md:flex items-center space-x-4">
             <!-- Notifications -->
-            <button
+            <!-- <button
               class="relative p-2 text-blue-100 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,7 +137,7 @@ const navigateTo = (routeName) => {
                 />
               </svg>
               <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            </button> -->
 
             <!-- User profile -->
             <div class="flex items-center space-x-3">

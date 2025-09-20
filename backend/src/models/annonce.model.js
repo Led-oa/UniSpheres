@@ -7,6 +7,9 @@ const AnnonceModel = {
       (title, content, posted_by, target_class_id, target_filiere_id, target_year_id, type, is_visible, priority, deadline)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
+
+    console.log("Model Annonce : data from services : ", data);
+
     const params = [
       data.title,
       data.content,
@@ -21,6 +24,9 @@ const AnnonceModel = {
     ];
 
     const result = await query(sql, params);
+
+    console.log("Model : Annonce id res :", result.insertId);
+
     return result.insertId;
   },
 
@@ -99,6 +105,8 @@ const AnnonceModel = {
     ORDER BY f2.id_file
   `;
     const rows = await query(sql, [id]);
+
+    console.log("Model : rows fetchBy Id :", rows);
 
     if (!rows.length) return null;
 

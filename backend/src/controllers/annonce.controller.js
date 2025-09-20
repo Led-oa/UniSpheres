@@ -5,11 +5,16 @@ const AnnonceController = {
   async create(req, res) {
     try {
       const data = req.body;
-      const files = req.files || []; // supposons que les fichiers sont envoyés via multipart/form-data
+      const files = req.files || [];
 
+      data.is_visible =
+        data.is_visible === "true" || data.is_visible === true ? 1 : 0;
+      data.posted_by = Number(data.posted_by);
+
+      console.log("Controller Annonce : Data from req.body : ", data);
       // Créer l'annonce
       const annonce = await AnnonceService.createAnnonce(data);
-
+      console.log("Controller Annonce : From the DB : ", annonce);
       // Créer les fichiers associés
       if (files.length) {
         for (const file of files) {
@@ -58,6 +63,8 @@ const AnnonceController = {
       const data = req.body;
       const files = req.files || []; // fichiers envoyés à ajouter
       const removeFiles = req.body.removeFiles || []; // tableau d'IDs de fichiers à supprimer
+
+      console.log("Controller annonce : update data : ", data);
 
       // Mettre à jour l'annonce
       const updatedAnnonce = await AnnonceService.updateAnnonce(id, data);

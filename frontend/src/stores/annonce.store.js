@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-
 import { AnnonceService } from "../services/api/annonce.api";
 
 export const useAnnonceStore = defineStore("annonce", () => {
@@ -61,12 +60,21 @@ export const useAnnonceStore = defineStore("annonce", () => {
         files,
         removeFiles
       );
-      // Mettre à jour la liste locale
+
+      // More robust state update - create new array for reactivity
       const index = annonces.value.findIndex((a) => a.id_annonce === id);
-      if (index !== -1) annonces.value[index] = updated;
-      if (currentAnnonce.value && currentAnnonce.value.id_annonce === id) {
-        currentAnnonce.value = updated;
+      if (index !== -1) {
+        annonces.value = [
+          ...annonces.value.slice(0, index),
+          updated,
+          ...annonces.value.slice(index + 1),
+        ];
       }
+
+      if (currentAnnonce.value && currentAnnonce.value.id_annonce === id) {
+        currentAnnonce.value = { ...updated }; // Create a new object reference
+      }
+
       return updated;
     } catch (err) {
       console.error("Erreur updateAnnonce:", err);
