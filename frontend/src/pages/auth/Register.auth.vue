@@ -2,14 +2,13 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
-// import { useUserStore } from "../../store/user.store";
-// import { useClasseStore } from "../../store/classes.store";
 
 import { useAuthStore } from "../../stores/auth.store";
+import { useClasseStore } from "../../stores/academique/classe.store";
 
 const router = useRouter();
 // const authStore = useUserStore();
-// const classeStore = useClasseStore();
+const classeStore = useClasseStore();
 const authStore = useAuthStore();
 
 const fileInput = ref(null);
@@ -28,12 +27,8 @@ onMounted(async () => {
 const loadClasses = async () => {
   isLoadingClasses.value = true;
   try {
-    await classeStore.fetchClassesForRegister({ join: true });
-    classes.value = classeStore.classes.map((classe) => ({
-      id: classe.id_class,
-      nom: `${classe.class_name} - ${classe.filiere_name}`,
-      fullData: classe, // Garder les données complètes si besoin
-    }));
+    const res = await classeStore.fetchClassesRegister();
+    classes.value = res.data || []
   } catch (error) {
     console.error("Erreur chargement classes:", error);
     // Fallback sur des données mock si l'API échoue
@@ -273,7 +268,6 @@ const handleRegister = async () => {
     setTimeout(() => {
       router.push("/login?message=account_created");
     }, 200);
-
   } catch (error) {
     console.error("Registration failed", error);
   }
@@ -555,8 +549,8 @@ watch(
                 class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors appearance-none"
               >
                 <option value="">Sélectionnez une classe</option>
-                <option v-for="classe in classes" :key="classe.id" :value="classe.id">
-                  {{ classe.nom }}
+                <option v-for="classe in classes" :key="classe.id_class" :value="classe.id_class">
+                  {{ classe.name }}
                 </option>
               </select>
             </div>

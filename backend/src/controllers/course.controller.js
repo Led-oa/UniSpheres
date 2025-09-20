@@ -59,9 +59,7 @@ const CourseController = {
   async getCourseByTeacher(req, res) {
     try {
       const teacherId = req.params.id;
-      
       console.log("teacher id : ", teacherId);
-
       const courses = await CourseService.getByTeacher(teacherId);
       res.json(courses);
     } catch (err) {
@@ -73,6 +71,9 @@ const CourseController = {
     try {
       const classId = req.params.id;
       const courses = await CourseService.getByClass(classId);
+
+      console.log("Controller course for class : ", courses);
+
       res.json(courses);
     } catch (err) {
       console.error("Error fetching courses by class:", err);

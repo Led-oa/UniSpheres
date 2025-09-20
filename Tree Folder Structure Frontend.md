@@ -1,6 +1,6 @@
 # File Tree: frontend
 
-Generated on: 9/17/2025, 10:32:50 AM
+Generated on: 9/18/2025, 9:44:49 PM
 Root path: `d:\UniSpheres\frontend`
 
 ```
@@ -96,10 +96,13 @@ Root path: `d:\UniSpheres\frontend`
 │   │   ├── api/
 │   │   │   ├── chat.api.js
 │   │   │   ├── classe.api.js
+│   │   │   ├── course.api.js
+│   │   │   ├── file.api.js
 │   │   │   ├── infoGenerique.api.js
 │   │   │   └── user.api.js
 │   │   ├── Connect.backend.js
-│   │   └── Structure Frontend.md
+│   │   ├── Structure Frontend.md
+│   │   └── socket.service.js
 │   ├── stores/
 │   │   ├── academique/
 │   │   │   ├── classe.store.js
@@ -109,6 +112,8 @@ Root path: `d:\UniSpheres\frontend`
 │   │   ├── admin.store.js
 │   │   ├── auth.store.js
 │   │   ├── chat.store.js
+│   │   ├── course.store.js
+│   │   ├── file.store.js
 │   │   ├── student.store.js
 │   │   ├── teacher.store.js
 │   │   └── user.store.js

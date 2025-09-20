@@ -4,17 +4,10 @@ import { ref } from "vue";
 import { CourseService } from "../services/api/course.api";
 
 export const useCourseStore = defineStore("course", () => {
-  // -------------------
-  // State
-  // -------------------
   const courses = ref([]);
   const currentCourse = ref(null);
   const loading = ref(false);
   const error = ref(null);
-
-  // -------------------
-  // Actions
-  // -------------------
 
   // Récupérer tous les cours
   const fetchAllCourses = async () => {
@@ -41,7 +34,7 @@ export const useCourseStore = defineStore("course", () => {
       console.log("Response course store : ", response.data);
 
       currentCourse.value = response.data;
-      return response;
+      return response.data;
     } catch (err) {
       console.error("Erreur fetchCourseById:", err);
       error.value = err;
@@ -73,7 +66,9 @@ export const useCourseStore = defineStore("course", () => {
     error.value = null;
     try {
       const response = await CourseService.getCoursesByClass(classId);
+      console.log("Store fetch course for class : ", response.data);
       courses.value = response.data;
+      return response;
     } catch (err) {
       console.error("Erreur fetchCoursesByClass:", err);
       error.value = err;

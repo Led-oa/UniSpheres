@@ -66,7 +66,26 @@ const CourseModel = {
     return query(sql, [teacherId]);
   },
   async findByClass(classId) {
-    const sql = `SELECT * FROM course WHERE class_id = ?`;
+    const sql = `
+    SELECT 
+      co.*,
+      cl.name AS class_name,
+      f.name AS filiere_name,
+      p.name AS parcours_name,
+      y.year_value AS year_name,
+      u.id_user AS teacher_id,
+      u.name AS teacher_name,
+      u.lastname AS teacher_lastname,
+      u.email AS teacher_email
+    FROM course AS co
+    INNER JOIN classe   AS cl ON co.class_id  = cl.id_class
+    INNER JOIN filiere  AS f  ON cl.filiere_id  = f.id_filiere
+    INNER JOIN parcours AS p  ON cl.parcours_id = p.id_parcours
+    INNER JOIN year     AS y  ON cl.year_id     = y.id_year
+    INNER JOIN user     AS u  ON co.teach_by    = u.id_user
+    WHERE co.class_id = ?
+    ORDER BY co.title;
+  `;
     return query(sql, [classId]);
   },
   async update(courseId, data) {

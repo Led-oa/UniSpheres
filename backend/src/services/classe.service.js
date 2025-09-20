@@ -1,4 +1,5 @@
 const ClasseModel = require("../models/classe.model");
+const FilePathToUrl = require("../utils/urlCleaner.utils");
 
 const ClasseService = {
   // Récupérer toutes les classes
@@ -17,10 +18,58 @@ const ClasseService = {
     try {
       const classe = await ClasseModel.getById(id);
       if (!classe) throw new Error("Classe non trouvée");
+
+      console.log("Service classe : ", classe);
+
       return classe;
     } catch (error) {
       console.error("ClasseService.getClasseById error:", error);
       throw error;
+    }
+  },
+
+  async getClasseByTeacher(teacherId) {
+    try {
+      console.log("Service classe teacher id : ", teacherId);
+
+      const classes = await ClasseModel.getByTeacher(teacherId);
+
+      console.log("Service classe : ", classes);
+      return classes;
+    } catch (error) {
+      console.error("ClasseService.getClasseByTeacher error : ", error);
+    }
+  },
+
+  async getStudentFromClass(classId) {
+    try {
+      const students = await ClasseModel.getStudentByClass(classId);
+      // On ne nettoie que le champ profile_pic
+      for (const student of students) {
+        if (student.profile_pic) {
+          student.profile_pic = FilePathToUrl.urlCleaner(student.profile_pic);
+        }
+      }
+      return students;
+    } catch (error) {
+      console.error("ClasseService.getStudentsFromClass error : ", error);
+    }
+  },
+
+  async getTeacherOfClass(classId) {
+    try {
+      console.log("Service classe class id : ", classId);
+      const teachers = await ClasseModel.getTeacherByClass(classId);
+      // On ne nettoie que le champ profile_pic
+      for (const teacher of teachers) {
+        if (teacher.profile_pic) {
+          teacher.profile_pic = FilePathToUrl.urlCleaner(teacher.profile_pic);
+        }
+      }
+      console.log("Service classe (cleaned profile_pic only): ", teachers);
+      return teachers;
+    } catch (error) {
+      console.error("ClasseService.getStudentsFromClass error : ", error);
     }
   },
 

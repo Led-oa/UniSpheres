@@ -45,19 +45,19 @@
 
         <!-- Statistiques -->
         <!-- <div class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto">
-          <div class="text-center">
-            <div class="text-3xl font-bold text-blue-600">500+</div>
-            <div class="text-gray-600 mt-1">Étudiants actifs</div>
-          </div>
-          <div class="text-center">
-            <div class="text-3xl font-bold text-purple-600">50+</div>
-            <div class="text-gray-600 mt-1">Enseignants experts</div>
-          </div>
-          <div class="text-center">
-            <div class="text-3xl font-bold text-indigo-600">100+</div>
-            <div class="text-gray-600 mt-1">Cours disponibles</div>
-          </div>
-        </div> -->
+            <div class="text-center">
+              <div class="text-3xl font-bold text-blue-600">500+</div>
+              <div class="text-gray-600 mt-1">Étudiants actifs</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-purple-600">50+</div>
+              <div class="text-gray-600 mt-1">Enseignants experts</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-indigo-600">100+</div>
+              <div class="text-gray-600 mt-1">Cours disponibles</div>
+            </div>
+          </div> -->
 
         <!-- Call to Action -->
         <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center">
