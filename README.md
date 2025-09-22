@@ -231,5 +231,3 @@ Pour toute question ou problème, veuillez contacter l'équipe de développement
 
 **UniSpheres** - Révolutionnez l'éducation collaborative ! 🎓✨
 ```
-
-Ce fichier README.md est maintenant prêt à être enregistré. Vous pouvez le copier-coller dans un fichier nommé `README.md` à la racine de votre projet.
