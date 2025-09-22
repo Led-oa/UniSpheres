@@ -20,39 +20,6 @@ Le projet est structuré en deux parties principales :
 - **State management**: Pinia
 - **Routing**: Vue Router
 
-## 📁 Structure des Dossiers
-
-### Backend Structure
-```
-backend/
-├── src/
-│   ├── config/          # Configuration base de données
-│   ├── controllers/     # Logique métier
-│   ├── middlewares/     # Middlewares d'authentification et upload
-│   ├── models/         # Modèles de données
-│   ├── routers/        # Routes API
-│   ├── services/       # Services métier
-│   ├── socket/         # Configuration Socket.IO
-│   ├── uploads/        # Fichiers uploadés
-│   └── utils/          # Utilities
-├── app.js              # Application principale
-├── server.js           # Serveur et gestion des sockets
-└── package.json
-```
-
-### Frontend Structure
-```
-frontend/
-├── src/
-│   ├── components/     # Composants Vue organisés par rôle
-│   ├── pages/         # Pages de l'application
-│   ├── stores/        # Stores Pinia
-│   ├── services/      # Services API
-│   ├── assets/        # Ressources statiques
-│   └── plugins/       # Plugins Vue
-└── vite.config.js
-```
-
 ## 🚀 Fonctionnalités Principales
 
 ### 👥 Gestion des Utilisateurs
