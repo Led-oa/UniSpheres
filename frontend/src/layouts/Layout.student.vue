@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed,onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth.store";
 
@@ -11,8 +11,9 @@ const authStore = useAuthStore();
 // Récupérer les informations de l'utilisateur
 const user = computed(() => authStore.user);
 const userName = computed(
-  () => user.value?.name || user.value?.username || "Utilisateur"
+  () => user.value?.email || user.value?.username || "Utilisateur"
 );
+
 const userInitial = computed(() => userName.value.charAt(0).toUpperCase());
 
 const loadUser = async () => {
@@ -30,12 +31,36 @@ onMounted(() => {
 });
 
 const menuItems = [
-  { name: "TableauDeBordsEtudiant", label: "Tableau de bord", icon: "📊" },
-  { name: "AnnoncesEtudiant", label: "Annonces", icon: "📢" },
-  { name: "ClasseEtudiant", label: "Ma classe", icon: "👨‍🎓" },
-  { name: "ListeCoursEtudiant", label: "Mes cours", icon: "📚" },
-  { name: "ListeDiscussionsEtudiant", label: "Messagerie", icon: "💬" },
-  { name: "ProfileEtudiant", label: "Mon profil", icon: "👤" },
+  {
+    name: "TableauDeBordsEtudiant",
+    label: "Tableau de bord",
+    icon: "📊",
+  },
+  {
+    name: "AnnoncesEtudiant",
+    label: "Annonces",
+    icon: "📢",
+  },
+  {
+    name: "ClasseEtudiant",
+    label: "Ma classe",
+    icon: "👨‍🎓",
+  },
+  {
+    name: "ListeCoursEtudiant",
+    label: "Mes cours",
+    icon: "📚",
+  },
+  {
+    name: "ListeDiscussionsEtudiant",
+    label: "Messagerie",
+    icon: "💬",
+  },
+  {
+    name: "ProfileEtudiant",
+    label: "Mon profil",
+    icon: "👤",
+  },
 ];
 
 function handleLogout() {
