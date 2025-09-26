@@ -1,4 +1,3 @@
-// Fichier : /src/models/Filiere.model.js
 const InfoGenerique = require("./InfoGenerique.model");
 
 class FiliereModel extends InfoGenerique {

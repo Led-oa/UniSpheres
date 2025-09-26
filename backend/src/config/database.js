@@ -23,7 +23,7 @@ const pool = mysql.createPool({
   } catch (err) {
     console.error("❌ Échec de la connexion à la BDD:", err.message);
     console.error("Code erreur:", err.code);
-    process.exit(1);
+    // process.exit(1);
   }
 })();
 

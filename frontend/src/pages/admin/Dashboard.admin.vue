@@ -1,9 +1,9 @@
 <script setup>
 const stats = [
-  { label: "Utilisateurs", value: 342, icon: "👥", color: "from-blue-500 to-purple-500" },
-  { label: "Cours", value: 78, icon: "📚", color: "from-purple-500 to-pink-500" },
-  { label: "Classes", value: 25, icon: "🏫", color: "from-green-500 to-teal-500" },
-  { label: "Annonces", value: 12, icon: "📢", color: "from-orange-500 to-red-500" },
+  { label: "Utilisateurs", value: 0, icon: "👥", color: "from-blue-500 to-purple-500" },
+  { label: "Cours", value: 0, icon: "📚", color: "from-purple-500 to-pink-500" },
+  { label: "Classes", value: 0, icon: "🏫", color: "from-green-500 to-teal-500" },
+  { label: "Annonces", value: 0, icon: "📢", color: "from-orange-500 to-red-500" },
 ];
 </script>
 
