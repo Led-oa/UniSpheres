@@ -10,7 +10,7 @@
         <span class="text-3xl">📚</span>
         <div>
           <p class="text-gray-500 text-sm">Cours</p>
-          <p class="text-xl font-semibold text-gray-800">6</p>
+          <p class="text-xl font-semibold text-gray-800">0</p>
         </div>
       </div>
 
@@ -18,7 +18,7 @@
         <span class="text-3xl">👩‍🎓</span>
         <div>
           <p class="text-gray-500 text-sm">Classe</p>
-          <p class="text-xl font-semibold text-gray-800">3A Informatique</p>
+          <p class="text-xl font-semibold text-gray-800">Non mentionnez</p>
         </div>
       </div>
 

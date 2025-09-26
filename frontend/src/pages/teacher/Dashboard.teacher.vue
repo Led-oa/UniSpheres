@@ -1,8 +1,8 @@
 <script setup>
 const stats = [
-  { label: "Mes Cours", value: 5 },
-  { label: "Classes Assignées", value: 3 },
-  { label: "Annonces Publiées", value: 8 },
+  { label: "Mes Cours", value: 0 },
+  { label: "Classes Assignées", value: 0 },
+  { label: "Annonces Publiées", value: 0 },
 ];
 
 const annonces = [
