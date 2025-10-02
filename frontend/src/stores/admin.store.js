@@ -18,6 +18,8 @@ export const useAdminStore = defineStore("admin", () => {
     error.value = null;
     try {
       users.value = await getAllUsers();
+      console.log("Users.value : ", users.value);
+      return users.value;
     } catch (err) {
       error.value = err;
     } finally {
