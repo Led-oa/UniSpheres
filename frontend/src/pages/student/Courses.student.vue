@@ -27,6 +27,7 @@ const loadCourses = async () => {
     // L’API peut renvoyer { success, data: [...] }
     console.log("Composant fetch course for classe : ", res.data);
     courses.value = res.data || [];
+    console.log("Composant fetch course for classe : ", courses.value[0].credits);
   } catch (err) {
     console.error("Erreur lors du chargement des cours :", err);
     error.value = err;
@@ -189,7 +190,9 @@ onMounted(loadCourses);
                 >
                   {{ course.title }}
                 </h2>
-                <p class="text-sm text-gray-500 mt-1">Code: {{ course.code || "N/A" }}</p>
+                <p class="text-sm text-gray-500 mt-1">
+                  Code: {{ course.id_course || "N/A" }}
+                </p>
               </div>
               <div class="flex-shrink-0 ml-4">
                 <div
@@ -246,7 +249,7 @@ onMounted(loadCourses);
               <span
                 class="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-600 rounded-full"
               >
-                {{ course.credits || "0" }} crédits
+                {{ course.credits || "N/A" }} crédits
               </span>
               <span
                 class="text-blue-600 text-sm font-medium flex items-center group-hover:translate-x-1 transition-transform"

@@ -110,14 +110,21 @@ const userService = {
   },
 
   // Récupération de tous les utilisateurs
-  async getAllUsers(limit = 10, offset = 0) {
+  async getAllUsers(limit, offset) {
     try {
       const users = await userModel.findAll(limit, offset);
-      return users.map((u) => {
+      const totalCount = await userModel.getTotalCount();
+
+      const cleanedUser = users.map((u) => {
         if (u.profile_pic)
           u.profile_pic = FilePathToUrl.urlCleaner(u.profile_pic);
         return u;
       });
+
+      return {
+        users: cleanedUser,
+        totalCount,
+      };
     } catch (error) {
       console.error("userService.getAllUsers error:", error);
       throw error;
@@ -125,14 +132,43 @@ const userService = {
   },
 
   // Récupération par rôle
-  async getUsersByRole(role, limit = 10, offset = 0) {
+  async getUsersByRole(role, limit, offset) {
     try {
       const users = await userModel.findAllByRole(limit, offset, role);
-      return users.map((u) => {
+      const totalCount = await userModel.getCountByRole(role);
+
+      const cleanedUser = users.map((u) => {
         if (u.profile_pic)
           u.profile_pic = FilePathToUrl.urlCleaner(u.profile_pic);
         return u;
       });
+
+      return {
+        users: cleanedUser,
+        totalCount,
+      };
+    } catch (error) {
+      console.error("userService.getUsersByRole error:", error);
+      throw error;
+    }
+  },
+
+  async getAllTeacher() {
+    try {
+      const role = "teacher";
+      const users = await userModel.findAllTeacher();
+      const totalCount = await userModel.getCountByRole(role);
+
+      const cleanedUser = users.map((u) => {
+        if (u.profile_pic)
+          u.profile_pic = FilePathToUrl.urlCleaner(u.profile_pic);
+        return u;
+      });
+
+      return {
+        users: cleanedUser,
+        totalCount,
+      };
     } catch (error) {
       console.error("userService.getUsersByRole error:", error);
       throw error;

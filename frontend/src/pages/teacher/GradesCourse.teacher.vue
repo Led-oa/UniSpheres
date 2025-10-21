@@ -128,11 +128,28 @@ onMounted(async () => {
     <div
       class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8"
     >
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900">
-          {{ course?.title || "Matière" }}
-        </h1>
-        <p class="mt-2 text-gray-600">Gérer les notes de la matière</p>
+      <div class="flex">
+        <button @click="$router.back()" class="p-2 rounded-lg hover:bg-gray-100">
+          <svg
+            class="w-5 h-5 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">
+            {{ course?.title || "Matière" }}
+          </h1>
+          <p class="mt-2 text-gray-600">Gérer les notes de la matière</p>
+        </div>
       </div>
       <div class="flex space-x-2 mt-4 sm:mt-0">
         <button

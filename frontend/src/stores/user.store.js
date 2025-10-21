@@ -21,7 +21,6 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
-
   const updateCurrentUser = async (id, userData) => {
     loading.value = true;
     error.value = null;

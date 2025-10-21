@@ -1,5 +1,7 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
+
+import PaginationGenerale from "../../components/generale/Pagination.generale.vue";
 
 import { useAdminStore } from "../../stores/admin.store";
 
@@ -52,9 +54,34 @@ function handleDesactivate(user) {
   adminStore.desactivate(user.id_user);
 }
 
+const loadUsers = async (page = 1) => {
+  const limit = 10;
+
+  if (activeTab.value === "students") {
+    await adminStore.fetchUsersByRole("student", page, limit);
+
+    console.log("Adminstore pagination : ", adminStore.pagination)
+
+  } else if (activeTab.value === "teachers") {
+    await adminStore.fetchUsersByRole("teacher", page, limit);
+  } else if (activeTab.value === "admins") {
+    await adminStore.fetchUsersByRole("administrator", page, limit);
+  }
+};
+
+// Gestion du changement de page
+const handlePageChange = (page) => {
+  loadUsers(page);
+};
+
+// Watcher pour recharger les données quand l'onglet change
+watch(activeTab, (newTab) => {
+  loadUsers(1);
+});
+
 // Fetch initial
 onMounted(() => {
-  adminStore.fetchUsers();
+  loadUsers(1);
 });
 </script>
 
@@ -65,7 +92,7 @@ onMounted(() => {
       <div>
         <h1 class="text-2xl font-bold text-gray-800">Gestion des utilisateurs</h1>
         <p class="text-gray-500 text-sm mt-1">
-          Ajouter, modifier ou supprimer des comptes.
+          Activer, modifier ou supprimer des comptes.
         </p>
       </div>
       <button
@@ -104,6 +131,7 @@ onMounted(() => {
       <table class="min-w-full bg-white rounded-xl shadow border border-gray-100">
         <thead class="bg-gray-50 text-gray-700 text-sm">
           <tr>
+            <th class="px-4 py-3 text-left">Matricule</th>
             <th class="px-4 py-3 text-left">Nom</th>
             <th class="px-4 py-3 text-left">Email</th>
             <th class="px-4 py-3 text-left">Statut</th>
@@ -111,7 +139,8 @@ onMounted(() => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in currentUsers" :key="user.id" class="border-t">
+          <tr v-for="user in currentUsers" :key="user.id_user" class="border-t">
+            <td class="px-4 py-3">{{ user.matricule || "Non attribuer" }}</td>
             <td class="px-4 py-3">{{ user.name }}</td>
             <td class="px-4 py-3">{{ user.email }}</td>
             <td class="px-4 py-3">
@@ -154,8 +183,20 @@ onMounted(() => {
               Aucun utilisateur dans cette catégorie.
             </td>
           </tr>
+          <tr v-if="adminStore.loading">
+            <td colspan="5" class="text-center text-gray-500 py-4">Chargement...</td>
+          </tr>
         </tbody>
       </table>
     </div>
+    <!-- Pagination -->
+    <PaginationGenerale
+      v-if="adminStore.pagination.totalPages > 0"
+      :current-page="adminStore.pagination.currentPage"
+      :total-pages="adminStore.pagination.totalPages"
+      :total-items="adminStore.pagination.totalItems"
+      :items-per-page="adminStore.pagination.itemsPerPage"
+      @page-change="handlePageChange"
+    />
   </section>
 </template>

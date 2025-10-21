@@ -67,11 +67,26 @@ const userController = {
 
   async getAllUsers(req, res) {
     try {
-      const users = await userService.getAllUsers(
-        parseInt(req.query.limit) || 10,
-        parseInt(req.query.offset) || 0
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const offset = (page - 1) * limit;
+
+      const { users, totalCount } = await userService.getAllUsers(
+        limit,
+        offset
       );
-      res.json(users);
+      console.log("Listes user : ", users);
+
+      res.json({
+        success: true,
+        data: users,
+        pagination: {
+          currentPage: page,
+          totalPages: Math.ceil(totalCount / limit),
+          totalItems: totalCount,
+          itemsPerPage: limit,
+        },
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -79,12 +94,41 @@ const userController = {
 
   async getUsersByRole(req, res) {
     try {
-      const users = await userService.getUsersByRole(
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const offset = (page - 1) * limit;
+
+      const { users, totalCount } = await userService.getUsersByRole(
         req.params.role,
-        parseInt(req.query.limit) || 10,
-        parseInt(req.query.offset) || 0
+        limit,
+        offset
       );
-      res.json(users);
+      console.log("Listes user by role: ", users);
+
+      res.json({
+        success: true,
+        data: users,
+        pagination: {
+          currentPage: page,
+          totalPages: Math.ceil(totalCount / limit),
+          totalItems: totalCount,
+          itemsPerPage: limit,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+  async getAllTeachers(req, res) {
+    try {
+      const { users, totalCount } = await userService.getAllTeacher();
+      console.log("Listes user by role: ", users);
+
+      res.json({
+        success: true,
+        data: users,
+        totalItems: totalCount,
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

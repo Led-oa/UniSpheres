@@ -11,9 +11,12 @@ const mobileOpen = ref(false);
 // Récupérer les informations de l'utilisateur
 const user = computed(() => authStore.user);
 
-console.log("Current User Layout : ", user.value.email);
+// console.log("Current User Layout : ", user.value.email);
+// console.log("Current User Layout : ", user.value.role);
 
-const userName = computed(() => user.value?.email || user.value?.username || "Enseignant");
+const userName = computed(
+  () => user.value?.email || user.value?.username || "Enseignant"
+);
 const userInitial = computed(() => userName.value.charAt(0).toUpperCase());
 
 const loadUser = async () => {
@@ -44,8 +47,8 @@ const menuItems = [
     description: "Gérer vos communications",
   },
   {
-    name: "ListeDiscussionsEnseignant",
-    label: "Messagerie",
+    name: "DiscussionTeacher",
+    label: "Messageries",
     icon: "💬",
     description: "Communiquer avec les étudiants",
   },
@@ -78,6 +81,22 @@ function handleLogout() {
 const navigateTo = (routeName) => {
   mobileOpen.value = false;
   router.push({ name: routeName });
+};
+
+const getRouteDisplayName = (route) => {
+  // First try meta.title
+  if (route.meta?.title) {
+    return route.meta.title;
+  }
+
+  // Then try to find alias from router
+  const routeRecord = router.getRoutes().find((r) => r.name === route.name);
+  if (routeRecord?.alias) {
+    return Array.isArray(routeRecord.alias) ? routeRecord.alias[0] : routeRecord.alias;
+  }
+
+  // Fallback to route name
+  return route.name;
 };
 </script>
 
@@ -289,11 +308,10 @@ const navigateTo = (routeName) => {
           </router-link>
           <span class="text-gray-400">/</span>
           <span class="text-gray-800 font-medium capitalize">
-            {{
-              $route.meta.title ||
-              $route.name?.replace("Enseignant", "") ||
-              "Page actuelle"
-            }}
+            <!-- {{
+              $route.meta.name || $route.name.replace("Enseignant", "") || "Page actuelle"
+            }} -->
+            {{ getRouteDisplayName($route) }}
           </span>
         </nav>
       </div>

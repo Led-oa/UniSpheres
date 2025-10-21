@@ -162,7 +162,7 @@ onMounted(loadMyClass);
               </svg>
             </div>
             <div>
-              <p class="text-sm text-gray-600">Professeur Principal</p>
+              <p class="text-sm text-gray-600">Chef de mention</p>
               <p class="text-lg font-semibold text-gray-800">
                 {{ classInfo?.prof_principal || "Non défini" }}
               </p>

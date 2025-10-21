@@ -32,11 +32,19 @@ const filteredClasses = computed(() => {
 <template>
   <section class="space-y-6">
     <!-- Header -->
-    <header>
-      <h1 class="text-2xl font-bold text-gray-800">Mes Classes</h1>
-      <p class="text-gray-500 text-sm mt-1">
-        Liste des classes où vous enseignez au moins un cours.
-      </p>
+    <header class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">Mes Classes</h1>
+        <p class="text-gray-500 text-sm mt-1">
+          Liste des classes où vous enseignez au moins un cours.
+        </p>
+      </div>
+      <button
+        class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg shadow hover:opacity-90 cursor-pointer"
+        @click="openDispoModal"
+      >
+        Mettre disponiblité
+      </button>
     </header>
 
     <!-- Barre de recherche -->
@@ -86,16 +94,22 @@ const filteredClasses = computed(() => {
         <div class="mt-4 space-x-2">
           <router-link
             :to="{ name: 'NotesClasseEnseignant', params: { idClasse: cl.id_class } }"
-            class="inline-block text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline"
+            class="inline-block text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline p-2"
           >
-            Voir notes →
+            Notes
           </router-link>
           <router-link
             :to="{ name: 'ListeEtudiantEnseignant', params: { idClasse: cl.id_class } }"
-            class="inline-block text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline"
+            class="inline-block text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline p-2"
           >
-            Voir étudiants →
+            Etudiants
           </router-link>
+          <button
+            class="inline-block text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline p-2 cursor-pointer"
+            @click="openEmploiModal"
+          >
+            Emploi du temps
+          </button>
         </div>
       </article>
     </div>

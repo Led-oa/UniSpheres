@@ -30,7 +30,7 @@ const AnnonceModel = {
     return result.insertId;
   },
 
-  async fetchAll() {
+  async fetchAll(limit, offset) {
     const sql = `
       SELECT 
         a.*,
@@ -51,9 +51,20 @@ const AnnonceModel = {
       LEFT JOIN year y   ON a.target_year_id = y.id_year
       LEFT JOIN file f2  ON f2.annonce_id = a.id_annonce
       WHERE a.is_visible = 1
-      ORDER BY a.created_at DESC, f2.id_file
+      ORDER BY a.created_at DESC, f2.id_file LIMIT ? OFFSET ?
     `;
-    const rows = await query(sql);
+    const rows = await query(sql, [limit, offset]);
+
+    const countSql = `
+    SELECT COUNT(*) as totalCount 
+    FROM annonce a 
+    WHERE a.is_visible = 1
+  `;
+
+    const countResult = await query(countSql);
+    const totalCount = countResult[0].totalCount;
+
+    // console.log("Annonce model total count : ", totalCount);
 
     // Regrouper les fichiers par annonce
     const map = new Map();
@@ -78,7 +89,10 @@ const AnnonceModel = {
       delete map.get(id).file_path;
     }
 
-    return Array.from(map.values());
+    return {
+      annonces: Array.from(map.values()),
+      totalCount,
+    };
   },
 
   async fetchById(id) {

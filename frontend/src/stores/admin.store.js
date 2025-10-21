@@ -12,14 +12,21 @@ export const useAdminStore = defineStore("admin", () => {
   const users = ref([]);
   const loading = ref(false);
   const error = ref(null);
+  const pagination = ref({
+    currentPage: 1,
+    totalPages: 0,
+    totalItems: 0,
+    itemsPerPage: 10,
+  });
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (page = 1, limit = 10) => {
     loading.value = true;
     error.value = null;
     try {
-      users.value = await getAllUsers();
-      console.log("Users.value : ", users.value);
-      return users.value;
+      const response = await getAllUsers(page, limit);
+      users.value = response.data;
+      pagination.value = response.pagination;
+      return response;
     } catch (err) {
       error.value = err;
     } finally {
@@ -27,17 +34,40 @@ export const useAdminStore = defineStore("admin", () => {
     }
   };
 
-  const fetchUsersByRole = async (role) => {
+  const fetchAdmins = async () => {
     loading.value = true;
     error.value = null;
     try {
-      users.value = await getUsersByRole(role);
-      console.log("User value : ", users.value);
+      teachers.value = await getUsersByRole("teacher");
     } catch (err) {
       error.value = err;
     } finally {
       loading.value = false;
     }
+  };
+
+  const fetchUsersByRole = async (role, page = 1, limit = 10) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await getUsersByRole(role, page, limit);
+
+      console.log("Response adminstore : ", response);
+
+      users.value = response.data;
+      pagination.value = response.pagination;
+      return response;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const changePage = async (page) => {
+    pagination.value.currentPage = page;
+    // Recharger les données selon l'onglet actif
+    // Cette logique sera gérée dans le composant
   };
 
   const activate = async (id) => {
@@ -72,6 +102,9 @@ export const useAdminStore = defineStore("admin", () => {
     loading,
     error,
     fetchUsers,
+    pagination,
+    changePage,
+    fetchAdmins,
     fetchUsersByRole,
     activate,
     desactivate,

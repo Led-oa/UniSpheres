@@ -1,7 +1,6 @@
 const NoteService = require("../services/note.service");
 
 const NoteController = {
- 
   async upsertOne(req, res) {
     try {
       const noteData = req.body;
@@ -54,6 +53,7 @@ const NoteController = {
     try {
       const { studentId } = req.params;
       const result = await NoteService.getByStudent(studentId);
+      console.log("Note de l'etudiant : ", result);
       res.status(200).json({ success: true, data: result });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });

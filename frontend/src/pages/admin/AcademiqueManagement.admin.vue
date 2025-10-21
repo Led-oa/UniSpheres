@@ -10,6 +10,7 @@ import ModalClasseAdmin from "../../components/admin/ModalClasse.admin.vue";
 import ModalYearAdmin from "../../components/admin/ModalYear.admin.vue";
 import ModalFiliereAdmin from "../../components/admin/ModalFiliere.admin.vue";
 import ModalParcoursAdmin from "../../components/admin/ModalParcours.admin.vue";
+import { RouterLink } from "vue-router";
 
 const activeTab = ref("classes");
 const tabs = [
@@ -73,9 +74,6 @@ function handleAdd() {
     case "classes":
       selectedClasse.value = null;
       isModalClasseOpen.value = true;
-
-    default:
-      alert("Fonctionnalité non implémentée pour les classes");
   }
 }
 
@@ -124,8 +122,6 @@ function handleClasseSaved() {
 <template>
   <section class="space-y-8">
     <h1 class="text-2xl font-bold text-gray-800">Gestion Académique</h1>
-
-    <!-- Tabs + bouton -->
     <div
       class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-200 pb-3"
     >
@@ -182,11 +178,15 @@ function handleClasseSaved() {
               >
                 Modifier
               </button>
-              <button
-                class="flex-1 bg-gray-500 text-white py-1.5 rounded hover:bg-gray-600"
+              <RouterLink
+                :to="{
+                  name: 'InformationClassesAdmin',
+                  params: { idClasse: c.id_class },
+                }"
+                class="flex-1 bg-gray-500 text-center text-white py-1.5 rounded hover:bg-gray-600"
               >
                 Détails
-              </button>
+              </RouterLink>
               <button
                 class="flex-1 bg-red-600 text-white py-1.5 rounded hover:bg-red-700"
               >

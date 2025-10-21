@@ -22,7 +22,8 @@ const loadTeacherCourses = async () => {
   const teacherId = authStore.user.id_user;
   loading.value = true;
   try {
-    await courseStore.fetchCoursesByTeacher(teacherId);
+    const res = await courseStore.fetchCoursesByTeacher(teacherId);
+    console.log("res : ", res);
   } catch (err) {
     console.error("Erreur chargement cours de l'enseignant:", err);
   } finally {
@@ -63,7 +64,9 @@ watch(courseStore.courses, () => {
     </header>
 
     <!-- Barre de recherche et filtre -->
-    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+    <div
+      class="flex flex-col justify-between sm:flex-row gap-4 items-start sm:items-center"
+    >
       <input
         type="text"
         v-model="searchQuery"
@@ -96,7 +99,7 @@ watch(courseStore.courses, () => {
         <p class="text-gray-600 mt-2 flex-1 text-sm">{{ course.content }}</p>
 
         <div class="mt-4 flex justify-between items-center text-sm text-gray-500">
-          <span>Classe : {{ course.class_name }}</span>
+          <span>Credits : {{ course.credits }}</span>
           <router-link
             :to="{ name: 'CoursEnseignant', params: { id: course.id_course } }"
             class="text-blue-600 hover:text-blue-700 hover:underline font-medium"

@@ -40,8 +40,27 @@ const AnnonceController = {
 
   async getAll(req, res) {
     try {
-      const annonces = await AnnonceService.getAllAnnonces();
-      res.status(200).json({ success: true, data: annonces });
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const offset = (page - 1) * limit;
+
+      const { annonces, totalCounts } = await AnnonceService.getAllAnnonces(
+        limit,
+        offset
+      );
+
+      console.log("total count : ", totalCounts);
+
+      res.status(200).json({
+        success: true,
+        data: annonces,
+        pagination: {
+          currentPage: page,
+          totalPages: Math.ceil(totalCounts / limit),
+          totalItems: totalCounts,
+          itemsPerPage: limit,
+        },
+      });
     } catch (err) {
       res.status(500).json({ success: false, message: err.message });
     }

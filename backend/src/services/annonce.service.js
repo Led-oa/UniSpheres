@@ -29,9 +29,9 @@ const AnnonceService = {
     return annonce;
   },
 
-  async getAllAnnonces() {
-    const annonces = await AnnonceModel.fetchAll();
-    annonces.forEach((annonce) => {
+  async getAllAnnonces(limit, offset) {
+    const annonces = await AnnonceModel.fetchAll(limit, offset);
+    annonces.annonces.forEach((annonce) => {
       if (annonce.files && annonce.files.length) {
         annonce.files = annonce.files.map((file) => ({
           ...file,
@@ -40,9 +40,10 @@ const AnnonceService = {
       }
     });
 
-    console.log("Service Annonces : ", annonces);
+    const totalCounts = annonces.totalCount;
+    console.log("Total Annonces : ", totalCounts);
 
-    return annonces;
+    return { annonces, totalCounts };
   },
 
   async getAnnonceById(id) {

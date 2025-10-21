@@ -18,19 +18,23 @@ const messageRoute = require("./message.route");
 
 const annonceRoute = require("./annonce.route");
 
+const utilityRoute = require("./utility.route");
+
 const api = express.Router();
 
-api.use("/user", userRoute); 
+api.use("/user", userRoute);
 
 api.use("/file", fileRoute);
 
 api.use("/annonce", annonceRoute);
 
-api.use("/filiere", filiereRoute); 
-api.use("/parcours", parcoursRoute); 
-api.use("/year", yearRoute); 
+api.use("/utility", utilityRoute);
 
-api.use("/classe", classeRoute); 
+api.use("/filiere", filiereRoute);
+api.use("/parcours", parcoursRoute);
+api.use("/year", yearRoute);
+
+api.use("/classe", classeRoute);
 api.use("/note", noteRoute);
 
 api.use("/course", courseRoute);

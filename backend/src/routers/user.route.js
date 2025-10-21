@@ -21,6 +21,7 @@ router.get("/me", authenticateJWT, userController.me);
 // Protected routes
 router.get("/", authenticateJWT, userController.getAllUsers);
 router.get("/role/:role", authenticateJWT, userController.getUsersByRole);
+router.get("/teachers", authenticateJWT, userController.getAllTeachers);
 router.get("/:id", authenticateJWT, userController.getUser);
 router.patch(
   "/:id",
