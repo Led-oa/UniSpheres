@@ -93,7 +93,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 rounded-2xl to-indigo-100 p-6">
+  <div class="min-h-screen rounded-2xl p-6">
     <!-- En-tête -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-gray-800 mb-2">Tableau de bord Étudiant</h1>

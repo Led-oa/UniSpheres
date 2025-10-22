@@ -20,6 +20,8 @@ const annonceRoute = require("./annonce.route");
 
 const utilityRoute = require("./utility.route");
 
+const scheduleRoute = require("./schedule.route");
+
 const api = express.Router();
 
 api.use("/user", userRoute);
@@ -29,6 +31,8 @@ api.use("/file", fileRoute);
 api.use("/annonce", annonceRoute);
 
 api.use("/utility", utilityRoute);
+
+api.use("schedule", scheduleRoute);
 
 api.use("/filiere", filiereRoute);
 api.use("/parcours", parcoursRoute);
