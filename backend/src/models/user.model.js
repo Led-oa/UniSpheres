@@ -83,7 +83,27 @@ const userModel = {
       throw new Error("DATABASE_ERROR");
     }
   },
-  async findAll(limit = 10, offset = 0, join = true) {
+  async getTotalCount() {
+    try {
+      const sql = `SELECT COUNT(*) as total FROM user`;
+      const rows = await query(sql);
+      return rows[0].total;
+    } catch (error) {
+      console.error("UserModel.getTotalCount error:", error);
+      throw new Error("DATABASE_ERROR");
+    }
+  },
+  async getCountByRole(role) {
+    try {
+      const sql = `SELECT COUNT(*) as total FROM user WHERE role = ?`;
+      const rows = await query(sql, [role]);
+      return rows[0].total;
+    } catch (error) {
+      console.error("UserModel.getCountByRole error:", error);
+      throw new Error("DATABASE_ERROR");
+    }
+  },
+  async findAll(limit, offset, join = true) {
     try {
       let sql;
       if (join) {
@@ -106,7 +126,7 @@ const userModel = {
       throw new Error("DATABASE_ERROR");
     }
   },
-  async findAllByRole(limit = 10, offset = 0, userRole, join = true) {
+  async findAllByRole(limit, offset, userRole, join = true) {
     try {
       let sql;
       if (join) {
@@ -125,6 +145,30 @@ const userModel = {
         sql = `SELECT * FROM user WHERE role = ? ORDER BY created_at DESC LIMIT ? OFFSET ?`;
       }
       return await query(sql, [userRole, limit, offset]);
+    } catch (error) {
+      console.error("UserModel.findAllByRole error:", error);
+      throw new Error("DATABASE_ERROR");
+    }
+  },
+
+  async findAllTeacher(join = true) {
+    try {
+      let sql;
+      if (join) {
+        sql = `
+            SELECT u.*, c.name AS class_name, f.name AS filiere_name, p.name AS parcours_name, y.year_value
+            FROM user u
+            LEFT JOIN classe c ON u.class_id = c.id_class
+            LEFT JOIN filiere f ON c.filiere_id = f.id_filiere
+            LEFT JOIN parcours p ON c.parcours_id = p.id_parcours
+            LEFT JOIN year y ON c.year_id = y.id_year
+            WHERE u.role = "teacher"
+            ORDER BY u.created_at DESC
+          `;
+      } else {
+        sql = `SELECT * FROM user WHERE role = "teacher" ORDER BY created_at DESC LIMIT ? OFFSET ?`;
+      }
+      return await query(sql);
     } catch (error) {
       console.error("UserModel.findAllByRole error:", error);
       throw new Error("DATABASE_ERROR");

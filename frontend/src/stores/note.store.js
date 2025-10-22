@@ -90,6 +90,7 @@ export const useNoteStore = defineStore("note", () => {
     error.value = null;
     try {
       const res = await NoteService.fetchByStudents(studentId);
+      console.log("Fetch all note of student : ", res);
       notes.value = res.data || [];
       return notes.value;
     } catch (err) {

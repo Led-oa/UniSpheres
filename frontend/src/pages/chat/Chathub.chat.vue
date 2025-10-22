@@ -11,6 +11,12 @@ const chatStore = useChatStore();
 const authStore = useAuthStore();
 const adminStore = useAdminStore();
 
+// Récupérer les informations de l'utilisateur
+const user = computed(() => authStore.user);
+
+console.log("Current User ChatHub : ", user.value.email);
+console.log("Current User ChatHub : ", user.value.role);
+
 const showCreateModal = ref(false);
 const searchQuery = ref("");
 const newConversation = ref({
@@ -29,11 +35,9 @@ const availableUsers = computed(() => {
   if (!adminStore.users || !Array.isArray(adminStore.users)) {
     return [];
   }
-
   if (!authStore.user || !authStore.user.id) {
     return adminStore.users;
   }
-
   return adminStore.users.filter((user) => user.id !== authStore.user.id);
 });
 
@@ -58,7 +62,6 @@ const canCreateConversation = computed(() => {
     return newConversation.value.title && newConversation.value.memberIds.length >= 1;
   }
 });
-
 // Methods
 const getConversationInitials = (conversation) => {
   if (conversation.display_name) {
@@ -143,12 +146,23 @@ const closeCreateModal = () => {
 
 const selectConversation = (conversation) => {
   // router.push(`/messageries/${conversation.id_conversation}`);
-  return {
-    name: "DiscussionEtudiant",
-    params: {
-      id: conversation.id_conversation,
-    },
-  };
+  const userRole = user.value.role;
+  switch (userRole) {
+    case "teacher":
+      return {
+        name: "DiscussionEnseignant",
+        params: {
+          id: conversation.id_conversation,
+        },
+      };
+    case "student":
+      return {
+        name: "DiscussionEtudiant",
+        params: {
+          id: conversation.id_conversation,
+        },
+      };
+  }
 };
 
 const clearError = () => {
@@ -173,9 +187,9 @@ const createNewConversation = async () => {
     });
 
     if (result && result.exists) {
-      router.push(`/messageries/${result.conversationId}`);
+      router.push(`messageries/${result.conversationId}`);
     } else if (result && result.id_conversation) {
-      router.push(`/messageries/${result.id_conversation}`);
+      router.push(`messageries/${result.id_conversation}`);
     }
 
     closeCreateModal();
@@ -184,11 +198,21 @@ const createNewConversation = async () => {
   }
 };
 
+const loadUser = async () => {
+  if (authStore.token && !authStore.user) {
+    try {
+      await authStore.fetchUserData();
+    } catch (error) {
+      console.error("Failed to fetch user data");
+    }
+  }
+};
+
 // Lifecycle hooks
 onMounted(async () => {
   try {
     await chatStore.getConversations();
-
+    loadUser();
     if (authStore.token) {
       chatStore.initializeSocket(authStore.token);
     }

@@ -11,7 +11,7 @@ const mobileOpen = ref(false);
 // Récupérer les informations de l'utilisateur
 const user = computed(() => authStore.user);
 const userName = computed(
-  () => user.value?.name || user.value?.username || "Administrateur"
+  () => user.value?.name || user.value?.email || "Administrateur"
 );
 const userInitial = computed(() => userName.value.charAt(0).toUpperCase());
 
@@ -70,7 +70,7 @@ const menuItems = [
 
 function handleLogout() {
   authStore.logout();
-  router.push("/login");
+  router.push("/");
 }
 
 const navigateTo = (routeName) => {
@@ -78,7 +78,21 @@ const navigateTo = (routeName) => {
   router.push({ name: routeName });
 };
 
+const getRouteDisplayName = (route) => {
+  // First try meta.title
+  if (route.meta?.title) {
+    return route.meta.title;
+  }
 
+  // Then try to find alias from router
+  const routeRecord = router.getRoutes().find((r) => r.name === route.name);
+  if (routeRecord?.alias) {
+    return Array.isArray(routeRecord.alias) ? routeRecord.alias[0] : routeRecord.alias;
+  }
+
+  // Fallback to route name
+  return route.name;
+};
 </script>
 
 <template>
@@ -125,7 +139,7 @@ const navigateTo = (routeName) => {
           <!-- User menu desktop -->
           <div class="hidden md:flex items-center space-x-4">
             <!-- Notifications -->
-            <button
+            <!-- <button
               class="relative p-2 text-blue-100 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,7 +151,7 @@ const navigateTo = (routeName) => {
                 />
               </svg>
               <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            </button> -->
 
             <!-- User profile -->
             <div class="flex items-center space-x-3">
@@ -289,9 +303,10 @@ const navigateTo = (routeName) => {
           </router-link>
           <span class="text-gray-400">/</span>
           <span class="text-gray-800 font-medium capitalize">
-            {{
+            <!-- {{
               $route.meta.title || $route.name?.replace("Admin", "") || "Administration"
-            }}
+            }} -->
+            {{ getRouteDisplayName($route) }}
           </span>
         </nav>
       </div>
@@ -310,6 +325,7 @@ const navigateTo = (routeName) => {
         class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 text-sm"
       >
         <p>© 2025 UniSphere - Plateforme éducative. Administration système</p>
+        <p>Créer par Ledoa Gaël</p>
       </div>
     </footer>
   </div>

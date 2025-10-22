@@ -2,9 +2,11 @@ import api from "../Connect.backend";
 
 export const AnnonceService = {
   // Récupérer toutes les annonces
-  async getAllAnnonces() {
-    const response = await api.get("/annonce");
-    return response.data.data; // selon le format de ton controller { success, data }
+  async getAllAnnonces(page = 1, limit = 9) {
+    const response = await api.get("/annonce", {
+      params: { page, limit },
+    });
+    return response.data; // selon le format de ton controller { success, data }
   },
 
   // Récupérer une annonce par ID

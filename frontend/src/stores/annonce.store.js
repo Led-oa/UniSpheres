@@ -7,12 +7,22 @@ export const useAnnonceStore = defineStore("annonce", () => {
   const currentAnnonce = ref(null);
   const isLoading = ref(false);
   const error = ref(null);
+  const pagination = ref({
+    currentPage: 1,
+    totalPages: 0,
+    totalItems: 0,
+    itemsPerPage: 9,
+  });
 
-  const fetchAllAnnonces = async () => {
+  const fetchAllAnnonces = async (page = 1, limit = 9) => {
     isLoading.value = true;
     error.value = null;
     try {
-      annonces.value = await AnnonceService.getAllAnnonces();
+      const res = await AnnonceService.getAllAnnonces(page, limit);
+      console.log("resultat annonces : ", res);
+
+      annonces.value = res.data;
+      pagination.value = res.pagination;
     } catch (err) {
       console.error("Erreur fetchAllAnnonces:", err);
       error.value = err.message || "Erreur lors du chargement des annonces";
@@ -103,11 +113,18 @@ export const useAnnonceStore = defineStore("annonce", () => {
     }
   };
 
+  const changePage = async (page) => {
+    pagination.value.currentPage = page;
+    await fetchAllAnnonces(page, pagination.value.itemsPerPage);
+  };
+
   return {
     annonces,
     currentAnnonce,
     isLoading,
     error,
+    pagination,
+    changePage,
     fetchAllAnnonces,
     fetchAnnonceById,
     createAnnonce,

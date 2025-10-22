@@ -36,18 +36,31 @@ export const getCurrentUser = async () => {
   }
 };
 
-export const getAllUsers = async () => {
+export const getAllUsers = async (page = 1, limit = 10) => {
   try {
-    const response = await api.get("/user");
+    const response = await api.get("/user", {
+      params: { page, limit },
+    });
     return response.data;
   } catch (err) {
     throw err.response?.data || err;
   }
 };
 
-export const getUsersByRole = async (role) => {
+export const getUsersByRole = async (role, page = 1, limit = 10) => {
   try {
-    const response = await api.get(`/user/role/${role}`);
+    const response = await api.get(`/user/role/${role}`, {
+      params: { page, limit },
+    });
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || err;
+  }
+};
+
+export const getAllTeacher = async () => {
+  try {
+    const response = await api.get(`/user/teachers`);
     return response.data;
   } catch (err) {
     throw err.response?.data || err;

@@ -127,7 +127,7 @@ function closeModalNotes() {
                 />
               </svg>
             </div>
-            <h3 class="ml-3 text-sm font-medium text-gray-900">Horaire</h3>
+            <h3 class="ml-3 text-sm font-medium text-gray-900">Horaires</h3>
           </div>
           <p class="text-lg font-semibold text-gray-800">
             {{ course.duration || "Non spécifié" }} heures
@@ -155,9 +155,11 @@ function closeModalNotes() {
                 />
               </svg>
             </div>
-            <h3 class="ml-3 text-sm font-medium text-gray-900">Code</h3>
+            <h3 class="ml-3 text-sm font-medium text-gray-900">Credits</h3>
           </div>
-          <p class="text-lg font-semibold text-gray-800">{{ course.id_course || "N/A" }}</p>
+          <p class="text-lg font-semibold text-gray-800">
+            {{ course.credits || "N/A" }}
+          </p>
         </div>
       </div>
 

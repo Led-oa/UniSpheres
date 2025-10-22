@@ -678,7 +678,7 @@ watch(newMessage, adjustTextareaHeight);
           v-for="message in messages"
           :key="message.id_message"
           class="flex"
-          :class="{ 'justify-end': !isOwnMessage(message) }"
+          :class="{ 'justify-end': isOwnMessage(message) }"
         >
           <div class="relative group max-w-xs lg:max-w-md xl:max-w-lg">
             <div class="rounded-lg px-4 py-2" :class="getMessageClasses(message)">

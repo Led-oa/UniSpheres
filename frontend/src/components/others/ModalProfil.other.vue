@@ -54,7 +54,7 @@ async function updatePhoto() {
 }
 
 // ------------------ Profil ------------------
-const form = ref({ name: "", email: "" });
+const form = ref({ name: "", lastname: "", email: "" });
 
 watch(
   () => props.userId,
@@ -62,6 +62,7 @@ watch(
     if (id) {
       await userStore.fetchUser(id);
       form.value.name = userStore.currentUser.name;
+      form.value.lastname = userStore.currentUser.lastname;
       form.value.email = userStore.currentUser.email;
     }
   },
@@ -137,7 +138,15 @@ async function updatePassword() {
         <h2 class="text-xl font-bold mb-4">Modifier les informations</h2>
         <form @submit.prevent="updateProfil">
           <div class="mb-4">
-            <label class="block text-sm font-medium mb-1">Nom complet</label>
+            <label class="block text-sm font-medium mb-1">Nom</label>
+            <input
+              v-model="form.lastname"
+              type="text"
+              class="border p-2 w-full rounded"
+            />
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium mb-1">Prénom</label>
             <input v-model="form.name" type="text" class="border p-2 w-full rounded" />
           </div>
           <div class="mb-4">

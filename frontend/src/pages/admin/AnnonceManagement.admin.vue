@@ -2,7 +2,9 @@
 import { onMounted, ref, computed } from "vue";
 import { useAnnonceStore } from "../../stores/annonce.store";
 import { useAuthStore } from "../../stores/auth.store";
+
 import ModalAnnonceAdmin from "../../components/admin/ModalAnnonce.admin.vue";
+import PaginationGenerale from "../../components/generale/Pagination.generale.vue";
 
 const annonceStore = useAnnonceStore();
 const authStore = useAuthStore();
@@ -26,18 +28,25 @@ const filterType = ref("");
 const filterPriority = ref("");
 
 // --- Chargement ---
-const loadAnnonce = async () => {
+const loadAnnonce = async (page = 1) => {
   loading.value = true;
   try {
-    await annonceStore.fetchAllAnnonces();
-    annonces.value = annonceStore.annonces;
+    await annonceStore.fetchAllAnnonces(page, 9);
+    annonces.value = annonceStore.annonces.annonces;
   } catch (err) {
     console.error("Erreur chargement des annonces :", err);
   } finally {
     loading.value = false;
   }
 };
-onMounted(loadAnnonce);
+
+const handlePageChange = (page) => {
+  loadAnnonce(page);
+};
+
+onMounted(() => {
+  loadAnnonce(1);
+});
 
 // --- Filtrage ---
 const filteredAnnonces = computed(() =>
@@ -219,6 +228,16 @@ const handleDelete = async (id) => {
     <div v-if="!loading && filteredAnnonces.length === 0" class="text-gray-500">
       Aucune annonce correspondant aux filtres.
     </div>
+
+    <!-- Pagination -->
+    <PaginationGenerale
+      v-if="annonceStore.pagination.totalPages > 0"
+      :current-page="annonceStore.pagination.currentPage"
+      :total-pages="annonceStore.pagination.totalPages"
+      :total-items="annonceStore.pagination.totalItems"
+      :items-per-page="annonceStore.pagination.itemsPerPage"
+      @page-change="handlePageChange"
+    />
 
     <!-- MODAL -->
     <ModalAnnonceAdmin

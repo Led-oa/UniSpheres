@@ -52,7 +52,7 @@ const menuItems = [
     icon: "📚",
   },
   {
-    name: "ListeDiscussionsEtudiant",
+    name: "DiscussionStudent",
     label: "Messagerie",
     icon: "💬",
   },
@@ -72,6 +72,22 @@ function handleLogout() {
 const navigateTo = (routeName) => {
   isSidebarOpen.value = false;
   router.push({ name: routeName });
+};
+
+const getRouteDisplayName = (route) => {
+  // First try meta.title
+  if (route.meta?.title) {
+    return route.meta.title;
+  }
+
+  // Then try to find alias from router
+  const routeRecord = router.getRoutes().find((r) => r.name === route.name);
+  if (routeRecord?.alias) {
+    return Array.isArray(routeRecord.alias) ? routeRecord.alias[0] : routeRecord.alias;
+  }
+
+  // Fallback to route name
+  return route.name;
 };
 </script>
 
@@ -233,7 +249,8 @@ const navigateTo = (routeName) => {
         <div class="flex items-center justify-between p-4 px-8">
           <div class="flex items-center space-x-4">
             <h1 class="text-xl font-semibold text-gray-800 capitalize">
-              {{ $route.meta.title || $route.name }}
+              <!-- {{ $route.meta.title || $route.name }}  -->
+              {{ getRouteDisplayName($route) }}
             </h1>
           </div>
 

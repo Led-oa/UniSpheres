@@ -72,9 +72,26 @@ function openModal(course) {
 <template>
   <div class="space-y-6">
     <!-- Titre -->
-    <h1 class="text-2xl font-bold text-gray-800">
-      Notes – Classe {{ classe?.name || className }}
-    </h1>
+    <div class="flex">
+      <button @click="$router.back()" class="p-2 rounded-lg hover:bg-gray-100">
+        <svg
+          class="w-5 h-5 text-gray-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+      <h1 class="text-2xl font-bold text-gray-800">
+        Notes – Classe {{ classe?.name || className }}
+      </h1>
+    </div>
 
     <!-- Liste des cours -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

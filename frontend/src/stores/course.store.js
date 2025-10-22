@@ -51,7 +51,7 @@ export const useCourseStore = defineStore("course", () => {
       console.log("teacher id : ", teacherId);
 
       const response = await CourseService.getCoursesByTeacher(teacherId);
-      courses.value = response.data;
+      return (courses.value = response.data);
     } catch (err) {
       console.error("Erreur fetchCoursesByTeacher:", err);
       error.value = err;

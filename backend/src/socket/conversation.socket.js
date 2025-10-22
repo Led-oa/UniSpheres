@@ -12,21 +12,6 @@ module.exports = (socket, io) => {
   // --- Rejoindre une conversation avec vérification des permissions ---
   socket.on("joinConversation", async (conversationId) => {
     try {
-      // // Récupérer l'ID utilisateur depuis l'authentification socket
-      // const userId = socket.userId; // Vous devez définir cela lors de l'authentification
-
-      // console.log("userid dans convo socket : ", userId);
-
-      // // Vérifier que l'utilisateur est membre de la conversation
-      // const isMember = await ConversationModel.isMember(conversationId, userId);
-
-      // if (!isMember) {
-      //   socket.emit("error", {
-      //     message: "Accès non autorisé à cette conversation",
-      //   });
-      //   return;
-      // }
-
       socket.join(`conversation_${conversationId}`);
       console.log(`Socket ${socket.id} joined conversation ${conversationId}`);
     } catch (error) {

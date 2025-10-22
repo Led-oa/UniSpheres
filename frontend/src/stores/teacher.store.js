@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { getUsersByRole } from "../services/api/user.api";
+import { getUsersByRole, getAllTeacher } from "../services/api/user.api";
 
 export const useTeacherStore = defineStore("teacher", () => {
   const teachers = ref([]);
@@ -11,7 +11,9 @@ export const useTeacherStore = defineStore("teacher", () => {
     loading.value = true;
     error.value = null;
     try {
-      teachers.value = await getUsersByRole("teacher");
+      const res = await getAllTeacher();
+      console.log("Liste of all teacher : ", res.data);
+      return (teachers.value = res.data);
     } catch (err) {
       error.value = err;
     } finally {
