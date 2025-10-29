@@ -21,11 +21,11 @@ class YearModel extends InfoGenerique {
   }
 
   async update(id, data) {
-    return super.update(this.idField,id, data);
+    return super.update(this.idField, id, data);
   }
 
   async delete(id) {
-    return super.delete(id);
+    return super.delete(this.idField, id);
   }
 }
 

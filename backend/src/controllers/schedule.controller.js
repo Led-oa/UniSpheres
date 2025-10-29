@@ -358,6 +358,51 @@ const scheduleController = {
       });
     }
   },
+
+  async getOrganizedSchedule(req, res) {
+    try {
+      const classId = req.params.classId;
+      const currentWeek = req.query.week || null;
+
+      //   // Vérification des permissions (utilise ta logique existante)
+      //   if (
+      //     req.user.role === "student" &&
+      //     req.user.class_id !== parseInt(classId)
+      //   ) {
+      //     return res.status(403).json({
+      //       success: false,
+      //       message:
+      //         "Vous n'êtes pas autorisé à voir l'emploi du temps de cette classe",
+      //     });
+      //   }
+
+      const result = await scheduleService.findOrganizedSchedule(
+        classId,
+        currentWeek
+      );
+
+      if (result.success) {
+        return res.status(200).json({
+          success: true,
+          message: result.message,
+          data: result.data,
+        });
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: result.message,
+          data: null,
+        });
+      }
+    } catch (error) {
+      console.error("Erreur dans getOrganizedSchedule:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Erreur interne du serveur",
+        data: null,
+      });
+    }
+  },
 };
 
 module.exports = scheduleController;

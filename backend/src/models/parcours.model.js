@@ -21,12 +21,13 @@ class ParcoursModel extends InfoGenerique {
 
   async update(id, data) {
     console.log("Model update parcours: data", data);
-
     return super.update(this.idField, id, data);
   }
 
   async delete(id) {
-    return super.delete(id);
+    console.log("Delete model parcours : ", id);
+
+    return super.delete(this.idField, id);
   }
 }
 

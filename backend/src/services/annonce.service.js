@@ -42,6 +42,7 @@ const AnnonceService = {
 
     const totalCounts = annonces.totalCount;
     console.log("Total Annonces : ", totalCounts);
+    console.log("Annonces listes : ", annonces.annonces);
 
     return { annonces, totalCounts };
   },

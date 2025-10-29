@@ -5,8 +5,7 @@ const ParcoursController = {
   async getAll(req, res) {
     try {
       const data = await ParcoursService.getAll();
-      console.log("Controller parcours: ", data);
-
+      // console.log("Controller parcours: ", data);
       res.json({ success: true, data });
     } catch (err) {
       res.status(400).json({ success: false, error: err.message });
@@ -48,6 +47,9 @@ const ParcoursController = {
   async delete(req, res) {
     try {
       const id = req.params.id;
+
+      console.log("DELETE Parcours : ", id);
+
       await ParcoursService.delete(id);
       res.json({ success: true, message: "Supprimé avec succès" });
     } catch (err) {

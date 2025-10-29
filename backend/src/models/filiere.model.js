@@ -28,7 +28,7 @@ class FiliereModel extends InfoGenerique {
 
   // Supprimer une filière
   async delete(id) {
-    return super.delete(id);
+    return super.delete(this.idField, id);
   }
 }
 

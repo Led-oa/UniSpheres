@@ -27,4 +27,10 @@ router.delete(
   scheduleController.deleteSchedule
 );
 
+router.get(
+  "/class/:classId/organized",
+  authenticateJWT,
+  scheduleController.getOrganizedSchedule
+);
+
 module.exports = router;

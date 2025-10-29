@@ -63,7 +63,7 @@ const routes = [
   {
     path: "/administrator",
     component: LayoutAdmin,
-    meta: { requiresAuth: true, requiredRole: "administrator" },
+    meta: { requiresAuth: true, requiredRole: "administrator", isActive: 1 },
     children: [
       {
         path: "",
@@ -119,7 +119,7 @@ const routes = [
   {
     path: "/teacher",
     component: LayoutTeacher,
-    meta: { requiresAuth: true, requiredRole: "teacher" },
+    meta: { requiresAuth: true, requiredRole: "teacher", isActive: 1 },
     children: [
       {
         path: "",
@@ -210,7 +210,7 @@ const routes = [
   {
     path: "/student",
     component: LayoutStudent,
-    meta: { requiresAuth: true, requiredRole: "student" },
+    meta: { requiresAuth: true, requiredRole: "student", isActive: 1 },
     children: [
       {
         path: "",
@@ -296,7 +296,6 @@ const router = createRouter({
   routes,
 });
 
-// --- Garde globale refactorisée ---
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
 
@@ -307,12 +306,13 @@ router.beforeEach(async (to, from, next) => {
 
   // Debug initial
   console.log("Navigation to:", to.name);
-  // console.log("Initial auth state:", {
-  //   hasToken: !!authStore.token,
-  //   hasUser: !!authStore.user,
-  //   user: authStore.user,
-  //   role: authStore.role,
-  // });
+  console.log("Initial auth state:", {
+    hasToken: !!authStore.token,
+    hasUser: !!authStore.user,
+    user: authStore.user,
+    role: authStore.role,
+    is_active: authStore.is_active,
+  });
 
   // Si on a un token mais pas de données utilisateur, les récupérer
   if (authStore.token && !authStore.user) {
@@ -339,11 +339,12 @@ router.beforeEach(async (to, from, next) => {
     }
   };
 
-  // console.log("Final auth state:", {
-  //   isLoggedIn: authStore.isLoggedIn,
-  //   user: authStore.user,
-  //   role: authStore.role,
-  // });
+  console.log("Final auth state:", {
+    isLoggedIn: authStore.isLoggedIn,
+    user: authStore.user,
+    role: authStore.role,
+    is_active: authStore.is_active,
+  });
 
   if (to.meta.requiresAuth && !authStore.isLoggedIn) {
     // console.log("Redirecting to login - requires authentication");
@@ -368,6 +369,17 @@ router.beforeEach(async (to, from, next) => {
     //   authStore.user?.role
     // );
     next({ name: "Unauthorized" });
+    return;
+  }
+
+  if (to.meta.requiredRole && authStore.user?.is_active !== to.meta.isActive) {
+    console.log(
+      "Unauthorized - required:",
+      to.meta.isActive,
+      "has:",
+      authStore.user?.is_active
+    );
+    next({ name: "NotActivated" });
     return;
   }
 

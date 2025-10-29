@@ -4,8 +4,7 @@ const FiliereController = {
   async getAll(req, res) {
     try {
       const data = await FiliereService.getAll();
-    //   console.log("Controller filiere: ", data);
-
+      //   console.log("Controller filiere: ", data);
       res.json({ success: true, data });
     } catch (err) {
       res.status(400).json({ success: false, error: err.message });
@@ -44,6 +43,9 @@ const FiliereController = {
   async delete(req, res) {
     try {
       const id = req.params.id;
+
+      console.log("DELETE filière : ", id);
+
       await FiliereService.delete(id);
       res.json({ success: true, message: "Supprimé avec succès" });
     } catch (err) {

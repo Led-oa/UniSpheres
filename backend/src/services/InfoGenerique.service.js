@@ -55,6 +55,8 @@ class InfoGeneriqueService {
   // Supprimer une ligne
   async delete(id) {
     try {
+      console.log("Delete parcours : ", id);
+      console.log("Model : ", this.model);
       const deleted = await this.model.delete(id);
       if (!deleted) throw new Error(`${this.model.table} not found`);
       return deleted;

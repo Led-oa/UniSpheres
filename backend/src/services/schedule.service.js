@@ -212,6 +212,41 @@ const scheduleService = {
     }
   },
 
+  async findOrganizedSchedule(classId, currentWeek = null) {
+    try {
+      // Utilise la méthode existante pour récupérer les données
+      const result = await this.findScheduleOfClass(classId, currentWeek);
+      
+      if (!result.success) {
+        return result; // Retourne l'erreur existante
+      }
+
+      // Applique l'algorithme d'affectation
+      const organizedSchedule = Affectation.schedule(result.data.schedules);
+      const statistics = Affectation.getStatistics(organizedSchedule, result.data.schedules);
+      const displayData = Affectation.formatForDisplay(organizedSchedule);
+
+      return {
+        success: true,
+        message: `Emploi du temps organisé ${currentWeek ? `pour la semaine ${currentWeek}` : ''}`,
+        data: {
+          organizedSchedule,
+          statistics,
+          displayData,
+          originalData: result.data.schedules,
+          currentWeek
+        }
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        message: `Erreur d'organisation: ${error.message}`,
+        data: null
+      };
+    }
+  },
+
   async updateSchedule(scheduleId, classId, teacherId, updateData) {
     try {
       // Validation des IDs

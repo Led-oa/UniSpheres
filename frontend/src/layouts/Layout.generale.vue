@@ -87,7 +87,7 @@ const goToDashboard = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 font-sans">
+  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 font-sans">
     <!-- Navbar -->
     <header class="bg-white shadow-md sticky top-0 z-50">
       <nav
@@ -98,7 +98,7 @@ const goToDashboard = () => {
           :to="{ name: 'Accueil' }"
           class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 flex items-center"
         >
-          <svg
+          <!-- <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-8 w-8 mr-2 text-blue-600"
             fill="none"
@@ -111,7 +111,7 @@ const goToDashboard = () => {
               stroke-width="2"
               d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
             />
-          </svg>
+          </svg> -->
           UniSphere
         </router-link>
 
@@ -391,7 +391,7 @@ const goToDashboard = () => {
     </header>
 
     <!-- Page content -->
-    <main class="mt-8">
+    <main class="">
       <router-view />
     </main>
 

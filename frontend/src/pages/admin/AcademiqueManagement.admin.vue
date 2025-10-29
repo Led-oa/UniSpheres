@@ -30,6 +30,12 @@ const selectedYear = ref(null);
 const selectedFiliere = ref(null);
 const selectedParcours = ref(null);
 
+// Modal de confirmation de suppression
+const isDeleteModalOpen = ref(false);
+const itemToDelete = ref(null);
+const deleteConfirmationText = ref("");
+
+const deletedItem = ref(null);
 // Stores
 const classeStore = useClasseStore();
 const filiereStore = useFiliereStore();
@@ -99,6 +105,80 @@ function handleEdit(item) {
   }
 }
 
+function handleDelete(item) {
+  // Ouvrir le modal de confirmation au lieu de supprimer directement
+  itemToDelete.value = item;
+
+  let text;
+  switch (activeTab.value) {
+    case "niveaux":
+      text = `Voulez-vous vraiment supprimer le niveau : "${item.year_value}" ?`;
+      break;
+    case "filieres":
+      text = `Voulez-vous vraiment supprimer la filière : "${item.name}" ?`;
+      break;
+    case "parcours":
+      text = `Voulez-vous vraiment supprimer le parcours : "${item.name}" ?`;
+      break;
+    case "classes":
+      text = `Voulez-vous vraiment supprimer la classe : "${item.name}" ?`;
+      break;
+  }
+
+  deleteConfirmationText.value = text;
+  isDeleteModalOpen.value = true;
+}
+
+// Confirmer la suppression
+async function confirmDelete() {
+  if (!itemToDelete.value) return;
+
+  const item = itemToDelete.value;
+
+  console.log("ITEM : ", itemToDelete.value.id_parcours);
+
+  try {
+    switch (activeTab.value) {
+      case "niveaux":
+        console.log("Delete : ", itemToDelete.value.id_year);
+        await yearStore.deleteYear(itemToDelete.value.id_year);
+        await yearStore.fetchYears();
+        break;
+      case "filieres":
+        console.log("Delete : ", itemToDelete.value.id_filiere);
+        await filiereStore.deleteFiliere(itemToDelete.value.id_filiere);
+        await filiereStore.fetchFilieres();
+        break;
+      case "parcours":
+        console.log("Delete : ", itemToDelete.value.id_parcours);
+        await parcoursStore.deleteParcours(itemToDelete.value.id_parcours);
+        await parcoursStore.fetchParcours();
+        break;
+      case "classes":
+        console.log("Delete : ", itemToDelete.value.id_class);
+        await classeStore.deleteClass(itemToDelete.value.id_class);
+        await classeStore.fetchClasses();
+        break;
+    }
+  } catch (error) {
+    console.error("Erreur lors de la suppression:", error);
+  } finally {
+    closeDeleteModal();
+  }
+}
+
+// Annuler la suppression
+function cancelDelete() {
+  closeDeleteModal();
+}
+
+// Fermer le modal de suppression
+function closeDeleteModal() {
+  isDeleteModalOpen.value = false;
+  itemToDelete.value = null;
+  deleteConfirmationText.value = "";
+}
+
 // Pour rafraîchir les listes après enregistrement
 function handleSaved(tab) {
   switch (tab) {
@@ -121,7 +201,7 @@ function handleClasseSaved() {
 
 <template>
   <section class="space-y-8">
-    <h1 class="text-2xl font-bold text-gray-800">Gestion Académique</h1>
+    <h1 class="text-2xl font-bold text-gray-800">Gestion des Classes</h1>
     <div
       class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-200 pb-3"
     >
@@ -179,6 +259,7 @@ function handleClasseSaved() {
                 Modifier
               </button>
               <RouterLink
+                v-if="c && c.id_class"
                 :to="{
                   name: 'InformationClassesAdmin',
                   params: { idClasse: c.id_class },
@@ -188,6 +269,7 @@ function handleClasseSaved() {
                 Détails
               </RouterLink>
               <button
+                @click="handleDelete(c)"
                 class="flex-1 bg-red-600 text-white py-1.5 rounded hover:bg-red-700"
               >
                 Supprimer
@@ -251,11 +333,7 @@ function handleClasseSaved() {
                     Modifier
                   </button>
                   <button
-                    class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
-                  >
-                    Détails
-                  </button>
-                  <button
+                    @click="handleDelete(item)"
                     class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
                   >
                     Supprimer
@@ -267,7 +345,7 @@ function handleClasseSaved() {
         </div>
 
         <p v-else class="text-gray-500 text-center">
-          Aucun enregistrement pour l’onglet sélectionné.
+          Aucun enregistrement pour l'onglet sélectionné.
         </p>
       </template>
     </div>
@@ -298,5 +376,57 @@ function handleClasseSaved() {
       @close="isModalClasseOpen = false"
       @saved="handleClasseSaved"
     />
+
+    <!-- Modal de confirmation de suppression -->
+    <div
+      v-if="isDeleteModalOpen"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+      @click.self="cancelDelete"
+    >
+      <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6">
+        <div class="text-center">
+          <!-- Icône d'alerte -->
+          <div
+            class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4"
+          >
+            <svg
+              class="h-6 w-6 text-red-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+              />
+            </svg>
+          </div>
+
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">
+            Confirmer la suppression
+          </h3>
+          <p class="text-gray-600 mb-6">
+            {{ deleteConfirmationText }}
+          </p>
+
+          <div class="flex gap-3 justify-center">
+            <button
+              @click="cancelDelete"
+              class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            >
+              Non, annuler
+            </button>
+            <button
+              @click="confirmDelete"
+              class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+            >
+              Oui, supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
