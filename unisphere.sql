@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mer. 22 oct. 2025 à 15:58
+-- Généré le : mer. 29 oct. 2025 à 18:18
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.0.30
 
@@ -48,11 +48,9 @@ CREATE TABLE `annonce` (
 --
 
 INSERT INTO `annonce` (`id_annonce`, `title`, `content`, `posted_by`, `target_class_id`, `target_filiere_id`, `target_year_id`, `type`, `is_visible`, `priority`, `deadline`, `created_at`, `updated_at`) VALUES
-(100, 'joel', 'testestqs it became false', 11, 2, 2, 2, 'general', 1, 'medium', '2026-12-28', '2025-09-19 19:39:37', '2025-10-16 05:42:03'),
 (101, 'Examen', 'Examen la semaine prochaine', 11, 1, 1, 1, 'general', 1, 'low', '2025-09-23', '2025-09-22 17:48:02', '2025-10-16 05:42:08'),
-(102, 'Test', 'testesetsdgese ', 11, 5, 6, 8, 'evenement', 1, 'medium', '2025-09-24', '2025-09-22 17:49:04', '2025-10-16 05:42:12'),
 (103, 'Examen', 'Bonjour, ceci est une annonce pour l\'examen de la classe Info L1 B.', 11, 2, 1, 1, 'cours', 1, 'high', '2025-10-14', '2025-10-06 14:21:52', '2025-10-06 14:21:52'),
-(104, 'Annonces avec image', 'Annonces avec images', 11, NULL, NULL, NULL, 'general', 1, 'medium', '2025-10-18', '2025-10-17 12:04:15', '2025-10-17 12:04:15'),
+(104, 'Annonces avec image', 'Annonces avec images', 11, NULL, NULL, NULL, 'general', 0, 'medium', '2025-10-17', '2025-10-17 12:04:15', '2025-10-24 13:10:18'),
 (105, 'Evenement ', 'Evenement importante', 11, NULL, NULL, 5, 'evenement', 1, 'low', '2025-10-22', '2025-10-21 05:30:18', '2025-10-21 05:30:18');
 
 -- --------------------------------------------------------
@@ -76,13 +74,15 @@ CREATE TABLE `classe` (
 --
 
 INSERT INTO `classe` (`id_class`, `name`, `filiere_id`, `parcours_id`, `year_id`, `created_at`, `updated_at`) VALUES
-(1, 'Info L2 A', 1, 6, 2, '2025-09-16 04:01:17', '2025-10-18 13:56:10'),
+(1, 'Info L3 A', 1, 6, 3, '2025-09-16 04:01:17', '2025-10-29 11:00:00'),
 (2, 'Info L1 B', 1, 6, 1, '2025-09-16 04:01:17', '2025-09-16 04:01:17'),
 (3, 'Info L3 C', 1, 1, 3, '2025-09-16 07:39:17', '2025-09-16 13:51:35'),
 (4, 'Info DAI', 1, 2, 3, '2025-09-16 07:39:17', '2025-09-16 07:39:17'),
 (5, 'Math L1 F', 2, 6, 1, '2025-09-16 13:51:58', '2025-09-16 13:51:58'),
 (8, 'Nasa L1', 6, 6, 1, '2025-09-16 13:54:35', '2025-09-16 13:54:35'),
-(9, 'ST L1', 4, 6, 1, '2025-10-06 14:24:09', '2025-10-06 14:24:09');
+(9, 'ST L1', 4, 6, 1, '2025-10-06 14:24:09', '2025-10-06 14:24:09'),
+(10, 'Info M1 GL', 1, 1, 4, '2025-10-23 07:20:56', '2025-10-23 07:20:56'),
+(11, 'Agro L1 D', 4, 6, 1, '2025-10-24 04:05:41', '2025-10-24 04:05:41');
 
 -- --------------------------------------------------------
 
@@ -107,7 +107,9 @@ INSERT INTO `conversation` (`id_conversation`, `title`, `type`, `created_at`, `u
 (27, NULL, 'private', '2025-10-14 10:42:21', '2025-10-14 10:42:21'),
 (28, NULL, 'private', '2025-10-18 17:10:08', '2025-10-18 17:10:08'),
 (29, NULL, 'private', '2025-10-18 18:04:59', '2025-10-18 18:04:59'),
-(30, 'Adventure', 'group', '2025-10-18 18:08:02', '2025-10-18 18:08:02');
+(30, 'Adventure', 'group', '2025-10-18 18:08:02', '2025-10-18 18:08:02'),
+(31, NULL, 'private', '2025-10-24 12:50:34', '2025-10-24 12:50:34'),
+(32, NULL, 'private', '2025-10-27 08:24:50', '2025-10-27 08:24:50');
 
 -- --------------------------------------------------------
 
@@ -139,7 +141,11 @@ INSERT INTO `conversation_member` (`id_convo_member`, `conversation_id`, `member
 (41, 29, 10, '2025-10-18 18:04:59', NULL, '2025-10-18 18:04:59', '2025-10-18 18:04:59'),
 (42, 30, 14, '2025-10-18 18:08:02', NULL, '2025-10-18 18:08:02', '2025-10-18 18:08:02'),
 (43, 30, 12, '2025-10-18 18:08:02', NULL, '2025-10-18 18:08:02', '2025-10-18 18:08:02'),
-(44, 30, 13, '2025-10-18 18:08:02', NULL, '2025-10-18 18:08:02', '2025-10-18 18:08:02');
+(44, 30, 13, '2025-10-18 18:08:02', NULL, '2025-10-18 18:08:02', '2025-10-18 18:08:02'),
+(45, 31, 12, '2025-10-24 12:50:34', NULL, '2025-10-24 12:50:34', '2025-10-24 12:50:34'),
+(46, 31, 13, '2025-10-24 12:50:34', NULL, '2025-10-24 12:50:34', '2025-10-24 12:50:34'),
+(47, 32, 1, '2025-10-27 08:24:50', NULL, '2025-10-27 08:24:50', '2025-10-27 08:24:50'),
+(48, 32, 7, '2025-10-27 08:24:50', NULL, '2025-10-27 08:24:50', '2025-10-27 08:24:50');
 
 -- --------------------------------------------------------
 
@@ -164,33 +170,33 @@ CREATE TABLE `course` (
 --
 
 INSERT INTO `course` (`id_course`, `title`, `content`, `duration`, `credits`, `teach_by`, `class_id`, `created_at`, `updated_at`) VALUES
-(1, 'Thermo dynamique', 'Cours thermo dynamique', 45, 8, 4, 4, '2025-09-18 05:11:49', '2025-10-14 11:08:29'),
+(1, 'Thermo dynamique', 'Cours thermo dynamique', 45, 8, 4, 1, '2025-09-18 05:11:49', '2025-10-23 15:44:06'),
 (3, 'Introduction à la Programmation', 'Bases de la programmation et algorithmes', 60, 10, 6, 4, '2025-09-18 06:08:05', '2025-10-14 11:08:35'),
 (4, 'Algèbre Linéaire', 'Vecteurs, matrices et applications', 90, 2, 4, 1, '2025-09-18 06:08:05', '2025-10-18 06:20:36'),
 (5, 'Physique Mécanique', 'Lois de Newton et mouvement', 75, 5, 6, 3, '2025-09-18 06:08:05', '2025-10-14 11:08:50'),
 (7, 'Électromagnétisme', 'Champs électriques et magnétiques', 90, 5, 8, 5, '2025-09-18 06:08:05', '2025-10-14 11:08:54'),
-(8, 'Biologie Cellulaire', 'Structure et fonction des cellules', 60, 5, 9, 8, '2025-09-18 06:08:05', '2025-10-14 11:08:56'),
+(8, 'Biologie Cellulaire', 'Structure et fonction des cellules', 60, 5, 9, 1, '2025-09-18 06:08:05', '2025-10-23 15:44:36'),
 (9, 'Calcul Différentiel', 'Dérivées et applications', 75, 6, 1, 1, '2025-09-18 06:08:05', '2025-10-14 11:08:59'),
-(10, 'Statistiques Appliquées', 'Analyses de données et probabilités', 90, 8, 4, 2, '2025-09-18 06:08:05', '2025-10-14 11:09:03'),
+(10, 'Statistiques Appliquées', 'Analyses de données et probabilités', 90, 8, 4, 1, '2025-09-18 06:08:05', '2025-10-23 15:44:13'),
 (11, 'Optique Géométrique', 'Lumière et systèmes optiques', 60, 2, 6, 3, '2025-09-18 06:08:05', '2025-10-14 11:09:07'),
 (12, 'Biochimie', 'Processus chimiques dans les organismes', 75, 3, 7, 4, '2025-09-18 06:08:05', '2025-10-14 11:09:12'),
 (13, 'Programmation Web', 'HTML, CSS et JavaScript', 90, 5, 8, 5, '2025-09-18 06:08:05', '2025-10-14 11:09:16'),
-(14, 'Génétique', 'Hérédité et ADN', 60, 5, 9, 8, '2025-09-18 06:08:05', '2025-10-14 11:09:19'),
+(14, 'Génétique', 'Hérédité et ADN', 60, 5, 9, 1, '2025-09-18 06:08:05', '2025-10-23 15:44:41'),
 (15, 'Algorithmes Avancés', 'Structures de données complexes', 90, 8, 1, 1, '2025-09-18 06:08:05', '2025-10-14 11:09:22'),
-(16, 'Géométrie Analytique', 'Coordonnées et transformations', 75, 6, 4, 2, '2025-09-18 06:08:05', '2025-10-14 11:09:25'),
+(16, 'Géométrie Analytique', 'Coordonnées et transformations', 75, 6, 4, 1, '2025-09-18 06:08:05', '2025-10-23 15:44:19'),
 (17, 'Thermodynamique Avancée', 'Cycles thermodynamiques', 90, 5, 6, 3, '2025-09-18 06:08:05', '2025-10-14 11:09:29'),
 (18, 'Chimie Inorganique', 'Éléments et composés minéraux', 60, 4, 7, 4, '2025-09-18 06:08:05', '2025-10-14 11:09:32'),
 (19, 'Réseaux Informatiques', 'Protocoles et architecture réseau', 75, 2, 8, 5, '2025-09-18 06:08:05', '2025-10-14 11:10:04'),
-(20, 'Écologie', 'Écosystèmes et biodiversité', 60, 4, 9, 8, '2025-09-18 06:08:05', '2025-10-14 11:10:02'),
+(20, 'Écologie', 'Écosystèmes et biodiversité', 60, 4, 9, 1, '2025-09-18 06:08:05', '2025-10-23 15:44:47'),
 (21, 'Intelligence Artificielle', 'Machine Learning et réseaux neuronaux', 90, 4, 1, 1, '2025-09-18 06:08:05', '2025-10-14 11:09:58'),
-(22, 'Analyse Complexe', 'Fonctions complexes et intégration', 75, 4, 4, 2, '2025-09-18 06:08:05', '2025-10-14 11:09:55'),
+(22, 'Analyse Complexe', 'Fonctions complexes et intégration', 75, 4, 4, 1, '2025-09-18 06:08:05', '2025-10-23 15:44:24'),
 (23, 'Physique Quantique', 'Mécanique quantique et particules', 90, 4, 6, 3, '2025-09-18 06:08:05', '2025-10-14 11:09:52'),
 (24, 'Pharmacologie', 'Médicaments et mécanismes d action', 60, 4, 7, 4, '2025-09-18 06:08:05', '2025-10-14 11:09:50'),
-(25, 'Sécurité Informatique', 'Cryptographie et protection des données', 75, 4, 8, 5, '2025-09-18 06:08:05', '2025-10-14 11:09:47'),
-(26, 'Anatomie Humaine', 'Structure du corps humain', 90, 4, 9, 8, '2025-09-18 06:08:05', '2025-10-14 11:09:44'),
+(26, 'Anatomie Humaine', 'Structure du corps humain', 90, 4, 9, 1, '2025-09-18 06:08:05', '2025-10-23 15:44:53'),
 (27, 'Base de Données', 'SQL et modélisation des données', 60, 4, 1, 1, '2025-09-18 06:08:05', '2025-10-14 11:09:40'),
-(28, 'UML 2', 'Base de la conception de projet', 40, 0, 9, 2, '2025-09-18 06:37:41', '2025-09-18 06:37:41'),
-(29, 'Physique Chimie', 'Cours sur la physique chimie', 95, 0, 8, 8, '2025-10-06 14:23:23', '2025-10-06 14:23:23');
+(28, 'UML 2', 'Base de la conception de projet', 40, 5, 9, 1, '2025-09-18 06:37:41', '2025-10-29 17:04:33'),
+(29, 'Physique Chimie', 'Cours sur la physique chimie', 95, 5, 8, 8, '2025-10-06 14:23:23', '2025-10-29 17:04:10'),
+(31, 'Programmation Mécanique de Jeu video', 'Introduction au mécanique de programmation dans les jeux vidéo ', 45, 10, 9, 10, '2025-10-29 17:01:09', '2025-10-29 17:04:30');
 
 -- --------------------------------------------------------
 
@@ -222,13 +228,15 @@ INSERT INTO `file` (`id_file`, `file_name`, `file_path`, `annonce_id`, `course_i
 (26, 'Demande de stage.docx', 'D:/UniSpheres/backend/src/uploads/cours/1758562993480-962202125-demande_de_stage.docx', NULL, 7, NULL, '2025-09-22 17:43:13', '2025-09-22 17:43:13'),
 (27, 'CV LEDOA GAÃL.pdf', 'D:/UniSpheres/backend/src/uploads/cours/1758563027605-90533581-cv_ledoa_gaa_l.pdf', NULL, 7, NULL, '2025-09-22 17:43:47', '2025-09-22 17:43:47'),
 (28, 'LEDOA 5766 GL CV.pdf', 'D:\\UniSpheres\\backend\\src\\uploads\\annonces\\1758563282631-588025983-ledoa_5766_gl_cv.pdf', 101, NULL, NULL, '2025-09-22 17:48:02', '2025-09-22 17:48:02'),
-(29, 'LEDOA 5766 GL CV.pdf', 'D:\\UniSpheres\\backend\\src\\uploads\\annonces\\1758563343992-805152096-ledoa_5766_gl_cv.pdf', 102, NULL, NULL, '2025-09-22 17:49:04', '2025-09-22 17:49:04'),
 (32, 'LEDOA 5766 GL CV.pdf', 'D:/UniSpheres/backend/src/uploads/cours/1759760341207-505956364-ledoa_5766_gl_cv.pdf', NULL, 9, NULL, '2025-10-06 14:19:01', '2025-10-06 14:19:01'),
 (33, 'Picture.jpg', 'D:\\UniSpheres\\backend\\src\\uploads\\annonces\\1759760512497-275410872-picture.jpg', 103, NULL, NULL, '2025-10-06 14:21:52', '2025-10-06 14:21:52'),
 (34, 'Screenshot 2025-09-26 at 11-35-53 UniSphere.png', 'D:\\UniSpheres\\backend\\src\\uploads\\message\\1760593161346-475016639-screenshot_2025-09-26_at_11-35-53_unisphere.png', NULL, NULL, 84, '2025-10-16 05:39:21', '2025-10-16 05:39:21'),
 (35, 'LEDOA 5766 GL CV.pdf', 'D:/UniSpheres/backend/src/uploads/cours/1760683571395-704058920-ledoa_5766_gl_cv.pdf', NULL, 15, NULL, '2025-10-17 06:46:11', '2025-10-17 06:46:11'),
 (36, 'Capture d\'Ã©cran 2025-08-22 122205.png', 'D:\\UniSpheres\\backend\\src\\uploads\\annonces\\1760702655339-589056453-capture_d_a_cran_2025-08-22_122205.png', 104, NULL, NULL, '2025-10-17 12:04:15', '2025-10-17 12:04:15'),
-(38, 'testing.jpg', 'D:\\UniSpheres\\backend\\src\\uploads\\message\\1760810913062-481102506-testing.jpg', NULL, NULL, 93, '2025-10-18 18:08:33', '2025-10-18 18:08:33');
+(38, 'testing.jpg', 'D:\\UniSpheres\\backend\\src\\uploads\\message\\1760810913062-481102506-testing.jpg', NULL, NULL, 93, '2025-10-18 18:08:33', '2025-10-18 18:08:33'),
+(39, 'CV Ledoa GaÃ«l 2.pptx', 'D:\\UniSpheres\\backend\\src\\uploads\\message\\1761310268923-391858451-cv_ledoa_gaa_l_2.pptx', NULL, NULL, 99, '2025-10-24 12:51:08', '2025-10-24 12:51:08'),
+(40, 'Picture.jpg', 'D:\\UniSpheres\\backend\\src\\uploads\\message\\1761310290325-422395526-picture.jpg', NULL, NULL, 100, '2025-10-24 12:51:30', '2025-10-24 12:51:30'),
+(41, 'LEDOA 5766 GL CV.pdf', 'D:/UniSpheres/backend/src/uploads/cours/1761310668500-458207308-ledoa_5766_gl_cv.pdf', NULL, 9, NULL, '2025-10-24 12:57:48', '2025-10-24 12:57:48');
 
 -- --------------------------------------------------------
 
@@ -239,6 +247,7 @@ INSERT INTO `file` (`id_file`, `file_name`, `file_path`, `annonce_id`, `course_i
 CREATE TABLE `filiere` (
   `id_filiere` int(10) UNSIGNED NOT NULL,
   `name` varchar(20) NOT NULL,
+  `chefMention` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -247,13 +256,13 @@ CREATE TABLE `filiere` (
 -- Déchargement des données de la table `filiere`
 --
 
-INSERT INTO `filiere` (`id_filiere`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'Informatique', '2025-09-16 03:58:26', '2025-09-16 03:58:26'),
-(2, 'Mathématique', '2025-09-16 03:58:26', '2025-09-16 03:58:26'),
-(3, 'Physiques', '2025-09-16 03:58:26', '2025-09-16 03:58:26'),
-(4, 'Agronomie', '2025-09-16 03:58:26', '2025-09-16 03:58:26'),
-(5, 'Economie', '2025-09-16 03:58:26', '2025-09-16 03:58:26'),
-(6, 'Astronomie', '2025-09-16 13:07:37', '2025-09-16 13:07:37');
+INSERT INTO `filiere` (`id_filiere`, `name`, `chefMention`, `created_at`, `updated_at`) VALUES
+(1, 'Informatique', 0, '2025-09-16 03:58:26', '2025-09-16 03:58:26'),
+(2, 'Mathématique', 0, '2025-09-16 03:58:26', '2025-09-16 03:58:26'),
+(3, 'Physiques', 0, '2025-09-16 03:58:26', '2025-09-16 03:58:26'),
+(4, 'Agronomie', 0, '2025-09-16 03:58:26', '2025-09-16 03:58:26'),
+(5, 'Economie', 0, '2025-09-16 03:58:26', '2025-09-16 03:58:26'),
+(6, 'Astronomie', 0, '2025-09-16 13:07:37', '2025-09-16 13:07:37');
 
 -- --------------------------------------------------------
 
@@ -294,7 +303,16 @@ INSERT INTO `message` (`id_message`, `conversation_id`, `sender_id`, `content`, 
 (93, 30, 14, '', '2025-10-18 18:08:33', '2025-10-18 18:08:33'),
 (94, 30, 12, 'Why my face', '2025-10-18 18:08:43', '2025-10-18 18:08:43'),
 (95, 26, 12, 'So', '2025-10-18 18:08:52', '2025-10-18 18:08:52'),
-(96, 26, 12, 'cette approche est moins pratique pour faire des recherches SQL complexes', '2025-10-22 11:58:32', '2025-10-22 11:58:32');
+(96, 26, 12, 'cette approche est moins pratique pour faire des recherches SQL complexes', '2025-10-22 11:58:32', '2025-10-22 11:58:32'),
+(97, 27, 9, 'Voici un test qui pourrait ne pas fonctionner', '2025-10-24 11:56:17', '2025-10-24 11:56:17'),
+(98, 31, 12, 'Bonjour, Clenn', '2025-10-24 12:50:43', '2025-10-24 12:51:41'),
+(99, 31, 12, '', '2025-10-24 12:51:08', '2025-10-24 12:51:08'),
+(100, 31, 12, '', '2025-10-24 12:51:30', '2025-10-24 12:51:30'),
+(101, 32, 1, 'Bonjour*', '2025-10-27 08:25:06', '2025-10-27 08:25:06'),
+(102, 30, 12, 'Bonjour', '2025-10-28 17:39:43', '2025-10-28 17:39:43'),
+(103, 30, 12, 'Bonsoir', '2025-10-28 17:39:45', '2025-10-28 17:39:45'),
+(104, 28, 12, 'test', '2025-10-28 17:39:49', '2025-10-28 17:39:49'),
+(105, 30, 14, 'Bonjour', '2025-10-29 11:33:35', '2025-10-29 11:33:35');
 
 -- --------------------------------------------------------
 
@@ -349,8 +367,7 @@ INSERT INTO `parcours` (`id_parcours`, `name`, `created_at`, `updated_at`) VALUE
 (2, 'Devéloppement d\'application informatique', '2025-09-16 03:57:35', '2025-09-16 03:57:35'),
 (4, 'Génie Industriel', '2025-09-16 03:57:35', '2025-09-16 13:33:57'),
 (5, 'Télécommunication', '2025-09-16 03:57:35', '2025-09-16 03:57:35'),
-(6, 'Tronc Commun', '2025-09-16 03:59:01', '2025-09-16 03:59:01'),
-(7, 'Test', '2025-09-16 13:07:28', '2025-09-16 13:07:28');
+(6, 'Tronc Commun', '2025-09-16 03:59:01', '2025-09-16 03:59:01');
 
 -- --------------------------------------------------------
 
@@ -379,9 +396,9 @@ CREATE TABLE `schedule` (
 --
 
 INSERT INTO `schedule` (`id_schedule`, `teacher_id`, `class_id`, `course_id`, `week_start`, `monday_periods`, `tuesday_periods`, `wednesday_periods`, `thursday_periods`, `friday_periods`, `saturday_periods`, `created_at`, `updated_at`) VALUES
-(1, 4, 1, 4, '2025-10-27', 'P1,P2', 'P3', 'P1,P4', NULL, 'P2,P3', NULL, '2025-10-21 09:31:01', '2025-10-21 09:31:01'),
-(2, 1, 1, 9, '2025-10-27', 'P3,P4', NULL, 'P2', 'P1,P3', NULL, 'P1', '2025-10-21 09:31:14', '2025-10-21 09:31:14'),
-(3, 1, 1, 21, '2025-10-27', NULL, 'P1,P2', 'P3,P4', 'P2', 'P1,P4', NULL, '2025-10-21 09:31:24', '2025-10-21 09:31:24');
+(5, 1, 1, 9, '2025-10-27', 'P1,P2,P3,P4', 'P3,P4', '', '', '', '', '2025-10-23 15:55:30', '2025-10-23 15:55:30'),
+(6, 4, 1, 10, '2025-10-27', '', 'P1,P2,P3,P4', 'P1,P2,P3,P4', 'P1,P2,P3,P4', '', '', '2025-10-23 15:58:42', '2025-10-23 15:58:42'),
+(7, 9, 1, 20, '2025-10-27', '', 'P1,P2,P3,P4', 'P1,P2,P3,P4', 'P1,P2,P3,P4', 'P1,P2,P3,P4', 'P1,P2', '2025-10-23 15:59:59', '2025-10-23 15:59:59');
 
 -- --------------------------------------------------------
 
@@ -410,17 +427,17 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id_user`, `class_id`, `matricule`, `name`, `lastname`, `email`, `profile_pic`, `password_hash`, `role`, `is_active`, `created_at`, `updated_at`) VALUES
 (1, NULL, '5766', 'Gaël', 'LEDOA', 'ledoagael@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1761033028819-932053558-501d2c3d3146db3dd16d29851010dc1f.jpg', '$2b$10$Qo4Kzrw4ztZgFwJUlNjZFesh8hIXv/TGO.LvRpUwdQ2kfxd57L07y', 'teacher', 1, '2025-09-16 04:31:15', '2025-10-21 08:04:22'),
-(4, NULL, '1111', 'gael', 'ledoa', 'ledoaz@gmail.com', NULL, '$2b$10$F0WSHCEh3O4Q2NIs3Sjz4uZUHYDjCKMe8eRb/EkqxrHtvLobFgGXq', 'teacher', 1, '2025-09-16 04:41:17', '2025-09-16 14:15:43'),
+(4, NULL, '1111', 'gael', 'ledoa', 'ledoaz@gmail.com', NULL, '$2b$10$Qo4Kzrw4ztZgFwJUlNjZFesh8hIXv/TGO.LvRpUwdQ2kfxd57L07y', 'teacher', 1, '2025-09-16 04:41:17', '2025-10-28 19:02:40'),
 (5, 1, '7859', 'Mir', 'Vlad', 'vladmir@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1757997908363-269828321-testing.jpg', '$2b$10$xsNBynE3DCYTi8uZGLCp8u8OT28CrWe3TOT3Tp6UxgsJyVSsEYeqi', 'student', 1, '2025-09-16 04:45:08', '2025-09-19 10:52:34'),
 (6, NULL, '4857', 'Farah', 'Helen', 'helen@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1757998099846-624676310-testing.jpg', '$2b$10$WCcORcA7VlZt9VsN1N/pRepX00QEuSB/0CDsII1BWGLMvf0VDGAkO', 'teacher', 1, '2025-09-16 04:48:20', '2025-09-16 14:15:42'),
 (7, NULL, '7441', 'testone', 'testing', 'stone@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1757998378161-417765155-testing.jpg', '$2b$10$6V4yLsdoliFxE5iX0VSxaOpnPs1eT9P/ke3sY6CCWe8Q.C1Y/IABK', 'teacher', 1, '2025-09-16 04:52:58', '2025-09-16 14:15:41'),
-(8, NULL, '7856', 'Yuan Shi', 'Zhu', 'zhu@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1758012934379-839691065-6f5c3436794af6b6fba799df4727300c.jpg', '$2b$10$aqDRXXtwdNMibqaBFZZLe.T8vilpKiTR0ut782LHP3vktSLivKQWC', 'teacher', 1, '2025-09-16 04:54:58', '2025-09-16 14:15:40'),
+(8, NULL, '7856', 'Yuan Shi', 'Zhu', 'zhu@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1758012934379-839691065-6f5c3436794af6b6fba799df4727300c.jpg', '$2b$10$aqDRXXtwdNMibqaBFZZLe.T8vilpKiTR0ut782LHP3vktSLivKQWC', 'teacher', 1, '2025-09-16 04:54:58', '2025-10-28 19:02:35'),
 (9, NULL, '7412', 'Ling', 'Yin', 'yin@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1757998548354-775041847-wallhaven-1q3lmg_1448x2048.png', '$2b$10$6.UCfjwr4y52JRzhQ9dvWeIo5NsYJrFQ8LrIVYwp8j6NXcOake4SS', 'teacher', 1, '2025-09-16 04:55:48', '2025-09-16 14:15:39'),
-(10, 1, '7854', 'Marco', 'Jacob', 'jacob@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1757998607971-99369205-wallhaven-w587zr_4786x4852.png', '$2b$10$Ml9LfKrWU6gfwqYQ0Wpu3.mRTxpYy4kBZxGVtDawy12p7FfXdJvoC', 'student', 1, '2025-09-16 04:56:48', '2025-09-16 14:15:34'),
-(11, NULL, NULL, 'theFirstAdmin', 'admin', 'shifu@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1760775399657-877007602-0cd77eaf696d6aecf81d7564381e3d24_0_.jpg', '$2b$10$EUnPfU3uYNfkfDxfx.AomO5kZExU2ecEieb/5LdK9xjPheOh.XR.y', 'administrator', 1, '2025-09-16 10:02:23', '2025-10-18 08:16:39'),
-(12, 1, '48', 'Franca Lumian', 'jon', 'john@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1760774364430-552770499-852f45fa6e37efb87ed3eab2f1f4c84f.jpg', '$2b$10$QuhGGITakW0/eBdLGh5CXeDnjN6j1TS8xk7XdrKug9LOWsym6MBaW', 'student', 1, '2025-09-16 17:20:40', '2025-10-18 07:59:24'),
-(13, 5, '7855', 'Clenn', 'Cleavtess', 'clenn@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1759655886486-835856090-4d6651f745218ff6de5a68a598939d12.jpg', '$2b$10$bsJLBNUnO86Dg1DGCaHtBeuk0i432fGpph/zSx05.RYPmU6gO1fT.', 'student', 1, '2025-10-05 09:18:06', '2025-10-20 07:27:58'),
-(14, 1, '5805', 'Anil', 'TINA', 'anil@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1759759227740-29754978-testing.jpg', '$2b$10$QuhGGITakW0/eBdLGh5CXeDnjN6j1TS8xk7XdrKug9LOWsym6MBaW', 'student', 1, '2025-10-06 14:00:28', '2025-10-18 18:02:47');
+(10, 1, '7854', 'Marco', 'Jacob', 'jacob@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1757998607971-99369205-wallhaven-w587zr_4786x4852.png', '$2b$10$Ml9LfKrWU6gfwqYQ0Wpu3.mRTxpYy4kBZxGVtDawy12p7FfXdJvoC', 'student', 1, '2025-09-16 04:56:48', '2025-10-28 19:02:32'),
+(11, NULL, NULL, 'Elvina', 'Ledoa', 'shifu@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1760775399657-877007602-0cd77eaf696d6aecf81d7564381e3d24_0_.jpg', '$2b$10$EUnPfU3uYNfkfDxfx.AomO5kZExU2ecEieb/5LdK9xjPheOh.XR.y', 'administrator', 1, '2025-09-16 10:02:23', '2025-10-24 04:12:54'),
+(12, 1, '48', 'Franca Lumian', 'jon', 'john@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1761673168561-412266421-testing.jpg', '$2b$10$QuhGGITakW0/eBdLGh5CXeDnjN6j1TS8xk7XdrKug9LOWsym6MBaW', 'student', 1, '2025-09-16 17:20:40', '2025-10-28 19:02:01'),
+(13, 5, '7855', 'Clenn', 'Cleavtess', 'clenn@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1759655886486-835856090-4d6651f745218ff6de5a68a598939d12.jpg', '$2b$10$bsJLBNUnO86Dg1DGCaHtBeuk0i432fGpph/zSx05.RYPmU6gO1fT.', 'student', 1, '2025-10-05 09:18:06', '2025-10-28 19:02:31'),
+(14, 1, '5805', 'Anil', 'TINA', 'anil@gmail.com', 'D:\\UniSpheres\\backend\\src\\uploads\\profile\\1759759227740-29754978-testing.jpg', '$2b$10$QuhGGITakW0/eBdLGh5CXeDnjN6j1TS8xk7XdrKug9LOWsym6MBaW', 'student', 1, '2025-10-06 14:00:28', '2025-10-29 11:31:44');
 
 -- --------------------------------------------------------
 
@@ -508,7 +525,8 @@ ALTER TABLE `file`
 --
 ALTER TABLE `filiere`
   ADD PRIMARY KEY (`id_filiere`),
-  ADD UNIQUE KEY `name` (`name`);
+  ADD UNIQUE KEY `name` (`name`),
+  ADD KEY `chefMention` (`chefMention`);
 
 --
 -- Index pour la table `message`
@@ -573,31 +591,31 @@ ALTER TABLE `annonce`
 -- AUTO_INCREMENT pour la table `classe`
 --
 ALTER TABLE `classe`
-  MODIFY `id_class` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_class` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT pour la table `conversation`
 --
 ALTER TABLE `conversation`
-  MODIFY `id_conversation` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id_conversation` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT pour la table `conversation_member`
 --
 ALTER TABLE `conversation_member`
-  MODIFY `id_convo_member` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id_convo_member` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT pour la table `course`
 --
 ALTER TABLE `course`
-  MODIFY `id_course` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id_course` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT pour la table `file`
 --
 ALTER TABLE `file`
-  MODIFY `id_file` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id_file` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT pour la table `filiere`
@@ -609,7 +627,7 @@ ALTER TABLE `filiere`
 -- AUTO_INCREMENT pour la table `message`
 --
 ALTER TABLE `message`
-  MODIFY `id_message` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `id_message` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
 -- AUTO_INCREMENT pour la table `note`
@@ -627,7 +645,7 @@ ALTER TABLE `parcours`
 -- AUTO_INCREMENT pour la table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `id_schedule` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_schedule` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `user`
