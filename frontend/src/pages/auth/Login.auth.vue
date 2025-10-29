@@ -37,6 +37,9 @@ const handleLogin = async () => {
     if (result && result.user) {
       // Redirection basée sur le rôle
       const rolePath = result.user.role.toLowerCase() || authStore.user?.role;
+      const activated = result.user.is_active || authStore.user?.is_active;
+
+      console.log("Activated : ", activated);
 
       console.log("Role Path : ", rolePath);
 
@@ -59,7 +62,9 @@ const handleLogin = async () => {
 // Mot de passe oublié
 const handleForgotPassword = () => {
   // TODO: Implémenter la logique de réinitialisation
-  console.log("Mot de passe oublié cliqué");
+  alert(
+    "Implementation necessite un compte google valide et autre parametres pour l'instant non disponible"
+  );
 };
 
 // Reset error quand le composant est monté

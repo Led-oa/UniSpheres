@@ -11,6 +11,7 @@ import { useChatStore } from "./chat.store";
 export const useAuthStore = defineStore("auth", () => {
   const user = ref(null);
   const token = ref(localStorage.getItem("token") || null);
+  const is_active = ref(null);
   const isLoggedIn = ref(!!token.value);
   const loading = ref(false);
   const error = ref(null);
@@ -24,7 +25,7 @@ export const useAuthStore = defineStore("auth", () => {
         // console.log("Fetching user data with token...");
         const userData = await getCurrentUser();
         user.value = userData;
-        // console.log("User data fetched successfully:", userData);
+        console.log("User data fetched successfully:", userData);
         return userData;
       } catch (err) {
         // console.error("Failed to fetch user data:", err);
@@ -46,8 +47,10 @@ export const useAuthStore = defineStore("auth", () => {
       const data = await loginUser(credentials.value);
       token.value = data.token;
       user.value = data.user;
+      is_active.value = user.value.is_active;
 
       console.log("User Value : ", user.value);
+      console.log("is_active Value : ", is_active.value);
 
       localStorage.setItem("token", data.token);
       isLoggedIn.value = true;
@@ -124,6 +127,7 @@ export const useAuthStore = defineStore("auth", () => {
   return {
     user,
     token,
+    is_active,
     isLoggedIn,
     loading,
     error,

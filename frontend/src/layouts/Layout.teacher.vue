@@ -74,7 +74,7 @@ const menuItems = [
 
 function handleLogout() {
   authStore.logout();
-  router.push("/login");
+  router.push("/");
 }
 
 // Navigation avec fermeture du menu mobile
@@ -104,7 +104,7 @@ const getRouteDisplayName = (route) => {
   <div class="flex flex-col min-h-screen bg-gray-50">
     <!-- Navbar -->
     <header
-      class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg sticky top-0 z-40"
+      class="bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg sticky top-0 z-40"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
@@ -113,11 +113,11 @@ const getRouteDisplayName = (route) => {
             :to="{ name: 'TableauDeBordsEnseignant' }"
             class="flex items-center space-x-3 group"
           >
-            <div
+            <!-- <div
               class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white/20 transition-colors"
             >
               <span class="text-xl">🎓</span>
-            </div>
+            </div> -->
             <div class="hidden md:block">
               <span class="text-xl font-bold">UniSphere</span>
               <span class="block text-sm text-blue-100">Espace Enseignant</span>
@@ -330,6 +330,7 @@ const getRouteDisplayName = (route) => {
         class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 text-sm"
       >
         <p>© 2025 UniSphere - Plateforme éducative. Espace Enseignant</p>
+        <p>Créer par Ledoa Gaël</p>
       </div>
     </footer>
   </div>

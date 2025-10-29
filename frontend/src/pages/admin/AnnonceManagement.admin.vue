@@ -100,7 +100,6 @@ const handleUpdated = (updatedAnnonce) => {
 const closeModal = () => {
   showModal.value = false;
   selectedAnnonce.value = null;
-  // Add a small delay to allow modal animation to complete
   setTimeout(() => {
     modalMode.value = "add";
   }, 300);
@@ -130,8 +129,8 @@ const handleDelete = async (id) => {
   if (!confirm("Voulez-vous vraiment supprimer cette annonce ?")) return;
   try {
     await annonceStore.deleteAnnonce(id);
-    await loadAnnonce();
     alert("Annonce supprimée avec succès !");
+    await loadAnnonce();
   } catch (err) {
     alert("Erreur lors de la suppression : " + err.message);
   }

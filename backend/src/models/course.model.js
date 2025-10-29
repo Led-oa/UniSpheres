@@ -1,12 +1,12 @@
 const { query } = require("../config/database");
 
 const CourseModel = {
-  async create({ title, content, duration, teach_by, class_id }) {
+  async create({ title, content, duration, credits, teach_by, class_id }) {
     const sql = `
-        INSERT INTO course (title, content, duration, teach_by, class_id)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO course (title, content, duration, credits, teach_by, class_id)
+        VALUES (?, ?, ?, ?, ?, ?)
       `;
-    const values = [title, content, duration, teach_by, class_id];
+    const values = [title, content, duration, credits, teach_by, class_id];
     const result = await query(sql, values);
     return { id_course: result.insertId, ...values };
   },

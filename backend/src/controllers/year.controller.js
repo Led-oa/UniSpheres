@@ -5,7 +5,7 @@ const YearController = {
   async getAll(req, res) {
     try {
       const data = await YearService.getAll();
-    //   console.log("Controller year: ", data);
+      //   console.log("Controller year: ", data);
 
       res.json({ success: true, data });
     } catch (err) {
@@ -26,7 +26,7 @@ const YearController = {
   async create(req, res) {
     try {
       const data = req.body;
-    //   console.log("controller year: data", data);
+      //   console.log("controller year: data", data);
       const newYear = await YearService.create(data);
       res.status(201).json({ success: true, data: newYear });
     } catch (err) {
@@ -47,6 +47,7 @@ const YearController = {
   async delete(req, res) {
     try {
       const id = req.params.id;
+      console.log("DELETE Year : ", id);
       await YearService.delete(id);
       res.json({ success: true, message: "Supprimé avec succès" });
     } catch (err) {

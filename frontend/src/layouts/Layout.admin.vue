@@ -108,11 +108,11 @@ const getRouteDisplayName = (route) => {
             :to="{ name: 'TableauDeBordsAdmin' }"
             class="flex items-center space-x-3 group"
           >
-            <div
+            <!-- <div
               class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white/20 transition-colors"
             >
               <span class="text-xl">⚙️</span>
-            </div>
+            </div> -->
             <div class="hidden md:block">
               <span class="text-xl font-bold">UniSphere</span>
               <span class="block text-sm text-blue-100">Espace Administrateur</span>

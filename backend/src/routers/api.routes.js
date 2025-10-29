@@ -32,7 +32,7 @@ api.use("/annonce", annonceRoute);
 
 api.use("/utility", utilityRoute);
 
-api.use("schedule", scheduleRoute);
+api.use("/schedules", scheduleRoute);
 
 api.use("/filiere", filiereRoute);
 api.use("/parcours", parcoursRoute);

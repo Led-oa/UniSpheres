@@ -102,7 +102,7 @@ const getRouteDisplayName = (route) => {
 
     <!-- Sidebar Fixe -->
     <aside
-      class="sidebar fixed lg:static inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-blue-600 to-indigo-700 transform transition-transform duration-300 ease-in-out lg:translate-x-0 shadow-xl"
+      class="sidebar fixed lg:static inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-blue-600 to-purple-700 transform transition-transform duration-300 ease-in-out lg:translate-x-0 shadow-xl"
       :class="isSidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <div class="flex flex-col h-full">
@@ -113,11 +113,11 @@ const getRouteDisplayName = (route) => {
             class="flex items-center space-x-3 group"
             @click="navigateTo('DashboardStudent')"
           >
-            <div
+            <!-- <div
               class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white/20 transition-colors"
             >
               <span class="text-xl text-white">🎓</span>
-            </div>
+            </div> -->
             <span class="text-xl font-bold text-white">UniSphere</span>
           </router-link>
 
@@ -297,6 +297,7 @@ const getRouteDisplayName = (route) => {
         class="bg-white border-t border-gray-200 py-4 px-6 lg:px-8 text-center text-sm text-gray-500"
       >
         <p>© 2025 UniSphere - Plateforme éducative. Tous droits réservés.</p>
+        <p>Créer par Ledoa Gaël</p>
       </footer>
     </div>
   </div>

@@ -72,7 +72,7 @@ const userService = {
           class_id: user.class_id,
           role: user.role,
           email: user.email,
-          isActive: user.is_active,
+          is_active: user.is_active,
         },
         JWT_SECRET,
         {

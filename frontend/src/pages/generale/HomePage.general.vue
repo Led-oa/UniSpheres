@@ -1,16 +1,16 @@
 <template>
-  <section class="relative overflow-hidden py-16 sm:py-24 lg:py-32">
+  <section class="relative overflow-hidden sm:py-24 lg:py-32">
     <!-- Background decorative elements -->
-    <div class="absolute inset-0 -z-10">
-      <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div class="w-96 h-96 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
+    <!-- <div class="absolute inset-0 z-10">
+      <div class="absolute top-0 left-1/2 translate-x-1/2 translate-y-1/2">
+        <div class="w-96 h-96 bg-red-600 rounded-full opacity-20 blur-3xl"></div>
       </div>
       <div class="absolute bottom-0 right-1/2 translate-x-1/2 translate-y-1/2">
-        <div class="w-80 h-80 bg-purple-100 rounded-full opacity-20 blur-3xl"></div>
+        <div class="w-80 h-80 bg-purple-600 rounded-full opacity-20 blur-3xl"></div>
       </div>
-    </div>
+    </div> -->
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="text-center">
         <!-- Badge d'introduction -->
         <div

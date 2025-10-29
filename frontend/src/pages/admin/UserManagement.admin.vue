@@ -22,7 +22,7 @@ const currentUsers = computed(() => {
 });
 
 // Actions
-function handleAdd() {
+function handleActivation() {
   switch (activeTab.value) {
     case "students":
       alert("Activate student");
@@ -37,7 +37,19 @@ function handleAdd() {
 }
 
 function handleEdit(user) {
-  alert(`Modifier ${user.name}`);
+  alert(`Details : 
+  ${user.matricule}
+  ${user.name}
+  ${user.lastname}
+  ${user.email}
+  ${user.profile_pic}
+  ${user.class_name}
+  ${user.filiere_name}
+  ${user.parcours_name}
+  ${user.year_value}
+
+  `);
+  console.log("User details : ", user);
 }
 
 function handleDelete(user) {
@@ -60,8 +72,7 @@ const loadUsers = async (page = 1) => {
   if (activeTab.value === "students") {
     await adminStore.fetchUsersByRole("student", page, limit);
 
-    console.log("Adminstore pagination : ", adminStore.pagination)
-
+    console.log("Adminstore pagination : ", adminStore.pagination);
   } else if (activeTab.value === "teachers") {
     await adminStore.fetchUsersByRole("teacher", page, limit);
   } else if (activeTab.value === "admins") {
@@ -96,7 +107,7 @@ onMounted(() => {
         </p>
       </div>
       <button
-        @click="handleAdd"
+        @click="handleActivation"
         class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg shadow hover:opacity-90"
       >
         <span v-if="activeTab === 'students'">+ Activer Étudiant</span>
@@ -148,31 +159,37 @@ onMounted(() => {
                 :class="[
                   'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
                   user.is_active
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-red-100 text-red-800',
+                    ? 'bg-green-100 px-5 text-green-800'
+                    : 'bg-red-100 px-4 text-red-800',
                 ]"
               >
                 {{ user.is_active ? "Actif" : "Inactif" }}
               </span>
             </td>
             <td class="px-4 py-3 text-right space-x-2">
-              <button @click="handleEdit(user)" class="text-blue-600 hover:underline">
-                Modifier
+              <button
+                @click="handleEdit(user)"
+                class="text-blue-600 px-5 hover:underline"
+              >
+                Details
               </button>
-              <button @click="handleDelete(user)" class="text-red-500 hover:underline">
+              <button
+                @click="handleDelete(user)"
+                class="text-red-500 px-5 hover:underline"
+              >
                 Supprimer
               </button>
               <button
                 v-if="!user.is_active"
                 @click="handleActivate(user)"
-                class="text-green-600 hover:underline"
+                class="text-green-600 px-8 hover:underline"
               >
                 Activer
               </button>
               <button
                 v-else
                 @click="handleDesactivate(user)"
-                class="text-orange-500 hover:underline"
+                class="text-orange-500 px-5 hover:underline"
               >
                 Désactiver
               </button>

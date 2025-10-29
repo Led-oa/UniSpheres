@@ -158,12 +158,12 @@ onMounted(async () => {
         >
           Attribuer Notes
         </button>
-        <button
+        <!-- <button
           @click="isImportModalOpen = true"
           class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors"
         >
           Importer des Notes
-        </button>
+        </button> -->
       </div>
     </div>
 

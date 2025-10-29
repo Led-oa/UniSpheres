@@ -26,6 +26,9 @@ const loadMyClass = async () => {
 
     // Infos de la classe
     await classeStore.fetchClass(myClassId);
+
+    console.log("Classe Information : ", classeStore.currentClass?.data);
+
     classInfo.value = classeStore.currentClass?.data;
 
     // Étudiants
@@ -114,7 +117,7 @@ onMounted(loadMyClass);
         <h2 class="text-xl font-semibold text-gray-800 mb-6">
           Informations de la classe
         </h2>
-        <div class="grid gap-6 md:grid-cols-3">
+        <div class="grid gap-6 md:grid-cols-2">
           <div class="flex items-start space-x-4 p-4 bg-blue-50 rounded-lg">
             <div
               class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center"
@@ -142,7 +145,7 @@ onMounted(loadMyClass);
             </div>
           </div>
 
-          <div class="flex items-start space-x-4 p-4 bg-purple-50 rounded-lg">
+          <!-- <div class="flex items-start space-x-4 p-4 bg-purple-50 rounded-lg">
             <div
               class="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center"
             >
@@ -164,10 +167,10 @@ onMounted(loadMyClass);
             <div>
               <p class="text-sm text-gray-600">Chef de mention</p>
               <p class="text-lg font-semibold text-gray-800">
-                {{ classInfo?.prof_principal || "Non défini" }}
+                {{ classInfo?.chefMention || "Non défini" }}
               </p>
             </div>
-          </div>
+          </div> -->
 
           <div class="flex items-start space-x-4 p-4 bg-indigo-50 rounded-lg">
             <div
