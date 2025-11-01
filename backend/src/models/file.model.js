@@ -59,7 +59,7 @@ const FileModel = {
 
   async remove(id_file) {
     const sql = `DELETE FROM file WHERE id_file = ?`;
-    const [result] = await query(sql, [id_file]);
+    const result = await query(sql, [id_file]);
     return result.affectedRows > 0;
   },
 };

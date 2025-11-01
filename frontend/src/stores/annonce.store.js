@@ -49,7 +49,7 @@ export const useAnnonceStore = defineStore("annonce", () => {
     error.value = null;
     try {
       const annonce = await AnnonceService.createAnnonce(data, files);
-      annonces.value.unshift(annonce); // Ajouter en début de liste
+      // annonces.value.unshift(annonce); // Ajouter en début de liste
       return annonce;
     } catch (err) {
       console.error("Erreur createAnnonce:", err);
@@ -64,6 +64,8 @@ export const useAnnonceStore = defineStore("annonce", () => {
     isLoading.value = true;
     error.value = null;
     try {
+      console.log("DATA : ", data);
+
       const updated = await AnnonceService.updateAnnonce(
         id,
         data,
@@ -72,14 +74,14 @@ export const useAnnonceStore = defineStore("annonce", () => {
       );
 
       // More robust state update - create new array for reactivity
-      const index = annonces.value.findIndex((a) => a.id_annonce === id);
-      if (index !== -1) {
-        annonces.value = [
-          ...annonces.value.slice(0, index),
-          updated,
-          ...annonces.value.slice(index + 1),
-        ];
-      }
+      // const index = annonces.value.findIndex((a) => a.id_annonce === id);
+      // if (index !== -1) {
+      //   annonces.value = [
+      //     ...annonces.value.slice(0, index),
+      //     updated,
+      //     ...annonces.value.slice(index + 1),
+      //   ];
+      // }
 
       if (currentAnnonce.value && currentAnnonce.value.id_annonce === id) {
         currentAnnonce.value = { ...updated }; // Create a new object reference

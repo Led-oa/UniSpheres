@@ -53,13 +53,27 @@ const MessageModel = {
     }
 
     const rows = await query(
-      `SELECT m.id_message, m.conversation_id, m.sender_id, m.content, m.created_at, m.updated_at,
-                  u.name, u.lastname, u.profile_pic, f.file_path, f.file_name
-           FROM message m
-           JOIN user u ON m.sender_id = u.id_user
-           LEFT JOIN file f ON f.message_id = m.id_message
-           WHERE m.conversation_id = ?
-           ORDER BY m.created_at ASC`,
+      `SELECT 
+    m.id_message, 
+    m.conversation_id, 
+    m.sender_id, 
+    m.content, 
+    m.created_at, 
+    m.updated_at,
+    u.name, 
+    u.lastname, 
+    u.profile_pic,
+    u.role,
+    f.file_name, 
+    f.file_path,
+    c.title as conversation_title,
+    c.type as conversation_type
+FROM message m
+JOIN user u ON m.sender_id = u.id_user
+JOIN conversation c ON m.conversation_id = c.id_conversation
+LEFT JOIN file f ON f.message_id = m.id_message
+WHERE m.conversation_id = ?
+ORDER BY m.created_at ASC`,
       [conversationId]
     );
 

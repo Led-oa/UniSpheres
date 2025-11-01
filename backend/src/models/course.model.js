@@ -48,7 +48,8 @@ const CourseModel = {
         y.year_value AS year_value,
         f2.id_file,
         f2.file_name,
-        f2.file_path
+        f2.file_path,
+        f2.created_at
       FROM course c
       JOIN user u     ON c.teach_by = u.id_user
       JOIN classe cl  ON c.class_id = cl.id_class
@@ -62,7 +63,29 @@ const CourseModel = {
     return query(sql, [courseId]);
   },
   async findByTeacher(teacherId) {
-    const sql = `SELECT * FROM course WHERE teach_by = ?`;
+    const sql = `SELECT 
+        c.*,
+        u_teacher.name as teacher_name,
+        u_teacher.lastname as teacher_lastname,
+        u_teacher.email as teacher_email,
+        cl.name as class_name,
+        f.name as filiere_name,
+        p.name as parcours_name,
+        y.year_value,
+        COUNT(DISTINCT f_course.id_file) as total_files,
+        COUNT(DISTINCT n.id_note) as total_notes
+    FROM course c
+    JOIN user u_teacher ON c.teach_by = u_teacher.id_user
+    JOIN classe cl ON c.class_id = cl.id_class
+    JOIN filiere f ON cl.filiere_id = f.id_filiere
+    JOIN parcours p ON cl.parcours_id = p.id_parcours
+    JOIN year y ON cl.year_id = y.id_year
+    LEFT JOIN file f_course ON f_course.course_id = c.id_course
+    LEFT JOIN note n ON n.course_id = c.id_course
+    WHERE c.teach_by = ?
+    GROUP BY c.id_course
+    ORDER BY c.created_at DESC`;
+
     return query(sql, [teacherId]);
   },
   async findByClass(classId) {

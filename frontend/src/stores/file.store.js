@@ -75,6 +75,8 @@ export const useFileStore = defineStore("file", () => {
     loading.value = true;
     error.value = null;
     try {
+      console.log("File ID : ", fileId);
+
       await FileAPI.removeFile(fileId);
       files.value = files.value.filter((f) => f.id_file !== fileId);
       return true;
