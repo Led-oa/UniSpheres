@@ -4,6 +4,7 @@ const FilePathToUrl = require("../utils/urlCleaner.utils");
 const CourseService = {
   async createCourse(data) {
     // data doit contenir : { title, content, duration, teach_by, class_id }
+    console.log("Data", data);
     return CourseModel.create(data);
   },
   async getAll() {
@@ -38,6 +39,7 @@ const CourseService = {
           id_file: row.id_file,
           file_name: row.file_name,
           file_path: FilePathToUrl.urlCleaner(row.file_path),
+          created_at: row.created_at,
         });
       }
     }
@@ -74,6 +76,7 @@ const CourseService = {
           id_file: row.id_file,
           file_name: row.file_name,
           file_path: FilePathToUrl.urlCleaner(row.file_path),
+          created_at: row.created_at,
         });
       }
     }
@@ -84,6 +87,7 @@ const CourseService = {
   },
   async getByTeacher(teacherId) {
     const res = await CourseModel.findByTeacher(teacherId);
+    console.log("Liste of course by teacher : ", res);
     return res;
   },
   async getByClass(classId) {

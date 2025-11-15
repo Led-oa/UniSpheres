@@ -30,6 +30,7 @@ router.patch(
   authenticateJWT,
   userController.updateUser
 );
+router.get("/load/allUsers", authenticateJWT, userController.loadAllCtrl);
 router.patch("/:id/activate", authenticateJWT, userController.activateUser);
 router.patch(
   "/:id/desactivate",

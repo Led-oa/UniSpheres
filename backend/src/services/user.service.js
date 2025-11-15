@@ -121,6 +121,8 @@ const userService = {
         return u;
       });
 
+      console.log("CLEANED USER : ", cleanedUser);
+
       return {
         users: cleanedUser,
         totalCount,
@@ -168,6 +170,25 @@ const userService = {
       return {
         users: cleanedUser,
         totalCount,
+      };
+    } catch (error) {
+      console.error("userService.getUsersByRole error:", error);
+      throw error;
+    }
+  },
+
+  async loadAll() {
+    try {
+      const users = await userModel.loadAll();
+
+      const cleanedUser = users.map((u) => {
+        if (u.profile_pic)
+          u.profile_pic = FilePathToUrl.urlCleaner(u.profile_pic);
+        return u;
+      });
+
+      return {
+        users: cleanedUser,
       };
     } catch (error) {
       console.error("userService.getUsersByRole error:", error);

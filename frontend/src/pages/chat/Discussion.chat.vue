@@ -45,14 +45,21 @@ const user = computed(() => authStore.user);
 const conversations = computed(() => chatStore.conversations);
 const sortedConversations = computed(() => chatStore.sortedConversations);
 
+const availableUsersFromData = ref([]);
+
 const availableUsers = computed(() => {
-  if (!adminStore.users || !Array.isArray(adminStore.users)) {
+  if (!availableUsersFromData.value || !Array.isArray(availableUsersFromData.value)) {
+    console.log("Confirm");
     return [];
   }
   if (!authStore.user || !authStore.user.id_user) {
-    return adminStore.users;
+    console.log("Confirm 2");
+    return availableUsersFromData.value;
   }
-  return adminStore.users.filter((user) => user.id_user !== authStore.user.id_user);
+  console.log("Confirm 3");
+  return availableUsersFromData.value.filter(
+    (user) => user.id_user !== authStore.user.id_user
+  );
 });
 
 const filteredUsers = computed(() => {
@@ -126,12 +133,8 @@ const selectConversation = async (conversation) => {
 const loadMessages = async (conversationId) => {
   try {
     loading.value = true;
-    console.log("Chargement des messages pour la conversation:", conversationId);
-
     await chatStore.getMessages(conversationId);
     messages.value = chatStore.messages.map((msg) => ({ ...msg, status: "sent" }));
-
-    console.log("Messages chargés:", messages.value.length);
   } catch (error) {
     console.error("Erreur lors du chargement des messages:", error);
   } finally {
@@ -141,7 +144,6 @@ const loadMessages = async (conversationId) => {
 };
 
 const setupSocketListeners = (conversationId) => {
-  // Utiliser le service Socket pour la connexion
   socket.value = socketService.connect(authStore.token);
 
   if (!socket.value) {
@@ -149,18 +151,13 @@ const setupSocketListeners = (conversationId) => {
     return;
   }
 
-  // Rejoindre la conversation
   socket.value.emit("joinConversation", conversationId);
-
-  // Écouter les nouveaux messages
   socket.value.on("newMessage", handleNewMessage);
   socket.value.on("messageEdited", handleMessageEdited);
   socket.value.on("messageDeleted", handleMessageDeleted);
   socket.value.on("errorMessage", handleErrorMessage);
   socket.value.on("conversationRenamed", handleConversationRenamed);
   socket.value.on("conversationDeleted", handleConversationDeleted);
-
-  console.log("Listeners Socket.IO configurés pour la conversation:", conversationId);
 };
 
 const cleanupSocketListeners = () => {
@@ -175,8 +172,6 @@ const cleanupSocketListeners = () => {
     socket.value.off("errorMessage", handleErrorMessage);
     socket.value.off("conversationRenamed", handleConversationRenamed);
     socket.value.off("conversationDeleted", handleConversationDeleted);
-
-    console.log("Listeners Socket.IO nettoyés");
   }
 };
 
@@ -224,7 +219,6 @@ const handleMessageEdited = (updatedMessage) => {
 };
 
 const handleMessageDeleted = ({ id_message }) => {
-  console.log("Message supprimé:", id_message);
   messages.value = messages.value.filter((m) => m.id_message !== id_message);
 };
 
@@ -234,7 +228,6 @@ const handleErrorMessage = (errorData) => {
 };
 
 const handleConversationRenamed = (data) => {
-  console.log("Conversation renommée:", data);
   if (
     selectedConversation.value &&
     data.conversationId == selectedConversation.value.id_conversation
@@ -244,7 +237,6 @@ const handleConversationRenamed = (data) => {
 };
 
 const handleConversationDeleted = (data) => {
-  console.log("Conversation supprimée:", data);
   if (
     selectedConversation.value &&
     data.conversationId == selectedConversation.value.id_conversation
@@ -269,7 +261,7 @@ const isOwnMessage = (message) => {
 
 const getMessageClasses = (message) => {
   return {
-    "bg-blue-500 text-white": isOwnMessage(message) && message.status !== "failed",
+    "bg-blue-600 text-white": isOwnMessage(message) && message.status !== "failed",
     "bg-gray-400 text-gray-500": isOwnMessage(message) && message.status === "failed",
     "bg-white border border-gray-200": !isOwnMessage(message),
     "opacity-80": message.status === "sending",
@@ -401,8 +393,6 @@ const sendMessage = async () => {
 
   try {
     if (editingMessage.value) {
-      console.log("Editing message:", editingMessage.value.id_message);
-
       if (socket.value) {
         socket.value.emit("editMessage", {
           messageId: editingMessage.value.id_message,
@@ -606,7 +596,9 @@ const toggleUserSelection = (userId) => {
 
 const openCreateModal = async () => {
   showCreateModal.value = true;
-  await adminStore.fetchUsers();
+  const res = await adminStore.fetchAll();
+  availableUsersFromData.value = res.data.users;
+  console.log("Resultat open modal create", availableUsersFromData.value);
 };
 
 const closeCreateModal = () => {
@@ -632,9 +624,7 @@ const createNewConversation = async () => {
     });
 
     if (result && result.id_conversation) {
-      // Recharger la liste des conversations
       await chatStore.getConversations();
-      // Sélectionner la nouvelle conversation
       const newConv = conversations.value.find(
         (c) => c.id_conversation === result.id_conversation
       );
@@ -672,8 +662,26 @@ watch(newMessage, adjustTextareaHeight);
     <!-- Sidebar des conversations -->
     <div class="w-80 border-r border-gray-200 bg-white flex flex-col">
       <!-- En-tête avec barre de recherche -->
-      <div class="p-4 border-b border-gray-200">
-        <h1 class="text-xl font-bold text-gray-800 mb-4">Discussions</h1>
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between mb-6">
+          <h1 class="text-2xl font-bold text-gray-900">Messages</h1>
+        </div>
+
+        <!-- Bouton de création -->
+        <button
+          @click="openCreateModal"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl flex items-center justify-center font-medium transition-colors mb-6"
+        >
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          Nouvelle conversation
+        </button>
 
         <!-- Barre de recherche -->
         <div class="relative mb-4">
@@ -681,7 +689,7 @@ watch(newMessage, adjustTextareaHeight);
             class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
           >
             <svg
-              class="h-5 w-5 text-gray-400"
+              class="w-5 h-5 text-gray-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -697,19 +705,19 @@ watch(newMessage, adjustTextareaHeight);
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Rechercher..."
-            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Rechercher une conversation..."
+            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
           />
         </div>
 
         <!-- Onglets de filtrage -->
-        <div class="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+        <div class="flex space-x-1 bg-gray-100 p-1 rounded-xl">
           <button
             v-for="tab in tabs"
             :key="tab"
             @click="activeTab = tab"
             :class="[
-              'flex-1 py-2 text-sm font-medium rounded-md transition',
+              'flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200',
               activeTab === tab
                 ? 'bg-white text-blue-600 shadow-sm'
                 : 'text-gray-600 hover:text-gray-900',
@@ -723,29 +731,39 @@ watch(newMessage, adjustTextareaHeight);
       <!-- Liste des conversations -->
       <div class="flex-1 overflow-y-auto">
         <div v-if="chatStore.loading" class="flex justify-center items-center h-32">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
 
-        <div v-else-if="filteredConversations.length === 0" class="text-center py-12">
-          <svg
-            class="w-16 h-16 text-gray-400 mx-auto mb-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <div
+          v-else-if="filteredConversations.length === 0"
+          class="text-center py-12 px-6"
+        >
+          <div
+            class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-            />
-          </svg>
-          <p class="text-gray-600 mb-4">Aucune conversation pour le moment</p>
+            <svg
+              class="w-8 h-8 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Aucune conversation</h3>
+          <p class="text-gray-600 text-sm mb-4">
+            Commencez une nouvelle conversation pour discuter avec vos collègues.
+          </p>
           <button
             @click="openCreateModal"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
           >
-            Commencer une conversation
+            Démarrer
           </button>
         </div>
 
@@ -754,31 +772,30 @@ watch(newMessage, adjustTextareaHeight);
             v-for="conversation in filteredConversations"
             :key="conversation.id_conversation"
             @click="selectConversation(conversation)"
-            class="p-4 cursor-pointer hover:bg-gray-50 transition"
+            class="p-4 cursor-pointer hover:bg-gray-50 transition-colors border-l-4"
             :class="{
-              'bg-blue-50':
+              'border-blue-600 bg-blue-50':
                 selectedConversation?.id_conversation === conversation.id_conversation,
+              'border-transparent':
+                selectedConversation?.id_conversation !== conversation.id_conversation,
             }"
           >
             <div class="flex items-center space-x-3">
               <!-- Avatar -->
-              <div class="relative">
+              <div class="relative flex-shrink-0">
                 <div
-                  class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center"
+                  class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm"
                 >
-                  <span class="text-blue-600 font-semibold">
+                  <span class="text-white font-semibold text-sm">
                     {{ getConversationInitials(conversation) }}
                   </span>
                 </div>
-                <!-- <div
-                  class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"
-                ></div> -->
               </div>
 
               <!-- Informations de la conversation -->
               <div class="flex-1 min-w-0">
-                <div class="flex justify-between items-start">
-                  <h3 class="font-medium text-gray-900 truncate">
+                <div class="flex justify-between items-start mb-1">
+                  <h3 class="font-semibold text-gray-900 truncate text-sm">
                     {{ conversation.title || getConversationName(conversation) }}
                   </h3>
                   <span class="text-xs text-gray-500 whitespace-nowrap ml-2">
@@ -790,14 +807,14 @@ watch(newMessage, adjustTextareaHeight);
 
                 <p
                   v-if="conversation.last_message"
-                  class="text-sm text-gray-600 truncate mt-1"
+                  class="text-sm text-gray-600 truncate"
                 >
                   {{ conversation.last_message }}
                 </p>
-                <p v-else class="text-sm text-gray-400 italic mt-1">Aucun message</p>
+                <p v-else class="text-sm text-gray-400 italic">Aucun message</p>
 
                 <div class="flex items-center mt-1">
-                  <span class="text-xs text-gray-500">
+                  <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
                     {{ conversation.type === "private" ? "Privé" : "Groupe" }}
                   </span>
                 </div>
@@ -806,37 +823,17 @@ watch(newMessage, adjustTextareaHeight);
           </div>
         </div>
       </div>
-
-      <!-- Bouton de création de conversation -->
-      <div class="p-4 border-t border-gray-200">
-        <button
-          @click="openCreateModal"
-          class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg flex items-center justify-center"
-        >
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          Nouvelle conversation
-        </button>
-      </div>
     </div>
 
     <!-- Zone de chat principale -->
     <div class="flex-1 flex flex-col" v-if="selectedConversation">
       <!-- Header de la conversation -->
-      <div
-        class="bg-white shadow-sm border-b border-gray-200 px-6 py-4 flex items-center justify-between"
-      >
+      <div class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
         <div class="flex items-center space-x-3">
           <div
-            class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center"
+            class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center"
           >
-            <span class="text-blue-600 font-semibold">
+            <span class="text-white font-semibold text-sm">
               {{ getConversationInitials(selectedConversation) }}
             </span>
           </div>
@@ -846,7 +843,13 @@ watch(newMessage, adjustTextareaHeight);
                 selectedConversation.title || getConversationName(selectedConversation)
               }}
             </h2>
-            <!-- <p class="text-sm text-gray-500">En ligne</p> -->
+            <p class="text-sm text-gray-500">
+              {{
+                selectedConversation.type === "private"
+                  ? "Conversation privée"
+                  : "Groupe de discussion"
+              }}
+            </p>
           </div>
         </div>
       </div>
@@ -854,15 +857,15 @@ watch(newMessage, adjustTextareaHeight);
       <!-- Zone des messages -->
       <div
         ref="messagesContainer"
-        class="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50"
+        class="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50"
       >
         <!-- Loading state -->
         <div v-if="loading" class="flex justify-center items-center h-32">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
 
         <!-- Messages -->
-        <div v-else>
+        <div v-else class="space-y-6">
           <div
             v-for="message in messages"
             :key="message.id_message"
@@ -870,74 +873,54 @@ watch(newMessage, adjustTextareaHeight);
             :class="{ 'justify-end': isOwnMessage(message) }"
           >
             <div class="relative group max-w-xs lg:max-w-md xl:max-w-lg">
-              <div class="rounded-lg px-2 py-2" :class="getMessageClasses(message)">
+              <div
+                class="rounded-2xl px-10 py-2 shadow-sm"
+                :class="getMessageClasses(message)"
+              >
+                <!-- En-tête du message -->
+                <div v-if="!isOwnMessage(message)" class="flex items-center gap-2 mb-2">
+                  <span class="text-sm font-medium text-gray-700">
+                    {{ message?.name || " User name" }}
+                  </span>
+                  <!-- <span class="text-xs text-gray-500">
+                    {{ formatTime(message.created_at) }}
+                  </span> -->
+                </div>
+
                 <!-- Contenu du message -->
-                <p class="break-words">{{ message.content }}</p>
-
-                <!-- Indicateur d'envoi en cours -->
-                <div
-                  v-if="message.status === 'sending'"
-                  class="flex items-center mt-2 text-blue-100 text-xs"
-                >
-                  <div
-                    class="animate-spin rounded-full h-3 w-3 border-b-2 border-white mr-1"
-                  ></div>
-                  Envoi en cours...
-                </div>
-
-                <!-- Indicateur d'échec -->
-                <div
-                  v-if="message.status === 'failed'"
-                  class="flex items-center mt-2 text-white text-xs"
-                >
-                  <svg
-                    class="w-4 h-4 mr-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  Échec de l'envoi
-                  <button @click="retryMessage(message)" class="ml-2 underline">
-                    Réessayer
-                  </button>
-                </div>
+                <p class="break-words text-sm">{{ message.content }}</p>
 
                 <!-- Fichier joint -->
-                <div v-if="message.file_path || message.file" class="mt-2">
+                <div v-if="message.file_path || message.file" class="mt-3">
                   <div
                     v-if="isImageFile(message.file_path || message.file)"
-                    class="rounded-lg overflow-hidden"
+                    class="rounded-lg overflow-hidden border border-gray-200"
                   >
                     <img
                       :src="message.file_path || message.file"
                       :alt="message.file_name || 'Fichier joint'"
-                      class="max-w-full h-auto max-h-48 object-cover cursor-pointer"
+                      class="max-w-full h-auto max-h-48 object-cover cursor-pointer hover:opacity-90 transition-opacity"
                       @click="openFile(message.file_path || message.file)"
                     />
                   </div>
                   <div
                     v-else
-                    class="flex items-center p-3 bg-white bg-opacity-20 rounded-lg"
+                    class="flex items-center p-3 bg-white bg-opacity-20 rounded-lg border border-white border-opacity-20"
                   >
                     <div class="flex-1 min-w-0">
                       <p class="text-sm font-medium truncate">
                         {{ message.file_name || "Fichier joint" }}
                       </p>
                       <p class="text-xs opacity-90">
-                        {{ getFileType(message.file_name) }}
+                        {{ getFileType(message.file_name) }} •
+                        {{ formatFileSize(message.file_size) }}
                       </p>
                     </div>
                     <div class="flex space-x-2 ml-3">
                       <button
                         @click="openFile(message.file_path || message.file)"
-                        class="p-1 hover:bg-white hover:bg-opacity-20 rounded"
+                        class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+                        title="Voir le fichier"
                       >
                         <svg
                           class="w-4 h-4"
@@ -966,7 +949,8 @@ watch(newMessage, adjustTextareaHeight);
                             message.file_name
                           )
                         "
-                        class="p-1 hover:bg-white hover:bg-opacity-20 rounded"
+                        class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+                        title="Télécharger"
                       >
                         <svg
                           class="w-4 h-4"
@@ -986,72 +970,104 @@ watch(newMessage, adjustTextareaHeight);
                   </div>
                 </div>
 
-                <!-- Timestamp -->
-                <div
-                  class="flex items-center justify-end mt-1 text-xs"
-                  :class="{
-                    'text-blue-100': isOwnMessage(message) && message.status !== 'failed',
-                    'text-gray-400': !isOwnMessage(message),
-                    'text-gray-500': message.status === 'failed',
-                  }"
-                >
-                  <span>{{ formatTime(message.created_at) }}</span>
-                  <span
-                    v-if="isOwnMessage(message) && message.status === 'sent'"
-                    class="ml-1"
+                <!-- Indicateurs de statut -->
+                <div class="flex items-center justify-between mt-2">
+                  <div
+                    v-if="message.status === 'sending'"
+                    class="flex items-center text-blue-100 text-xs"
                   >
-                    ✓
+                    <div
+                      class="animate-spin rounded-full h-3 w-3 border-b-2 border-white mr-1"
+                    ></div>
+                    Envoi...
+                  </div>
+                  <div
+                    v-else-if="message.status === 'failed'"
+                    class="flex items-center text-white text-xs"
+                  >
+                    <svg
+                      class="w-4 h-4 mr-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    Échec
+                    <button @click="retryMessage(message)" class="ml-2 underline text-xs">
+                      Réessayer
+                    </button>
+                  </div>
+                  <div v-else class="flex-1"></div>
+
+                  <!-- Timestamp pour les messages propres -->
+                  <span
+                    class="text-xs"
+                    :class="isOwnMessage(message) ? 'text-blue-100' : 'text-gray-500'"
+                  >
+                    {{ formatTime(message.created_at) }}
+                    <span
+                      v-if="isOwnMessage(message) && message.status === 'sent'"
+                      class="ml-1"
+                      >✓</span
+                    >
                   </span>
                 </div>
-                <div
-                  v-if="
-                    isOwnMessage(message) &&
-                    message.status !== 'sending' &&
-                    message.status !== 'failed'
-                  "
-                  class="absolute top-0 right-30 opacity-0 group-hover:opacity-100 transition-opacity bg-white shadow-lg rounded-lg border border-gray-200 p-1"
-                >
-                  <button
-                    @click="editMessage(message)"
-                    class="flex items-center px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 rounded-md w-full"
-                  >
-                    <svg
-                      class="w-4 h-4 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                      />
-                    </svg>
-                    Modifier
-                  </button>
-                  <button
-                    @click="deleteMessage(message.id_message)"
-                    class="flex items-center px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded-md w-full"
-                  >
-                    <svg
-                      class="w-4 h-4 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                    Supprimer
-                  </button>
-                </div>
               </div>
-              <!-- Menu d'actions pour les messages -->
+
+              <!-- Menu d'actions pour les messages propres -->
+              <div
+                v-if="
+                  isOwnMessage(message) &&
+                  message.status !== 'sending' &&
+                  message.status !== 'failed'
+                "
+                class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white shadow-lg rounded-lg border border-gray-200 p-1 z-10"
+              >
+                <button
+                  @click="editMessage(message)"
+                  class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md w-full transition-colors"
+                >
+                  <svg
+                    class="w-4 h-4 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                  Modifier
+                </button>
+                <button
+                  @click="deleteMessage(message.id_message)"
+                  class="flex items-center px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md w-full transition-colors"
+                >
+                  <svg
+                    class="w-4 h-4 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                  Supprimer
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1062,14 +1078,32 @@ watch(newMessage, adjustTextareaHeight);
         <!-- Message en cours d'édition -->
         <div
           v-if="editingMessage"
-          class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-3"
+          class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4"
         >
           <div class="flex justify-between items-center">
-            <span class="text-sm text-yellow-800 font-medium">
-              Modification du message
-            </span>
-            <button @click="cancelEdit" class="text-yellow-600 hover:text-yellow-800">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-center">
+              <svg
+                class="w-5 h-5 text-yellow-600 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+              <span class="text-sm text-yellow-800 font-medium"
+                >Modification du message</span
+              >
+            </div>
+            <button
+              @click="cancelEdit"
+              class="text-yellow-600 hover:text-yellow-800 transition-colors"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -1084,23 +1118,27 @@ watch(newMessage, adjustTextareaHeight);
         <!-- Fichier sélectionné -->
         <div
           v-if="selectedFile"
-          class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3"
+          class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"
         >
           <div class="flex justify-between items-center">
             <div class="flex items-center space-x-3">
-              <svg
-                class="w-8 h-8 text-blue-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              <div
+                class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
+                <svg
+                  class="w-6 h-6 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
               <div>
                 <p class="text-sm font-medium text-blue-900">
                   {{ selectedFile.name }}
@@ -1110,7 +1148,10 @@ watch(newMessage, adjustTextareaHeight);
                 </p>
               </div>
             </div>
-            <button @click="removeSelectedFile" class="text-blue-600 hover:text-blue-800">
+            <button
+              @click="removeSelectedFile"
+              class="text-blue-600 hover:text-blue-800 transition-colors"
+            >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
@@ -1136,7 +1177,8 @@ watch(newMessage, adjustTextareaHeight);
             />
             <button
               @click="$refs.fileInput.click()"
-              class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition"
+              class="p-3 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
+              title="Joindre un fichier"
             >
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -1158,7 +1200,7 @@ watch(newMessage, adjustTextareaHeight);
               @keydown.enter.shift.exact.prevent="newMessage += '\n'"
               placeholder="Tapez votre message..."
               rows="1"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none bg-white shadow-sm"
               style="min-height: 48px; max-height: 120px"
             ></textarea>
           </div>
@@ -1168,7 +1210,8 @@ watch(newMessage, adjustTextareaHeight);
             <button
               @click="sendMessage"
               :disabled="(!newMessage.trim() && !selectedFile) || loading"
-              class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-3 rounded-lg transition"
+              class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-colors shadow-sm"
+              title="Envoyer le message"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -1186,30 +1229,34 @@ watch(newMessage, adjustTextareaHeight);
 
     <!-- Vue quand aucune conversation n'est sélectionnée -->
     <div v-else class="flex-1 flex items-center justify-center bg-gray-50">
-      <div class="text-center">
-        <svg
-          class="w-24 h-24 text-gray-400 mx-auto mb-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      <div class="text-center max-w-md">
+        <div
+          class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-          />
-        </svg>
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">
+          <svg
+            class="w-12 h-12 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+            />
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">
           Bienvenue dans la messagerie
         </h3>
-        <p class="text-gray-600 mb-6 max-w-md">
+        <p class="text-gray-600 mb-8 leading-relaxed">
           Sélectionnez une conversation existante ou créez-en une nouvelle pour commencer
-          à discuter.
+          à discuter avec vos collègues et collaborateurs.
         </p>
         <button
           @click="openCreateModal"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-medium transition-colors shadow-sm"
         >
           Créer une conversation
         </button>
@@ -1219,42 +1266,101 @@ watch(newMessage, adjustTextareaHeight);
     <!-- Modal de création de conversation -->
     <div
       v-if="showCreateModal"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
       @click.self="closeCreateModal"
     >
-      <div class="bg-white rounded-lg w-full max-w-md mx-4">
+      <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl">
         <div class="p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Nouvelle conversation</h3>
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-semibold text-gray-900">Nouvelle conversation</h3>
+            <button
+              @click="closeCreateModal"
+              class="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-lg"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
 
           <!-- Type de conversation -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-3">
               Type de conversation
             </label>
-            <div class="flex space-x-4">
-              <label class="flex items-center">
+            <div class="grid grid-cols-2 gap-3">
+              <label class="relative flex cursor-pointer">
                 <input
                   type="radio"
                   v-model="newConversation.type"
                   value="private"
-                  class="mr-2"
+                  class="sr-only"
                 />
-                <span>Privé</span>
+                <div
+                  class="flex-1 p-4 border-2 rounded-xl text-center transition-all"
+                  :class="
+                    newConversation.type === 'private'
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                  "
+                >
+                  <svg
+                    class="w-6 h-6 mx-auto mb-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                  <span class="text-sm font-medium">Privé</span>
+                </div>
               </label>
-              <label class="flex items-center">
+              <label class="relative flex cursor-pointer">
                 <input
                   type="radio"
                   v-model="newConversation.type"
                   value="group"
-                  class="mr-2"
+                  class="sr-only"
                 />
-                <span>Groupe</span>
+                <div
+                  class="flex-1 p-4 border-2 rounded-xl text-center transition-all"
+                  :class="
+                    newConversation.type === 'group'
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                  "
+                >
+                  <svg
+                    class="w-6 h-6 mx-auto mb-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                  <span class="text-sm font-medium">Groupe</span>
+                </div>
               </label>
             </div>
           </div>
 
           <!-- Titre (pour les groupes) -->
-          <div v-if="newConversation.type === 'group'" class="mb-4">
+          <div v-if="newConversation.type === 'group'" class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">
               Nom du groupe
             </label>
@@ -1262,13 +1368,13 @@ watch(newMessage, adjustTextareaHeight);
               v-model="newConversation.title"
               type="text"
               placeholder="Entrez le nom du groupe..."
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             />
           </div>
 
           <!-- Recherche d'utilisateurs -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-3">
               {{
                 newConversation.type === "private"
                   ? "Sélectionner un utilisateur"
@@ -1279,24 +1385,26 @@ watch(newMessage, adjustTextareaHeight);
               v-model="searchQuery"
               type="text"
               placeholder="Rechercher un utilisateur..."
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors mb-4"
             />
 
             <!-- Liste des utilisateurs -->
-            <div class="max-h-48 overflow-y-auto border border-gray-200 rounded-md">
+            <div
+              class="max-h-48 overflow-y-auto border border-gray-200 rounded-xl bg-gray-50"
+            >
               <div
                 v-for="user in filteredUsers"
                 :key="user.id_user"
                 @click="toggleUserSelection(user.id_user)"
-                class="flex items-center p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                class="flex items-center p-3 hover:bg-white cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
                 :class="{
-                  'bg-blue-50': isUserSelected(user.id_user),
+                  'bg-blue-50 border-blue-200': isUserSelected(user.id_user),
                 }"
               >
                 <div
-                  class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3"
+                  class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3"
                 >
-                  <span class="text-blue-600 text-sm font-medium">
+                  <span class="text-white text-sm font-medium">
                     {{ getUserInitials(user) }}
                   </span>
                 </div>
@@ -1304,11 +1412,20 @@ watch(newMessage, adjustTextareaHeight);
                   <p class="text-sm font-medium text-gray-900">
                     {{ user.name || user.email }}
                   </p>
-                  <p class="text-xs text-gray-500">{{ user.role }}</p>
+                  <div v-if="user.role == 'student'">
+                    <p class="text-xs text-gray-500">Etudiant</p>
+                  </div>
+                  <div v-else-if="user.role == 'teacher'">
+                    <p class="text-xs text-gray-500">Enseignant</p>
+                  </div>
+                  <div v-if="user.role == 'administrator'">
+                    <p class="text-xs text-gray-500">Administrateur</p>
+                  </div>
+                  <!-- <p class="text-xs text-gray-500">{{ user.role }}</p> -->
                 </div>
                 <div
                   v-if="isUserSelected(user.id_user)"
-                  class="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"
+                  class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center"
                 >
                   <svg
                     class="w-3 h-3 text-white"
@@ -1328,25 +1445,38 @@ watch(newMessage, adjustTextareaHeight);
 
               <div
                 v-if="filteredUsers.length === 0"
-                class="p-4 text-center text-gray-500"
+                class="p-6 text-center text-gray-500"
               >
-                Aucun utilisateur trouvé
+                <svg
+                  class="w-12 h-12 mx-auto mb-2 text-gray-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+                <p class="text-sm">Aucun utilisateur trouvé</p>
               </div>
             </div>
           </div>
 
           <!-- Actions -->
-          <div class="flex justify-end space-x-3">
+          <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
             <button
               @click="closeCreateModal"
-              class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+              class="px-6 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors font-medium"
             >
               Annuler
             </button>
             <button
               @click="createNewConversation"
               :disabled="!canCreateConversation"
-              class="px-4 py-2 text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-md"
+              class="px-6 py-2.5 text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-xl transition-colors font-medium"
             >
               Créer
             </button>
@@ -1358,20 +1488,20 @@ watch(newMessage, adjustTextareaHeight);
     <!-- Vue pour les images en plein écran -->
     <div
       v-if="viewingImage"
-      class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50"
+      class="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4"
       @click="viewingImage = null"
     >
       <div class="relative max-w-4xl max-h-full">
         <img
           :src="viewingImage"
           alt="Image en plein écran"
-          class="max-w-full max-h-full object-contain"
+          class="max-w-full max-h-full object-contain rounded-lg"
         />
         <button
           @click="viewingImage = null"
-          class="absolute top-4 right-4 text-white hover:text-gray-300"
+          class="absolute top-4 right-4 text-white hover:text-gray-300 bg-black/50 p-2 rounded-lg transition-colors"
         >
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -1386,11 +1516,6 @@ watch(newMessage, adjustTextareaHeight);
 </template>
 
 <style scoped>
-/* Styles personnalisés */
-.chat-container {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
 /* Scrollbar personnalisée */
 ::-webkit-scrollbar {
   width: 6px;
@@ -1418,19 +1543,6 @@ watch(newMessage, adjustTextareaHeight);
 .message-enter-from {
   opacity: 0;
   transform: translateY(10px);
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .conversation-list {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 40;
-    background: white;
-  }
 }
 
 /* Amélioration de l'accessibilité */

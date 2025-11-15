@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import {
   getAllUsers,
+  loadAllApi,
   getUsersByRole,
   activateUser,
   desactivateUser,
@@ -26,6 +27,21 @@ export const useAdminStore = defineStore("admin", () => {
       const response = await getAllUsers(page, limit);
       users.value = response.data;
       pagination.value = response.pagination;
+      return response;
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const fetchAll = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await loadAllApi();
+      console.log("Response : ", response);
+      users.value = response.data;
       return response;
     } catch (err) {
       error.value = err;
@@ -102,6 +118,7 @@ export const useAdminStore = defineStore("admin", () => {
     loading,
     error,
     fetchUsers,
+    fetchAll,
     pagination,
     changePage,
     fetchAdmins,

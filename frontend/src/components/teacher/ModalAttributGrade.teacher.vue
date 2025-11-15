@@ -1,178 +1,13 @@
-<template>
-  <div class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-lg w-full max-w-md mx-auto shadow-lg">
-      <!-- Header -->
-      <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-        <h2 class="text-lg font-semibold text-gray-900">
-          <template v-if="mode === 'edit'">Modifier les notes</template>
-          <template v-else>Attribuer des notes</template>
-        </h2>
-        <button @click="close" class="text-gray-400 hover:text-gray-600">✕</button>
-      </div>
-
-      <!-- Body: Add mode -->
-      <div v-if="mode === 'add'" class="px-6 py-4 space-y-4">
-        <p class="text-sm text-gray-600">
-          Sélectionnez un étudiant puis saisissez au moins une note.
-        </p>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Étudiant</label>
-          <select
-            v-model="selectedStudentId"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md"
-          >
-            <option value="" disabled>-- Sélectionner un étudiant --</option>
-            <option v-for="s in studentList" :key="studentKey(s)" :value="studentKey(s)">
-              {{ studentDisplay(s) }}
-            </option>
-          </select>
-        </div>
-
-        <div class="grid grid-cols-1 gap-3">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Note DS (0-20)</label
-            >
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              max="20"
-              v-model.number="noteDS"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Note Examen (0-20)</label
-            >
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              max="20"
-              v-model.number="noteExam"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Note Finale (0-20)</label
-            >
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              max="20"
-              v-model.number="noteFinal"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-            <p class="text-xs text-gray-500 mt-1">
-              La note finale est saisie manuellement.
-            </p>
-          </div>
-        </div>
-
-        <div v-if="validationMessage" class="text-sm text-red-600">
-          {{ validationMessage }}
-        </div>
-      </div>
-
-      <!-- Body: Edit mode -->
-      <div v-else class="px-6 py-4 space-y-4">
-        <p class="text-sm text-gray-600">
-          Modification des notes pour :
-          <strong>{{ studentDisplay(currentStudent) }}</strong>
-        </p>
-
-        <div class="grid grid-cols-1 gap-3">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Note DS (0-20)</label
-            >
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              max="20"
-              v-model.number="noteDS"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Note Examen (0-20)</label
-            >
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              max="20"
-              v-model.number="noteExam"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Note Finale (0-20)</label
-            >
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              max="20"
-              v-model.number="noteFinal"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-            <p class="text-xs text-gray-500 mt-1">
-              La note finale est saisie manuellement.
-            </p>
-          </div>
-        </div>
-
-        <div v-if="validationMessage" class="text-sm text-red-600">
-          {{ validationMessage }}
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div
-        class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end space-x-3"
-      >
-        <button
-          @click="close"
-          class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-        >
-          Annuler
-        </button>
-
-        <button
-          :disabled="!canSave"
-          @click="saveGrade"
-          :class="[
-            'px-4 py-2 text-sm text-white rounded-md',
-            canSave ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed',
-          ]"
-        >
-          {{ mode === "edit" ? "Modifier" : "Attribuer" }}
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
-/**
- * ModalAttributeGrade.teacher.vue
- * Rewritten from scratch with:
- *  - separate add / edit UI
- *  - separate validation rules
- *  - console.log traces everywhere
- */
-
 import { ref, computed, watch } from "vue";
 import { useNoteStore } from "../../stores/note.store";
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
 
 console.log("[Modal] initializing component file");
 
@@ -399,6 +234,230 @@ const saveGrade = async () => {
 };
 </script>
 
-<style scoped>
-/* small scoped styles if needed */
-</style>
+<template>
+  <TransitionRoot as="template" :show="true">
+    <Dialog as="div" class="relative z-50" @close="close">
+      <TransitionChild
+        as="template"
+        enter="ease-out duration-300"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="ease-in duration-200"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
+      >
+        <div class="fixed inset-0 bg-black/75 transition-opacity" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div
+          class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+        >
+          <TransitionChild
+            as="template"
+            enter="ease-out duration-300"
+            enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            enter-to="opacity-100 translate-y-0 sm:scale-100"
+            leave="ease-in duration-200"
+            leave-from="opacity-100 translate-y-0 sm:scale-100"
+            leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          >
+            <DialogPanel
+              class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md sm:p-6"
+            >
+              <!-- Header -->
+              <div class="flex items-center justify-between mb-4">
+                <DialogTitle
+                  as="h3"
+                  class="text-lg font-semibold leading-6 text-gray-900"
+                >
+                  <template v-if="mode === 'edit'">Modifier les notes</template>
+                  <template v-else>Attribuer des notes</template>
+                </DialogTitle>
+                <button
+                  @click="close"
+                  class="rounded-md bg-white text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                >
+                  <svg
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Body: Add mode -->
+              <div v-if="mode === 'add'" class="space-y-4">
+                <p class="text-sm text-gray-600">
+                  Sélectionnez un étudiant puis saisissez au moins une note.
+                </p>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Étudiant</label
+                  >
+                  <select
+                    v-model="selectedStudentId"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                  >
+                    <option value="" disabled>-- Sélectionner un étudiant --</option>
+                    <option
+                      v-for="s in studentList"
+                      :key="studentKey(s)"
+                      :value="studentKey(s)"
+                    >
+                      {{ studentDisplay(s) }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="grid grid-cols-1 gap-3">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >Note DS (0-20)</label
+                    >
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      max="20"
+                      v-model.number="noteDS"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >Note Examen (0-20)</label
+                    >
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      max="20"
+                      v-model.number="noteExam"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >Note Finale (0-20)</label
+                    >
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      max="20"
+                      v-model.number="noteFinal"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                    />
+                    <p class="text-xs text-gray-500 mt-1">
+                      La note finale est saisie manuellement.
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  v-if="validationMessage"
+                  class="text-sm text-red-600 transition-all duration-200"
+                >
+                  {{ validationMessage }}
+                </div>
+              </div>
+
+              <!-- Body: Edit mode -->
+              <div v-else class="space-y-4">
+                <p class="text-sm text-gray-600">
+                  Modification des notes pour :
+                  <strong>{{ studentDisplay(currentStudent) }}</strong>
+                </p>
+
+                <div class="grid grid-cols-1 gap-3">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >Note DS (0-20)</label
+                    >
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      max="20"
+                      v-model.number="noteDS"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >Note Examen (0-20)</label
+                    >
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      max="20"
+                      v-model.number="noteExam"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >Note Finale (0-20)</label
+                    >
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      max="20"
+                      v-model.number="noteFinal"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                    />
+                    <p class="text-xs text-gray-500 mt-1">
+                      La note finale est saisie manuellement.
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  v-if="validationMessage"
+                  class="text-sm text-red-600 transition-all duration-200"
+                >
+                  {{ validationMessage }}
+                </div>
+              </div>
+
+              <!-- Footer -->
+              <div class="mt-6 flex justify-end space-x-3">
+                <button
+                  @click="close"
+                  class="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-200 ease-in-out"
+                >
+                  Annuler
+                </button>
+
+                <button
+                  :disabled="!canSave"
+                  @click="saveGrade"
+                  :class="[
+                    'px-4 py-2 text-sm text-white rounded-md transition-colors duration-200 ease-in-out',
+                    canSave
+                      ? 'bg-blue-600 hover:bg-blue-700'
+                      : 'bg-gray-300 cursor-not-allowed',
+                  ]"
+                >
+                  {{ mode === "edit" ? "Modifier" : "Attribuer" }}
+                </button>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
+</template>

@@ -126,6 +126,7 @@ const getCellClass = (day, periodCode) => {
     "p-2",
     "transition-all",
     "duration-200",
+    "ease-in-out",
     "cursor-pointer",
     "min-h-[80px]",
   ];
@@ -177,16 +178,25 @@ watch(
 </script>
 
 <template>
-  <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+  <div
+    class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 transition-all duration-300 ease-in-out"
+  >
     <!-- En-tête avec sélecteurs -->
     <div class="bg-gradient-to-r from-blue-600 to-purple-700 px-6 py-4 text-white">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div class="flex-1">
-          <h3 class="text-xl font-bold mb-1" v-if="title">{{ title }}</h3>
-          <h3 class="text-xl font-bold mb-1" v-else>Emploi du Temps</h3>
+          <h3 class="text-xl font-bold mb-1 transition-colors duration-200" v-if="title">
+            {{ title }}
+          </h3>
+          <h3 class="text-xl font-bold mb-1 transition-colors duration-200" v-else>
+            Emploi du Temps
+          </h3>
 
           <div v-if="showWeekSelector" class="flex items-center gap-3">
-            <label for="week-select" class="text-sm font-medium text-blue-100">
+            <label
+              for="week-select"
+              class="text-sm font-medium text-blue-100 transition-colors duration-200"
+            >
               Semaine :
             </label>
             <select
@@ -194,7 +204,7 @@ watch(
               v-model="selectedWeek"
               @change="loadSchedule"
               :disabled="loading"
-              class="px-3 py-1 rounded border-0 bg-white/20 text-white focus:bg-white/30 focus:ring-2 focus:ring-blue-300 transition-colors"
+              class="px-3 py-1 rounded border-0 bg-white/20 text-white focus:bg-white/30 focus:ring-2 focus:ring-blue-300 transition-all duration-200 ease-in-out"
             >
               <option value="" class="text-gray-800">Semaine courante</option>
               <option
@@ -214,11 +224,11 @@ watch(
             v-if="showRefresh"
             @click="loadSchedule"
             :disabled="loading"
-            class="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg border border-white border-opacity-30 transition-all duration-200 font-medium"
+            class="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg border border-white border-opacity-30 transition-all duration-200 ease-in-out font-medium"
           >
             <svg
               v-if="loading"
-              class="animate-spin h-4 w-4 text-white"
+              class="animate-spin h-4 w-4 text-white transition-colors duration-200"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -239,7 +249,7 @@ watch(
             </svg>
             <svg
               v-else
-              class="h-4 w-4"
+              class="h-4 w-4 transition-colors duration-200"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -253,35 +263,47 @@ watch(
             </svg>
             {{ loading ? "Chargement..." : "Actualiser" }}
           </button>
-
-          <!-- <span
-            v-if="statistics.preferenceSatisfaction"
-            class="px-3 py-1 bg-white/20 rounded-full text-sm font-medium border border-white border-opacity-30"
-          >
-            🎯 {{ statistics.preferenceSatisfaction }}
-          </span> -->
         </div>
       </div>
     </div>
 
     <!-- États de chargement et d'erreur -->
-    <div v-if="loading" class="flex flex-col items-center justify-center py-12 px-6">
+    <div
+      v-if="loading"
+      class="flex flex-col items-center justify-center py-12 px-6 transition-all duration-300 ease-in-out"
+    >
       <div
-        class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"
+        class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4 transition-colors duration-200"
       ></div>
-      <p class="text-gray-600 font-medium">Chargement de l'emploi du temps...</p>
+      <p class="text-gray-600 font-medium transition-colors duration-200">
+        Chargement de l'emploi du temps...
+      </p>
     </div>
 
     <div
       v-else-if="error"
-      class="flex flex-col items-center justify-center py-12 px-6 text-center"
+      class="flex flex-col items-center justify-center py-12 px-6 text-center transition-all duration-300 ease-in-out"
     >
-      <div class="text-red-500 text-4xl mb-4">⚠️</div>
-      <p class="text-red-600 font-medium mb-2">Une erreur est survenue</p>
-      <p class="text-gray-600 text-sm mb-4">{{ error }}</p>
+      <svg
+        class="w-12 h-12 text-red-500 mb-4 transition-colors duration-200"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"
+        />
+      </svg>
+      <p class="text-red-600 font-medium mb-2 transition-colors duration-200">
+        Une erreur est survenue
+      </p>
+      <p class="text-gray-600 text-sm mb-4 transition-colors duration-200">{{ error }}</p>
       <button
         @click="loadSchedule"
-        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 ease-in-out font-medium"
       >
         Réessayer
       </button>
@@ -289,87 +311,116 @@ watch(
 
     <div
       v-else-if="!hasScheduleData"
-      class="flex flex-col items-center justify-center py-12 px-6 text-center"
+      class="flex flex-col items-center justify-center py-12 px-6 text-center transition-all duration-300 ease-in-out"
     >
-      <div class="text-4xl mb-4 text-gray-400">📅</div>
-      <p class="text-gray-600 font-medium mb-2">Aucun emploi du temps disponible</p>
-      <p v-if="showEmptyMessage" class="text-gray-500 text-sm">
+      <svg
+        class="w-12 h-12 text-gray-400 mb-4 transition-colors duration-200"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+        />
+      </svg>
+      <p class="text-gray-600 font-medium mb-2 transition-colors duration-200">
+        Aucun emploi du temps disponible
+      </p>
+      <p
+        v-if="showEmptyMessage"
+        class="text-gray-500 text-sm transition-colors duration-200"
+      >
         {{ emptyMessage }}
       </p>
     </div>
 
     <!-- Emploi du temps -->
-    <div v-else class="p-1">
+    <div v-else class="p-1 transition-all duration-300 ease-in-out">
       <!-- Vue Tableau -->
-      <div v-if="viewMode === 'table'" class="overflow-x-auto">
-        <table class="w-full border-collapse">
+      <div
+        v-if="viewMode === 'table'"
+        class="overflow-x-auto transition-all duration-300 ease-in-out"
+      >
+        <table class="w-full border-collapse transition-all duration-300 ease-in-out">
           <thead>
-            <tr class="bg-gray-50">
+            <tr class="bg-gray-50 transition-colors duration-200">
               <th
-                class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b border-gray-200"
+                class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b border-gray-200 transition-colors duration-200"
               >
                 Créneau
               </th>
               <th
                 v-for="day in days"
                 :key="day"
-                class="px-4 py-3 text-center text-sm font-semibold text-gray-700 border-b border-gray-200"
+                class="px-4 py-3 text-center text-sm font-semibold text-gray-700 border-b border-gray-200 transition-colors duration-200"
               >
                 {{ day }}
               </th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200">
-            <tr v-for="period in periods" :key="period.code">
-              <td class="px-4 py-3 bg-gray-50 border-r border-gray-200">
-                <div class="text-sm font-semibold text-gray-900">
+          <tbody class="divide-y divide-gray-200 transition-all duration-300">
+            <tr
+              v-for="period in periods"
+              :key="period.code"
+              class="transition-colors duration-200"
+            >
+              <td
+                class="px-4 py-3 bg-gray-50 border-r border-gray-200 transition-colors duration-200"
+              >
+                <div
+                  class="text-sm font-semibold text-gray-900 transition-colors duration-200"
+                >
                   {{ period.description }}
                 </div>
-                <div class="text-xs text-gray-500">{{ period.label }}</div>
-                <!-- <div class="text-xs text-gray-400">{{ period.code }}</div> -->
+                <div class="text-xs text-gray-500 transition-colors duration-200">
+                  {{ period.label }}
+                </div>
               </td>
               <td
                 v-for="day in days"
                 :key="`${day}-${period.code}`"
                 :class="getCellClass(day, period.code)"
                 @click="onCellClick(day, period.code)"
+                class="transition-all duration-200 ease-in-out"
               >
                 <div
                   v-if="getCoursesInSlot(day, period.code).length > 0"
-                  class="space-y-1"
+                  class="space-y-1 transition-all duration-200"
                 >
                   <div
                     v-for="course in getCoursesInSlot(day, period.code)"
                     :key="course.id_schedule"
-                    class="p-2 rounded border-l-4 bg-white shadow-sm"
+                    class="p-2 rounded border-l-4 bg-white shadow-sm transition-all duration-200 ease-in-out hover:shadow-md"
                     :class="[
                       course.is_preferred
-                        ? 'border-yellow-500 bg-yellow-50'
-                        : 'border-green-500',
+                        ? 'border-yellow-500 bg-yellow-50 hover:bg-yellow-100'
+                        : 'border-green-500 hover:bg-green-100',
                     ]"
                   >
-                    <div class="flex justify-between items-start">
+                    <div
+                      class="flex justify-between items-start transition-colors duration-200"
+                    >
                       <div class="flex-1">
-                        <div class="text-sm font-semibold text-gray-900 line-clamp-1">
+                        <div
+                          class="text-sm font-semibold text-gray-900 line-clamp-1 transition-colors duration-200"
+                        >
                           {{ course.course_title }}
                         </div>
-                        <div class="text-xs text-gray-600 mt-1">
+                        <div
+                          class="text-xs text-gray-600 mt-1 transition-colors duration-200"
+                        >
                           {{ getTeacherShortName(course.teacher_name) }}
                         </div>
                       </div>
-                      <!-- <div
-                        v-if="course.is_preferred"
-                        class="text-yellow-500 text-xs flex-shrink-0 ml-1"
-                        title="Créneau préféré"
-                      >
-                        ★
-                      </div> -->
                     </div>
                   </div>
                 </div>
                 <div
                   v-else
-                  class="flex items-center justify-center h-full text-gray-400 text-sm italic"
+                  class="flex items-center justify-center h-full text-gray-400 text-sm italic transition-colors duration-200"
                 >
                   —
                 </div>
@@ -382,57 +433,78 @@ watch(
       <!-- Vue Cartes -->
       <div
         v-else-if="viewMode === 'cards'"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 transition-all duration-300 ease-in-out"
       >
         <div
           v-for="day in days"
           :key="day"
-          class="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden"
+          class="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden transition-all duration-300 ease-in-out hover:shadow-lg"
         >
-          <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-3">
-            <h4 class="text-lg font-semibold text-white text-center">{{ day }}</h4>
+          <div
+            class="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-3 transition-colors duration-200"
+          >
+            <h4
+              class="text-lg font-semibold text-white text-center transition-colors duration-200"
+            >
+              {{ day }}
+            </h4>
           </div>
-          <div class="p-4 space-y-3">
+          <div class="p-4 space-y-3 transition-all duration-300">
             <div
               v-for="period in periods"
               :key="period.code"
-              class="bg-white rounded-lg border border-gray-200 p-3 transition-all duration-200 hover:shadow-md"
+              class="bg-white rounded-lg border border-gray-200 p-3 transition-all duration-200 ease-in-out hover:shadow-md"
               :class="{
-                'border-green-300 bg-green-50':
+                'border-green-300 bg-green-50 hover:bg-green-100':
                   getCoursesInSlot(day, period.code).length > 0,
               }"
             >
-              <div class="flex justify-between items-center mb-2">
-                <span class="text-sm font-semibold text-gray-900">{{ period.code }}</span>
-                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+              <div
+                class="flex justify-between items-center mb-2 transition-colors duration-200"
+              >
+                <span
+                  class="text-sm font-semibold text-gray-900 transition-colors duration-200"
+                  >{{ period.code }}</span
+                >
+                <span
+                  class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded transition-colors duration-200"
+                >
                   {{ period.label }}
                 </span>
               </div>
-              <div class="text-xs text-gray-600 mb-3">{{ period.description }}</div>
+              <div class="text-xs text-gray-600 mb-3 transition-colors duration-200">
+                {{ period.description }}
+              </div>
 
-              <div class="space-y-2">
+              <div class="space-y-2 transition-all duration-200">
                 <div
                   v-for="course in getCoursesInSlot(day, period.code)"
                   :key="course.id_schedule"
-                  class="p-2 rounded border-l-4 text-sm"
+                  class="p-2 rounded border-l-4 text-sm transition-all duration-200 ease-in-out hover:shadow-sm"
                   :class="[
                     course.is_preferred
-                      ? 'border-yellow-500 bg-yellow-50'
-                      : 'border-green-500 bg-white',
+                      ? 'border-yellow-500 bg-yellow-50 hover:bg-yellow-100'
+                      : 'border-green-500 bg-white hover:bg-green-50',
                   ]"
                 >
-                  <div class="flex justify-between items-start">
+                  <div
+                    class="flex justify-between items-start transition-colors duration-200"
+                  >
                     <div class="flex-1">
-                      <div class="font-medium text-gray-900">
+                      <div
+                        class="font-medium text-gray-900 transition-colors duration-200"
+                      >
                         {{ course.course_title }}
                       </div>
-                      <div class="text-xs text-gray-600 mt-1">
+                      <div
+                        class="text-xs text-gray-600 mt-1 transition-colors duration-200"
+                      >
                         {{ getTeacherShortName(course.teacher_name) }}
                       </div>
                     </div>
                     <div
                       v-if="course.is_preferred"
-                      class="text-yellow-500 text-xs flex-shrink-0 ml-1"
+                      class="text-yellow-500 text-xs flex-shrink-0 ml-1 transition-colors duration-200"
                       title="Créneau préféré"
                     >
                       ★
@@ -442,7 +514,7 @@ watch(
 
                 <div
                   v-if="getCoursesInSlot(day, period.code).length === 0"
-                  class="text-center py-4 text-gray-400 text-sm italic"
+                  class="text-center py-4 text-gray-400 text-sm italic transition-colors duration-200"
                 >
                   Aucun cours
                 </div>
@@ -455,11 +527,13 @@ watch(
       <!-- Statistiques -->
       <div
         v-if="showStatistics && statistics.totalAssignments"
-        class="border-t border-gray-200 bg-gray-50 px-6 py-4"
+        class="border-t border-gray-200 bg-gray-50 px-6 py-4 transition-all duration-300 ease-in-out"
       >
-        <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <h4
+          class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2 transition-colors duration-200"
+        >
           <svg
-            class="w-5 h-5 text-gray-600"
+            class="w-5 h-5 text-gray-600 transition-colors duration-200"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -473,38 +547,37 @@ watch(
           </svg>
           Statistiques
         </h4>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 transition-all duration-300">
           <div
-            class="bg-white rounded-lg p-4 text-center border border-gray-200 shadow-sm"
+            v-for="(stat, index) in [
+              {
+                value: statistics.totalAssignments,
+                label: 'Cours planifiés',
+                color: 'blue',
+              },
+              {
+                value: statistics.preferredAssignments,
+                label: 'Créneaux préférés',
+                color: 'green',
+              },
+              {
+                value: statistics.preferenceSatisfaction,
+                label: 'Satisfaction',
+                color: 'purple',
+              },
+              { value: statistics.totalTeachers, label: 'Enseignants', color: 'orange' },
+            ]"
+            :key="index"
+            class="bg-white rounded-lg p-4 text-center border border-gray-200 shadow-sm transition-all duration-200 ease-in-out hover:shadow-md hover:scale-105"
           >
-            <div class="text-2xl font-bold text-blue-600 mb-1">
-              {{ statistics.totalAssignments }}
+            <div
+              :class="`text-2xl font-bold mb-1 transition-colors duration-200 text-${stat.color}-600`"
+            >
+              {{ stat.value }}
             </div>
-            <div class="text-sm text-gray-600">Cours planifiés</div>
-          </div>
-          <div
-            class="bg-white rounded-lg p-4 text-center border border-gray-200 shadow-sm"
-          >
-            <div class="text-2xl font-bold text-green-600 mb-1">
-              {{ statistics.preferredAssignments }}
+            <div class="text-sm text-gray-600 transition-colors duration-200">
+              {{ stat.label }}
             </div>
-            <div class="text-sm text-gray-600">Créneaux préférés</div>
-          </div>
-          <div
-            class="bg-white rounded-lg p-4 text-center border border-gray-200 shadow-sm"
-          >
-            <div class="text-2xl font-bold text-purple-600 mb-1">
-              {{ statistics.preferenceSatisfaction }}
-            </div>
-            <div class="text-sm text-gray-600">Satisfaction</div>
-          </div>
-          <div
-            class="bg-white rounded-lg p-4 text-center border border-gray-200 shadow-sm"
-          >
-            <div class="text-2xl font-bold text-orange-600 mb-1">
-              {{ statistics.totalTeachers }}
-            </div>
-            <div class="text-sm text-gray-600">Enseignants</div>
           </div>
         </div>
       </div>
@@ -515,7 +588,6 @@ watch(
 <style scoped>
 .line-clamp-1 {
   display: -webkit-box;
-  /* -webkit-line-clamp: 1; */
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -544,6 +616,7 @@ watch(
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 3px;
+  transition: background-color 0.2s ease-in-out;
 }
 
 ::-webkit-scrollbar-thumb:hover {

@@ -119,6 +119,7 @@ const userController = {
       res.status(500).json({ error: error.message });
     }
   },
+
   async getAllTeachers(req, res) {
     try {
       const { users, totalCount } = await userService.getAllTeacher();
@@ -128,6 +129,20 @@ const userController = {
         success: true,
         data: users,
         totalItems: totalCount,
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
+  async loadAllCtrl(req, res) {
+    try {
+      const users = await userService.loadAll();
+      console.log("Load all: ", users);
+
+      res.json({
+        success: true,
+        data: users,
       });
     } catch (error) {
       res.status(500).json({ error: error.message });

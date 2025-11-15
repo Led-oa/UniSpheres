@@ -37,7 +37,8 @@ router.post(
 
 router.put("/:id", FileController.update);
 
-router.delete("/:id", FileController.remove);
+router.delete("/:id", FileController.removeFile);
+
 router.get("/:ownerType/:ownerId", FileController.fetchByOwner);
 
 module.exports = router;

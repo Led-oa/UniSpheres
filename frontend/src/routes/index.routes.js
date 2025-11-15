@@ -272,7 +272,7 @@ const routes = [
         path: "classStudents",
         name: "ListeEtudiantsEtudiant",
         alias: "Liste des etudiants",
-        component: StudentPages.ListeEtudiantsEtudiant,
+        component: StudentPages.BulletinEtudiant,
         meta: { title: "Liste des etudiants" },
       },
       {

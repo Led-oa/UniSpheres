@@ -10,10 +10,6 @@ const mobileOpen = ref(false);
 
 // Récupérer les informations de l'utilisateur
 const user = computed(() => authStore.user);
-
-// console.log("Current User Layout : ", user.value.email);
-// console.log("Current User Layout : ", user.value.role);
-
 const userName = computed(
   () => user.value?.email || user.value?.username || "Enseignant"
 );
@@ -37,40 +33,56 @@ const menuItems = [
   {
     name: "TableauDeBordsEnseignant",
     label: "Tableau de bord",
-    icon: "📊",
+    icon: "chart-bar",
     description: "Vue d'ensemble de vos activités",
   },
   {
     name: "AnnoncesEnseignant",
     label: "Annonces",
-    icon: "📢",
+    icon: "megaphone",
     description: "Gérer vos communications",
   },
   {
     name: "DiscussionTeacher",
     label: "Messageries",
-    icon: "💬",
+    icon: "chat-bubble-left-right",
     description: "Communiquer avec les étudiants",
   },
   {
     name: "ListeCoursEnseignant",
     label: "Mes cours",
-    icon: "📚",
+    icon: "book-open",
     description: "Gérer vos matières",
   },
   {
     name: "ListeClasseEnseignant",
     label: "Mes classes",
-    icon: "👨‍🏫",
+    icon: "academic-cap",
     description: "Vos groupes d'étudiants",
   },
   {
     name: "ProfileEnseignant",
     label: "Mon profil",
-    icon: "👤",
+    icon: "user",
     description: "Paramètres personnels",
   },
 ];
+
+// Mapping des icônes Heroicons
+const iconMap = {
+  "chart-bar":
+    "M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z",
+  megaphone:
+    "M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 001.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.56.276 2.56-1.06V4.06zM18.584 5.106a.75.75 0 00-1.06 1.06 5.5 5.5 0 010 7.78.75.75 0 001.06 1.06 7 7 0 000-9.9z",
+  "chat-bubble-left-right":
+    "M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z",
+  "book-open":
+    "M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25",
+  "academic-cap":
+    "M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5",
+  user:
+    "M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z",
+};
 
 function handleLogout() {
   authStore.logout();
@@ -84,53 +96,51 @@ const navigateTo = (routeName) => {
 };
 
 const getRouteDisplayName = (route) => {
-  // First try meta.title
   if (route.meta?.title) {
     return route.meta.title;
   }
-
-  // Then try to find alias from router
   const routeRecord = router.getRoutes().find((r) => r.name === route.name);
   if (routeRecord?.alias) {
     return Array.isArray(routeRecord.alias) ? routeRecord.alias[0] : routeRecord.alias;
   }
-
-  // Fallback to route name
   return route.name;
 };
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen bg-gray-50">
+  <div class="flex flex-col min-h-screen bg-gray-50 transition-all duration-300">
     <!-- Navbar -->
     <header
-      class="bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg sticky top-0 z-40"
+      class="bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg sticky top-0 z-40 transition-all duration-300"
     >
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300">
+        <div
+          class="flex justify-between items-center h-16 transition-colors duration-200"
+        >
           <!-- Logo et nom -->
           <router-link
             :to="{ name: 'TableauDeBordsEnseignant' }"
-            class="flex items-center space-x-3 group"
+            class="flex items-center space-x-3 group transition-all duration-300"
           >
-            <!-- <div
-              class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white/20 transition-colors"
-            >
-              <span class="text-xl">🎓</span>
-            </div> -->
-            <div class="hidden md:block">
-              <span class="text-xl font-bold">UniSphere</span>
-              <span class="block text-sm text-blue-100">Espace Enseignant</span>
+            <div class="hidden md:block transition-colors duration-200">
+              <span class="text-xl font-bold transition-colors duration-200"
+                >UniSphere</span
+              >
+              <span class="block text-sm text-blue-100 transition-colors duration-200"
+                >Espace Enseignant</span
+              >
             </div>
           </router-link>
 
           <!-- Menu Desktop -->
-          <nav class="hidden md:flex items-center space-x-1">
+          <nav
+            class="hidden md:flex items-center space-x-1 transition-colors duration-200"
+          >
             <router-link
               v-for="item in menuItems"
               :key="item.name"
               :to="{ name: item.name }"
-              class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative group"
+              class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ease-in-out relative group hover:scale-105"
               :class="
                 route.name === item.name
                   ? 'bg-white/20 text-white shadow-inner'
@@ -142,42 +152,40 @@ const getRouteDisplayName = (route) => {
           </nav>
 
           <!-- User menu desktop -->
-          <div class="hidden md:flex items-center space-x-4">
-            <!-- Notifications -->
-            <!-- <button
-              class="relative p-2 text-blue-100 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                />
-              </svg>
-              <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button> -->
-
+          <div
+            class="hidden md:flex items-center space-x-4 transition-colors duration-200"
+          >
             <!-- User profile -->
-            <div class="flex items-center space-x-3">
-              <div class="text-right">
-                <p class="text-sm font-medium text-white">{{ userName }}</p>
-                <p class="text-xs text-blue-200">Enseignant</p>
+            <div class="flex items-center space-x-3 transition-colors duration-200">
+              <div class="text-right transition-colors duration-200">
+                <p class="text-sm font-medium text-white transition-colors duration-200">
+                  {{ userName }}
+                </p>
+                <p class="text-xs text-blue-200 transition-colors duration-200">
+                  Enseignant
+                </p>
               </div>
               <div
-                class="w-10 h-10 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full flex items-center justify-center shadow-sm"
+                class="w-10 h-10 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full flex items-center justify-center shadow-sm transition-all duration-300 ease-in-out hover:scale-105"
               >
-                <span class="text-white font-medium">{{ userInitial }}</span>
+                <span class="text-white font-medium transition-colors duration-200">{{
+                  userInitial
+                }}</span>
               </div>
             </div>
 
             <!-- Logout button -->
             <button
               @click="handleLogout"
-              class="p-2 text-blue-100 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
+              class="p-2 text-blue-100 hover:text-white rounded-lg hover:bg-white/10 transition-all duration-200 ease-in-out hover:scale-110"
               title="Déconnexion"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-5 h-5 transition-colors duration-200"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -191,10 +199,10 @@ const getRouteDisplayName = (route) => {
           <!-- Bouton mobile -->
           <button
             @click="mobileOpen = !mobileOpen"
-            class="md:hidden p-2 rounded-lg hover:bg-white/10 focus:outline-none transition-colors"
+            class="md:hidden p-2 rounded-lg hover:bg-white/10 focus:outline-none transition-all duration-200 ease-in-out hover:scale-110"
           >
             <svg
-              class="w-6 h-6"
+              class="w-6 h-6 transition-colors duration-200"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -208,7 +216,7 @@ const getRouteDisplayName = (route) => {
               />
             </svg>
             <svg
-              class="w-6 h-6"
+              class="w-6 h-6 transition-colors duration-200"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -227,56 +235,82 @@ const getRouteDisplayName = (route) => {
 
       <!-- Menu mobile -->
       <transition
-        enter-active-class="transition-all duration-200 ease-out"
+        enter-active-class="transition-all duration-300 ease-in-out"
         enter-from-class="opacity-0 -translate-y-4"
         enter-to-class="opacity-100 translate-y-0"
-        leave-active-class="transition-all duration-150 ease-in"
+        leave-active-class="transition-all duration-200 ease-in-out"
         leave-from-class="opacity-100 translate-y-0"
         leave-to-class="opacity-0 -translate-y-4"
       >
         <div
           v-if="mobileOpen"
-          class="md:hidden bg-gradient-to-b from-blue-700 to-indigo-800 border-t border-white/10 shadow-xl"
+          class="md:hidden bg-gradient-to-b from-blue-700 to-indigo-800 border-t border-white/10 shadow-xl transition-all duration-300"
         >
-          <nav class="flex flex-col p-4 space-y-1">
+          <nav class="flex flex-col p-4 space-y-1 transition-all duration-300">
             <router-link
               v-for="item in menuItems"
               :key="item.name"
               :to="{ name: item.name }"
-              class="flex items-center space-x-3 py-3 px-4 rounded-lg transition-colors"
+              class="flex items-center space-x-3 py-3 px-4 rounded-lg transition-all duration-200 ease-in-out hover:bg-white/10 hover:scale-105"
               :class="
                 route.name === item.name
                   ? 'bg-white/20 text-white'
-                  : 'text-blue-100 hover:text-white hover:bg-white/10'
+                  : 'text-blue-100 hover:text-white'
               "
               @click="navigateTo(item.name)"
             >
-              <span class="text-xl">{{ item.icon }}</span>
-              <div>
-                <p class="font-medium">{{ item.label }}</p>
-                <p class="text-xs text-blue-200">{{ item.description }}</p>
+              <svg
+                class="w-5 h-5 transition-colors duration-200"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  :d="iconMap[item.icon]"
+                />
+              </svg>
+              <div class="transition-colors duration-200">
+                <p class="font-medium transition-colors duration-200">{{ item.label }}</p>
+                <p class="text-xs text-blue-200 transition-colors duration-200">
+                  {{ item.description }}
+                </p>
               </div>
             </router-link>
 
-            <div class="border-t border-white/20 pt-3 mt-3">
-              <div class="flex items-center space-x-3 px-4 py-3">
+            <div
+              class="border-t border-white/20 pt-3 mt-3 transition-colors duration-200"
+            >
+              <div
+                class="flex items-center space-x-3 px-4 py-3 transition-colors duration-200"
+              >
                 <div
-                  class="w-10 h-10 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full flex items-center justify-center"
+                  class="w-10 h-10 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out hover:scale-105"
                 >
-                  <span class="text-white font-medium">{{ userInitial }}</span>
+                  <span class="text-white font-medium transition-colors duration-200">{{
+                    userInitial
+                  }}</span>
                 </div>
-                <div>
-                  <p class="text-sm font-medium text-white">{{ userName }}</p>
-                  <p class="text-xs text-blue-200">Enseignant</p>
+                <div class="transition-colors duration-200">
+                  <p
+                    class="text-sm font-medium text-white transition-colors duration-200"
+                  >
+                    {{ userName }}
+                  </p>
+                  <p class="text-xs text-blue-200 transition-colors duration-200">
+                    Enseignant
+                  </p>
                 </div>
               </div>
 
               <button
                 @click="handleLogout"
-                class="w-full flex items-center space-x-3 py-3 px-4 text-blue-100 hover:text-white rounded-lg hover:bg-red-500/20 transition-colors"
+                class="w-full flex items-center space-x-3 py-3 px-4 text-blue-100 hover:text-white rounded-lg hover:bg-red-500/20 transition-all duration-200 ease-in-out hover:scale-105"
               >
                 <svg
-                  class="w-5 h-5"
+                  class="w-5 h-5 transition-colors duration-200"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -288,7 +322,7 @@ const getRouteDisplayName = (route) => {
                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                   />
                 </svg>
-                <span>Déconnexion</span>
+                <span class="transition-colors duration-200">Déconnexion</span>
               </button>
             </div>
           </nav>
@@ -297,20 +331,21 @@ const getRouteDisplayName = (route) => {
     </header>
 
     <!-- Breadcrumb -->
-    <div class="bg-white border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <nav class="flex space-x-2 text-sm text-gray-600">
+    <div class="bg-white border-b border-gray-200 transition-all duration-300">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 transition-all duration-300"
+      >
+        <nav class="flex space-x-2 text-sm text-gray-600 transition-colors duration-200">
           <router-link
             :to="{ name: 'TableauDeBordsEnseignant' }"
-            class="hover:text-blue-600 transition-colors"
+            class="hover:text-blue-600 transition-all duration-200 ease-in-out hover:scale-105"
           >
             Accueil
           </router-link>
-          <span class="text-gray-400">/</span>
-          <span class="text-gray-800 font-medium capitalize">
-            <!-- {{
-              $route.meta.name || $route.name.replace("Enseignant", "") || "Page actuelle"
-            }} -->
+          <span class="text-gray-400 transition-colors duration-200">/</span>
+          <span
+            class="text-gray-800 font-medium capitalize transition-colors duration-200"
+          >
             {{ getRouteDisplayName($route) }}
           </span>
         </nav>
@@ -318,19 +353,27 @@ const getRouteDisplayName = (route) => {
     </div>
 
     <!-- Contenu principal -->
-    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <main
+      class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 transition-all duration-300"
+    >
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 transition-all duration-300 ease-in-out hover:shadow-lg"
+      >
         <router-view />
       </div>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 mt-auto py-6">
+    <footer
+      class="bg-white border-t border-gray-200 mt-auto py-6 transition-all duration-300"
+    >
       <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 text-sm"
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 text-sm transition-colors duration-200"
       >
-        <p>© 2025 UniSphere - Plateforme éducative. Espace Enseignant</p>
-        <p>Créer par Ledoa Gaël</p>
+        <p class="transition-colors duration-200">
+          © 2025 UniSphere - Plateforme éducative. Espace Enseignant
+        </p>
+        <p class="transition-colors duration-200">Créer par Ledoa Gaël</p>
       </div>
     </footer>
   </div>
@@ -344,12 +387,18 @@ const getRouteDisplayName = (route) => {
 /* Animation pour le menu mobile */
 .mobile-menu-enter-active,
 .mobile-menu-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 .mobile-menu-enter-from,
 .mobile-menu-leave-to {
   opacity: 0;
   transform: translateY(-10px);
+}
+
+/* Transitions globales */
+* {
+  transition-property: color, background-color, border-color, transform, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 </style>
