@@ -1,0 +1,247 @@
+Excellent. Voici les deux stratégies de migration Knex, comme demandé.
+
+### Option 1 : Un Seul Fichier de Migration (Recommandé pour la simplicité)
+
+C'est la méthode la plus simple pour initialiser une base de données. Vous créez un seul fichier qui construit tout le schéma d'un coup.
+
+**1. Créez la migration :**
+```bash
+npx knex migrate:make 001_initial_schema
+```
+
+**2. Contenu du fichier (`/migrations/..._001_initial_schema.js`) :**
+
+```javascript
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+exports.up = function (knex) {
+  // Il n'est pas nécessaire de désactiver les FK dans Knex, il les gère intelligemment.
+  return knex.schema
+    .createTable("year", (table) => {
+      table.increments("id_year").primary();
+      table.string("title", 20).notNullable();
+      table.integer("year_value").notNullable();
+      table.timestamps(true, true); // Gère created_at & updated_at
+    })
+    .createTable("parcours", (table) => {
+      table.increments("id_parcours").primary();
+      table.string("name", 20).notNullable();
+      table.timestamps(true, true);
+    })
+    .createTable("filiere", (table) => {
+      table.increments("id_filiere").primary();
+      table.string("name", 20).notNullable();
+      table.timestamps(true, true);
+    })
+    .createTable("classe", (table) => {
+      table.increments("id_class").primary();
+      table.string("name", 20).notNullable();
+      table.integer("filiere_id").unsigned().notNullable();
+      table.integer("parcours_id").unsigned().notNullable();
+      table.integer("year_id").unsigned().notNullable();
+      table.timestamps(true, true);
+
+      table.foreign("filiere_id").references("id_filiere").inTable("filiere");
+      table.foreign("parcours_id").references("id_parcours").inTable("parcours");
+      table.foreign("year_id").references("id_year").inTable("year");
+    })
+    .createTable("user", (table) => {
+      table.increments("id_user").primary();
+      table.integer("class_id").unsigned().notNullable();
+      table.string("matricule", 50).notNullable();
+      table.string("name", 150).notNullable();
+      table.string("lastname", 150).notNullable();
+      table.string("email", 150).notNullable().unique();
+      table.string("profile_pic", 255);
+      table.string("password_hash", 255).notNullable();
+      table.enu("role", ["admin", "student", "teacher"]).notNullable();
+      table.string("poste", 100);
+      table.timestamps(true, true);
+
+      table.foreign("class_id").references("id_class").inTable("classe");
+    })
+    .createTable("conversation", (table) => {
+      table.increments("id_conversation").primary();
+      table.string("title", 50).nullable(); // NULL pour les conversations privées
+      table.enu("type", ["private", "group"]).notNullable();
+      table.timestamps(true, true);
+    })
+    .createTable("conversation_member", (table) => {
+      table.increments("id_convo_member").primary();
+      table.integer("conversation_id").unsigned().notNullable();
+      table.integer("member_id").unsigned().notNullable();
+      table.timestamp("joined_at").defaultTo(knex.fn.now());
+      table.timestamp("left_at").nullable();
+      table.timestamps(true, true);
+
+      table.foreign("conversation_id").references("id_conversation").inTable("conversation").onDelete("CASCADE");
+      table.foreign("member_id").references("id_user").inTable("user").onDelete("CASCADE");
+    })
+    .createTable("message", (table) => {
+      table.increments("id_message").primary();
+      table.integer("conversation_id").unsigned().notNullable();
+      table.integer("sender_id").unsigned().notNullable();
+      table.text("content").notNullable();
+      table.timestamps(true, true);
+
+      table.foreign("conversation_id").references("id_conversation").inTable("conversation").onDelete("CASCADE");
+      table.foreign("sender_id").references("id_user").inTable("user").onDelete("CASCADE");
+    })
+    .createTable("annonce", (table) => {
+      table.increments("id_annonce").primary();
+      table.string("title", 255).notNullable();
+      table.text("content").notNullable();
+      table.integer("posted_by").unsigned().notNullable();
+      table.timestamps(true, true);
+
+      table.foreign("posted_by").references("id_user").inTable("user");
+    })
+    .createTable("course", (table) => {
+      table.increments("id_course").primary();
+      table.string("title", 50).notNullable();
+      table.text("content");
+      table.integer("duration");
+      table.integer("teach_by").unsigned().notNullable();
+      table.integer("class_id").unsigned().notNullable();
+      table.timestamps(true, true);
+
+      table.foreign("teach_by").references("id_user").inTable("user");
+      table.foreign("class_id").references("id_class").inTable("classe");
+    })
+    .createTable("file", (table) => {
+      table.increments("id_file").primary();
+      table.string("file_name", 255).notNullable();
+      table.string("file_path", 500).notNullable();
+      table.integer("owner_id").unsigned().notNullable();
+      table.enu("owner_type", ["annonce", "course", "message"]).notNullable(); // Note: 'user' retiré
+      table.timestamps(true, true);
+      // Pas de clé étrangère possible
+    });
+};
+
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+exports.down = function (knex) {
+  // L'ordre de suppression est CRUCIAL (inverse de la création) à cause des dépendances.
+  return knex.schema
+    .dropTableIfExists("file")
+    .dropTableIfExists("course")
+    .dropTableIfExists("annonce")
+    .dropTableIfExists("message")
+    .dropTableIfExists("conversation_member")
+    .dropTableIfExists("conversation")
+    .dropTableIfExists("user")
+    .dropTableIfExists("classe")
+    .dropTableIfExists("filiere")
+    .dropTableIfExists("parcours")
+    .dropTableIfExists("year");
+};
+```
+
+**3. Exécutez la migration :**
+```bash
+npx knex migrate:latest
+```
+
+---
+
+### Option 2 : Migrations Multiples (Pour un contrôle granulaire)
+
+Cette méthode est utile pour les équipes ou si vous prévoyez de faire évoluer le schéma par petites étapes. Elle est plus complexe à mettre en place initialement.
+
+**1. Créez une migration pour chaque table, dans l'ordre logique de dépendance :**
+
+```bash
+npx knex migrate:make 001_create_year
+npx knex migrate:make 002_create_parcours
+npx knex migrate:make 003_create_filiere
+npx knex migrate:make 004_create_classe
+npx knex migrate:make 005_create_user
+npx knex migrate:make 006_create_conversation
+npx knex migrate:make 007_create_conversation_member
+npx knex migrate:make 008_create_message
+npx knex migrate:make 009_create_annonce
+npx knex migrate:make 010_create_course
+npx knex migrate:make 011_create_file
+```
+
+**2. Exemple de deux fichiers de migration :**
+
+**`001_create_year.js` (La première)**
+```javascript
+exports.up = function (knex) {
+  return knex.schema.createTable("year", (table) => {
+    table.increments("id_year").primary();
+    table.string("title", 20).notNullable();
+    table.integer("year_value").notNullable();
+    table.timestamps(true, true);
+  });
+};
+
+exports.down = function (knex) {
+  return knex.schema.dropTableIfExists("year");
+};
+```
+
+**`004_create_classe.js` (Dépend de year, parcours, filiere)**
+```javascript
+exports.up = function (knex) {
+  return knex.schema.createTable("classe", (table) => {
+    table.increments("id_class").primary();
+    table.string("name", 20).notNullable();
+    table.integer("filiere_id").unsigned().notNullable();
+    table.integer("parcours_id").unsigned().notNullable();
+    table.integer("year_id").unsigned().notNullable();
+    table.timestamps(true, true);
+
+    table.foreign("filiere_id").references("id_filiere").inTable("filiere");
+    table.foreign("parcours_id").references("id_parcours").inTable("parcours");
+    table.foreign("year_id").references("id_year").inTable("year");
+  });
+};
+
+exports.down = function (knex) {
+  return knex.schema.dropTableIfExists("classe");
+};
+```
+
+**`011_create_file.js` (La dernière, ne dépend d'aucune autre table via FK)**
+```javascript
+exports.up = function (knex) {
+  return knex.schema.createTable("file", (table) => {
+    table.increments("id_file").primary();
+    table.string("file_name", 255).notNullable();
+    table.string("file_path", 500).notNullable();
+    table.integer("owner_id").unsigned().notNullable();
+    table.enu("owner_type", ["annonce", "course", "message"]).notNullable();
+    table.timestamps(true, true);
+  });
+};
+
+exports.down = function (knex) {
+  return knex.schema.dropTableIfExists("file");
+};
+```
+
+**3. Exécutez toutes les migrations :**
+```bash
+npx knex migrate:latest
+```
+Knex exécutera les fichiers dans l'ordre numérique, construisant ainsi le schéma couche par couche.
+
+---
+
+### Recommandation et Prochaines Étapes
+
+**Je recommande vivement l'Option 1 (un seul fichier)** pour commencer. C'est plus simple, plus rapide et tout aussi efficace pour initialiser une nouvelle base.
+
+1.  **Choisissez une option.**
+2.  **Exécutez `npx knex migrate:latest`.** Cela créera la table `knex_migrations` qui gardera une trace de toutes les migrations exécutées.
+3.  **Vérifiez que tout a fonctionné** avec `npx knex migrate:status`.
+4.  **Vous êtes maintenant prêt à créer vos seeds** (`npx knex seed:make 01_init_data`) pour peupler les tables de base comme `year`, `parcours`, `filiere`.
+
+**Allez-vous opter pour la simplicité de la migration unique ?**

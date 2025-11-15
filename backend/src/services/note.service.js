@@ -54,6 +54,7 @@ const NoteService = {
   },
 
   async remove(noteId) {
+    console.log("Suppression notes : ", noteId);
     return NoteModel.delete(noteId);
   },
 };

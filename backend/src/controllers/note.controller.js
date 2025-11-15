@@ -87,7 +87,7 @@ const NoteController = {
 
   async remove(req, res) {
     try {
-      const { noteId } = req.params;
+      const noteId = req.params.noteId;
       const result = await NoteService.remove(noteId);
       res.status(200).json({
         success: true,

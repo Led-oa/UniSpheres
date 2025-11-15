@@ -101,9 +101,8 @@ onMounted(async () => {
       </h1>
       <p class="text-gray-600 transition-colors duration-200">
         Bienvenue
-        <span class="font-semibold text-indigo-600 transition-colors duration-200">{{
-          student?.name || "Étudiant"
-        }}</span
+        <span class="font-semibold text-indigo-600 transition-colors duration-200">
+          {{ student.name || "Étudiant" }} </span
         >, voici votre résumé académique
       </p>
     </div>

@@ -7,6 +7,7 @@ const CourseModel = {
         VALUES (?, ?, ?, ?, ?, ?)
       `;
     const values = [title, content, duration, credits, teach_by, class_id];
+    console.log("Values : ", values);
     const result = await query(sql, values);
     return { id_course: result.insertId, ...values };
   },

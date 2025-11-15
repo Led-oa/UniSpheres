@@ -79,8 +79,10 @@ const deleteNote = async () => {
   if (!studentToDelete.value) return;
 
   try {
-    // await noteStore.deleteNote(courseId, studentToDelete.value.id);
-    await noteStore.remove(studentToDelete.value.id);
+    // await noteStore.remove(notes.value.id);
+    console.log("Student notes : ", studentToDelete.value);
+    await noteStore.remove(studentToDelete.value.id_note);
+
     // Recharger les notes après suppression
     const classId = course.value.class_id;
     await loadNote(classId);
@@ -126,6 +128,7 @@ const loadNote = async (classId) => {
   );
   console.log("Composant : ", fetchedNotes);
   notes.value = fetchedNotes.data.map((n) => ({
+    id_note: n.id_note,
     id: n.student_id,
     matricule: n.student_matricule,
     nom: n.student_lastname,

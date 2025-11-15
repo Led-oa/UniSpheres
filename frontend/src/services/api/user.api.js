@@ -67,6 +67,16 @@ export const getAllTeacher = async () => {
   }
 };
 
+export const loadAllApi = async () => {
+  try {
+    const response = await api.get(`/user/load/allUsers`);
+    console.log("Reponse", response);
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || err;
+  }
+};
+
 export const getUserById = async (id) => {
   try {
     const response = await api.get(`/user/${id}`);

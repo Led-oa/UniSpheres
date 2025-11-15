@@ -72,13 +72,24 @@ function closeDeleteModal() {
   userToDelete.value = null;
 }
 
-function handleActivate(user) {
-  adminStore.activate(user.id_user);
-}
+// function handleActivate(user) {
+//   console.log("Activates : ", user.id_user);
+//   adminStore.activate(user.id_user);
+// }
 
-function handleDesactivate(user) {
-  adminStore.desactivate(user.id_user);
-}
+const handleActivate = async (user) => {
+  await adminStore.activate(user.id_user);
+  await loadUsers(adminStore.pagination.currentPage);
+};
+
+// function handleDesactivate(user) {
+//   adminStore.desactivate(user.id_user);
+// }
+
+const handleDesactivate = async (user) => {
+  await adminStore.desactivate(user.id_user);
+  await loadUsers(adminStore.pagination.currentPage);
+};
 
 const loadUsers = async (page = 1) => {
   const limit = 10;
@@ -338,6 +349,7 @@ onMounted(() => {
 
     <!-- Modal de détails utilisateur -->
     <ModalUserAdmin
+      v-if="selectedUser"
       :user="selectedUser"
       :show="showUserModal"
       @close="showUserModal = false"

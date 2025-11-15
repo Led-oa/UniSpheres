@@ -37,7 +37,11 @@ onMounted(async () => {
       <div class="space-y-2">
         <h1 class="text-3xl font-bold text-gray-900">Tableau de bord</h1>
         <p class="text-gray-600 max-w-2xl">
-          Bienvenue {{ teacher.name }}, voici un aperçu de vos activités d'enseignement.
+          Bienvenue
+          <span class="font-semibold text-indigo-600 transition-colors duration-200">
+            {{ teacher.lastname || "" }} {{ teacher.name || "Enseignant" }}
+          </span>
+          , voici un aperçu de vos activités d'enseignement.
         </p>
       </div>
     </div>

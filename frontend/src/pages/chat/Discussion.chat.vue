@@ -45,14 +45,21 @@ const user = computed(() => authStore.user);
 const conversations = computed(() => chatStore.conversations);
 const sortedConversations = computed(() => chatStore.sortedConversations);
 
+const availableUsersFromData = ref([]);
+
 const availableUsers = computed(() => {
-  if (!adminStore.users || !Array.isArray(adminStore.users)) {
+  if (!availableUsersFromData.value || !Array.isArray(availableUsersFromData.value)) {
+    console.log("Confirm");
     return [];
   }
   if (!authStore.user || !authStore.user.id_user) {
-    return adminStore.users;
+    console.log("Confirm 2");
+    return availableUsersFromData.value;
   }
-  return adminStore.users.filter((user) => user.id_user !== authStore.user.id_user);
+  console.log("Confirm 3");
+  return availableUsersFromData.value.filter(
+    (user) => user.id_user !== authStore.user.id_user
+  );
 });
 
 const filteredUsers = computed(() => {
@@ -589,7 +596,9 @@ const toggleUserSelection = (userId) => {
 
 const openCreateModal = async () => {
   showCreateModal.value = true;
-  await adminStore.fetchUsers();
+  const res = await adminStore.fetchAll();
+  availableUsersFromData.value = res.data.users;
+  console.log("Resultat open modal create", availableUsersFromData.value);
 };
 
 const closeCreateModal = () => {
@@ -1403,7 +1412,16 @@ watch(newMessage, adjustTextareaHeight);
                   <p class="text-sm font-medium text-gray-900">
                     {{ user.name || user.email }}
                   </p>
-                  <p class="text-xs text-gray-500">{{ user.role }}</p>
+                  <div v-if="user.role == 'student'">
+                    <p class="text-xs text-gray-500">Etudiant</p>
+                  </div>
+                  <div v-else-if="user.role == 'teacher'">
+                    <p class="text-xs text-gray-500">Enseignant</p>
+                  </div>
+                  <div v-if="user.role == 'administrator'">
+                    <p class="text-xs text-gray-500">Administrateur</p>
+                  </div>
+                  <!-- <p class="text-xs text-gray-500">{{ user.role }}</p> -->
                 </div>
                 <div
                   v-if="isUserSelected(user.id_user)"

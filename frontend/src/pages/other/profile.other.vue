@@ -58,7 +58,7 @@ function handleUpdated() {
     <!-- En-tête -->
     <div class="mb-6 lg:mb-8 text-center lg:text-left">
       <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">
-        Profil {{ current.name }} {{ current.lastname }}
+        Profil : {{ current.lastname }} {{ current.name }} 
       </h1>
       <p class="mt-2 text-gray-600 text-sm lg:text-base">
         Gérez vos informations personnelles

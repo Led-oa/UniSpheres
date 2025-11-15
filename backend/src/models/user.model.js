@@ -175,6 +175,27 @@ const userModel = {
     }
   },
 
+  async loadAll() {
+    try {
+      const sql = `
+            SELECT u.*, c.name AS class_name, f.name AS filiere_name, p.name AS parcours_name, y.year_value
+            FROM user u
+            LEFT JOIN classe c ON u.class_id = c.id_class
+            LEFT JOIN filiere f ON c.filiere_id = f.id_filiere
+            LEFT JOIN parcours p ON c.parcours_id = p.id_parcours
+            LEFT JOIN year y ON c.year_id = y.id_year
+            WHERE u.role = "teacher" OR u.role = "student"
+            ORDER BY u.created_at DESC
+          `;
+      const row = await query(sql);
+      console.log("ROW : ", row);
+      return row;
+    } catch (error) {
+      console.error("UserModel.findAllByRole error:", error);
+      throw new Error("DATABASE_ERROR");
+    }
+  },
+
   async update(userData) {
     try {
       const { id_user, ...safeUpdates } = userData;

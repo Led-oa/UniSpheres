@@ -117,7 +117,8 @@ const NoteModel = {
 
   // Suppression d’une note
   async delete(noteId) {
-    const sql = `DELETE FROM note WHERE id_note = ?;`;
+    console.log("Delete notes : ", noteId);
+    const sql = `DELETE FROM note WHERE id_note = ?`;
     return query(sql, [noteId]);
   },
 };

@@ -6,6 +6,7 @@ const CourseController = {
     try {
       // 1️⃣ Créer le cours
       const courseData = req.body;
+      console.log("Affichez : ", courseData);
       const newCourse = await CourseService.createCourse(courseData);
 
       // 2️⃣ Vérifier s'il y a des fichiers attachés

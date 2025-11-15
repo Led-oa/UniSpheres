@@ -4,6 +4,7 @@ const FilePathToUrl = require("../utils/urlCleaner.utils");
 const CourseService = {
   async createCourse(data) {
     // data doit contenir : { title, content, duration, teach_by, class_id }
+    console.log("Data", data);
     return CourseModel.create(data);
   },
   async getAll() {
