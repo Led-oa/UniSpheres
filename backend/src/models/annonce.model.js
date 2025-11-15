@@ -53,6 +53,8 @@ const AnnonceModel = {
       WHERE a.is_visible = 1
       ORDER BY a.created_at DESC, f2.id_file LIMIT ? OFFSET ?
     `;
+    console.log("MODEL Annonce : limit : ", limit);
+    console.log("MODEL Annonce : offset : ", offset);
     const rows = await query(sql, [limit, offset]);
 
     const countSql = `

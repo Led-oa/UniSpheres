@@ -30,7 +30,13 @@ const AnnonceService = {
   },
 
   async getAllAnnonces(limit, offset) {
-    const annonces = await AnnonceModel.fetchAll(limit, offset);
+    console.log("SERVICE Annonce : limit : ", limit);
+    console.log("SERVICE Annonce : offset : ", offset);
+
+    const validLimit = parseInt(limit) || 10; // Valeur par défaut: 10
+    const validOffset = parseInt(offset) || 0; // Valeur par défaut: 0
+
+    const annonces = await AnnonceModel.fetchAll(validLimit, validOffset);
     annonces.annonces.forEach((annonce) => {
       if (annonce.files && annonce.files.length) {
         annonce.files = annonce.files.map((file) => ({

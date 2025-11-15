@@ -44,6 +44,9 @@ const AnnonceController = {
       const limit = parseInt(req.query.limit) || 10;
       const offset = (page - 1) * limit;
 
+      console.log("CONTROLLER Annonce : limit : ", limit);
+      console.log("CONTROLLER Annonce : offset : ", offset);
+
       const { annonces, totalCounts } = await AnnonceService.getAllAnnonces(
         limit,
         offset

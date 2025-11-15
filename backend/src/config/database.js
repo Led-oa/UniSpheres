@@ -29,7 +29,8 @@ const pool = mysql.createPool({
 
 async function query(sql, params) {
   try {
-    const [rows, fields] = await pool.execute(sql, params || []);
+    // Changez execute() en query()
+    const [rows, fields] = await pool.query(sql, params || []);
     return rows;
   } catch (error) {
     console.error("Database query error:", error);
