@@ -1,0 +1,19 @@
+2025/11/15 16:47:58 [notice] 15100#12068: signal process started
+2025/11/15 16:50:52 [notice] 8276#10044: signal process started
+2025/11/15 17:01:14 [error] 15740#19808: *1 CreateFile() "D:/WORK/UniSpheres/frontend/dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost", referrer: "http://localhost/api/user"
+2025/11/15 17:12:06 [notice] 8692#20064: signal process started
+2025/11/15 17:22:24 [notice] 20324#18828: signal process started
+2025/11/15 17:30:20 [notice] 18296#18700: signal process started
+2025/11/15 17:32:24 [notice] 19624#13768: signal process started
+2025/11/15 17:42:03 [notice] 15180#19880: signal process started
+2025/11/16 07:43:18 [notice] 17132#2324: signal process started
+2025/11/16 07:43:31 [notice] 22464#11252: signal process started
+2025/11/16 10:54:38 [notice] 14616#15624: signal process started
+2025/11/16 14:07:08 [notice] 15356#15132: signal process started
+2025/11/16 14:07:08 [error] 15356#15132: CreateFile() "C:\nginx\server/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2025/11/16 14:07:44 [notice] 15020#15016: signal process started
+2025/11/16 14:07:44 [error] 15020#15016: CreateFile() "C:\nginx\server/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2025/11/16 14:11:15 [notice] 7224#4608: signal process started
+2025/11/16 14:11:15 [error] 7224#4608: CreateFile() "C:\nginx\server/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2025/11/16 14:13:35 [notice] 9708#12492: signal process started
+2025/11/16 14:13:35 [error] 9708#12492: CreateFile() "C:\nginx\server/logs/nginx.pid" failed (2: The system cannot find the file specified)
