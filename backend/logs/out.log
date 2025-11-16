@@ -1,0 +1,374 @@
+2025-11-15 16:59:23: [dotenv@17.2.2] injecting env (7) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+2025-11-15 16:59:24: [dotenv@17.2.2] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+2025-11-15 16:59:24: ✅ Server running on port 8000
+2025-11-15 16:59:24: ✅ Connexion à la BDD réussie.
+2025-11-15 17:12:05: [dotenv@17.2.2] injecting env (7) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+2025-11-15 17:12:06: [dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+2025-11-15 17:12:06: ✅ Server running on port 8000
+2025-11-15 17:12:06: ✅ Connexion à la BDD réussie.
+2025-11-15 17:13:41: CLEANED USER :  [
+2025-11-15 17:13:41:   {
+2025-11-15 17:13:41:     id_user: 35,
+2025-11-15 17:13:41:     class_id: null,
+2025-11-15 17:13:41:     matricule: '4567',
+2025-11-15 17:13:41:     name: 'Alexia',
+2025-11-15 17:13:41:     lastname: 'VALERIA',
+2025-11-15 17:13:41:     email: 'alexia@gmail.com',
+2025-11-15 17:13:41:     profile_pic: null,
+2025-11-15 17:13:41:     password_hash: '$2b$10$HNyS72kn43hwVQrdin7Te.I3Vq2bxobHApd1KsFPWSYKU9fZUpIe2',
+2025-11-15 17:13:41:     role: 'teacher',
+2025-11-15 17:13:41:     is_active: 0,
+2025-11-15 17:13:41:     created_at: 2025-11-04T08:18:39.000Z,
+2025-11-15 17:13:41:     updated_at: 2025-11-04T08:18:39.000Z,
+2025-11-15 17:13:41:     class_name: null,
+2025-11-15 17:13:41:     filiere_name: null,
+2025-11-15 17:13:41:     parcours_name: null,
+2025-11-15 17:13:41:     year_value: null
+2025-11-15 17:13:41:   },
+2025-11-15 17:13:41:   {
+2025-11-15 17:13:41:     id_user: 34,
+2025-11-15 17:13:41:     class_id: 22,
+2025-11-15 17:13:41:     matricule: '1234',
+2025-11-15 17:13:41:     name: 'Jacob',
+2025-11-15 17:13:41:     lastname: 'RAKOTO',
+2025-11-15 17:13:41:     email: 'jacob@gmail.com',
+2025-11-15 17:13:41:     profile_pic: null,
+2025-11-15 17:13:41:     password_hash: '$2b$10$NjsIn3pWBJB8c.Ct8tmpVe1V6mty7z18KY26VuDFVijW4Z7cFWuWy',
+2025-11-15 17:13:41:     role: 'student',
+2025-11-15 17:13:41:     is_active: 1,
+2025-11-15 17:13:41:     created_at: 2025-11-04T08:17:46.000Z,
+2025-11-15 17:13:41:     updated_at: 2025-11-04T08:26:47.000Z,
+2025-11-15 17:13:41:     class_name: 'DROIT L1 A',
+2025-11-15 17:13:41:     filiere_name: 'Droit',
+2025-11-15 17:13:41:     parcours_name: 'Tronc Commun',
+2025-11-15 17:13:41:     year_value: 'Licence 1'
+2025-11-15 17:13:41:   },
+2025-11-15 17:13:41:   {
+2025-11-15 17:13:41:     id_user: 3,
+2025-11-15 17:13:41:     class_id: null,
+2025-11-15 17:13:41:     matricule: '4485',
+2025-11-15 17:13:41:     name: 'Anil Dama',
+2025-11-15 17:13:41:     lastname: 'TINA',
+2025-11-15 17:13:41:     email: 'anil@gmail.com',
+2025-11-15 17:13:41:     profile_pic: null,
+2025-11-15 17:13:41:     password_hash: '$2b$10$HZ9FVrLKmOJaFd46ZaBh1.lGGgFRMdnW3SZO7y/JNznNkUWgKXELW',
+2025-11-15 17:13:41:     role: 'teacher',
+2025-11-15 17:13:41:     is_active: 1,
+2025-11-15 17:13:41:     created_at: 2025-11-03T18:09:41.000Z,
+2025-11-15 17:13:41:     updated_at: 2025-11-03T18:36:50.000Z,
+2025-11-15 17:13:41:     class_name: null,
+2025-11-15 17:13:41:     filiere_name: null,
+2025-11-15 17:13:41:     parcours_name: null,
+2025-11-15 17:13:41:     year_value: null
+2025-11-15 17:13:41:   },
+2025-11-15 17:13:41:   {
+2025-11-15 17:13:41:     id_user: 2,
+2025-11-15 17:13:41:     class_id: 5,
+2025-11-15 17:13:41:     matricule: '5805',
+2025-11-15 17:13:41:     name: 'John Francio',
+2025-11-15 17:13:41:     lastname: 'RABEMAHAVORY',
+2025-11-15 17:13:41:     email: 'dev.johnfrancio@gmail.com',
+2025-11-15 17:13:41:     profile_pic: 'http://localhost:8000/uploads/profile/1762196621500-191274844-d_unispheres_organigramme.png',
+2025-11-15 17:13:41:     password_hash: '$2b$10$AWeg5P2O4xwrKNT3eMSSmOR/BL0t6Od8q8WC/NyF8hYcZDgVev2NG',
+2025-11-15 17:13:41:     role: 'student',
+2025-11-15 17:13:41:     is_active: 1,
+2025-11-15 17:13:41:     created_at: 2025-11-03T18:02:55.000Z,
+2025-11-15 17:13:41:     updated_at: 2025-11-03T19:03:41.000Z,
+2025-11-15 17:13:41:     class_name: 'INFO L3 DAI',
+2025-11-15 17:13:41:     filiere_name: 'Informatiques',
+2025-11-15 17:13:41:     parcours_name: 'Développement Application Informatique',
+2025-11-15 17:13:41:     year_value: 'Licence 3'
+2025-11-15 17:13:41:   },
+2025-11-15 17:13:41:   {
+2025-11-15 17:13:41:     id_user: 1,
+2025-11-15 17:13:41:     class_id: null,
+2025-11-15 17:13:41:     matricule: null,
+2025-11-15 17:13:41:     name: 'Gaël',
+2025-11-15 17:13:41:     lastname: 'LEDOA',
+2025-11-15 17:13:41:     email: 'ledoagael@gmail.com',
+2025-11-15 17:13:41:     profile_pic: 'http://localhost:8000/uploads/profile/1763213197991-56765435-2baabb046865baffb17aec233926bf09.jpg',
+2025-11-15 17:13:41:     password_hash: '$2b$10$EUnPfU3uYNfkfDxfx.AomO5kZExU2ecEieb/5LdK9xjPheOh.XR.y',
+2025-11-15 17:13:41:     role: 'administrator',
+2025-11-15 17:13:41:     is_active: 1,
+2025-11-15 17:13:41:     created_at: 2025-11-03T16:59:48.000Z,
+2025-11-15 17:13:41:     updated_at: 2025-11-15T13:26:38.000Z,
+2025-11-15 17:13:41:     class_name: null,
+2025-11-15 17:13:41:     filiere_name: null,
+2025-11-15 17:13:41:     parcours_name: null,
+2025-11-15 17:13:41:     year_value: null
+2025-11-15 17:13:41:   }
+2025-11-15 17:13:41: ]
+2025-11-15 17:13:41: Listes user :  [
+2025-11-15 17:13:41:   {
+2025-11-15 17:13:41:     id_user: 35,
+2025-11-15 17:13:41:     class_id: null,
+2025-11-15 17:13:41:     matricule: '4567',
+2025-11-15 17:13:41:     name: 'Alexia',
+2025-11-15 17:13:41:     lastname: 'VALERIA',
+2025-11-15 17:13:41:     email: 'alexia@gmail.com',
+2025-11-15 17:13:41:     profile_pic: null,
+2025-11-15 17:13:41:     password_hash: '$2b$10$HNyS72kn43hwVQrdin7Te.I3Vq2bxobHApd1KsFPWSYKU9fZUpIe2',
+2025-11-15 17:13:41:     role: 'teacher',
+2025-11-15 17:13:41:     is_active: 0,
+2025-11-15 17:13:41:     created_at: 2025-11-04T08:18:39.000Z,
+2025-11-15 17:13:41:     updated_at: 2025-11-04T08:18:39.000Z,
+2025-11-15 17:13:41:     class_name: null,
+2025-11-15 17:13:41:     filiere_name: null,
+2025-11-15 17:13:41:     parcours_name: null,
+2025-11-15 17:13:41:     year_value: null
+2025-11-15 17:13:41:   },
+2025-11-15 17:13:41:   {
+2025-11-15 17:13:41:     id_user: 34,
+2025-11-15 17:13:41:     class_id: 22,
+2025-11-15 17:13:41:     matricule: '1234',
+2025-11-15 17:13:41:     name: 'Jacob',
+2025-11-15 17:13:41:     lastname: 'RAKOTO',
+2025-11-15 17:13:41:     email: 'jacob@gmail.com',
+2025-11-15 17:13:41:     profile_pic: null,
+2025-11-15 17:13:41:     password_hash: '$2b$10$NjsIn3pWBJB8c.Ct8tmpVe1V6mty7z18KY26VuDFVijW4Z7cFWuWy',
+2025-11-15 17:13:41:     role: 'student',
+2025-11-15 17:13:41:     is_active: 1,
+2025-11-15 17:13:41:     created_at: 2025-11-04T08:17:46.000Z,
+2025-11-15 17:13:41:     updated_at: 2025-11-04T08:26:47.000Z,
+2025-11-15 17:13:41:     class_name: 'DROIT L1 A',
+2025-11-15 17:13:41:     filiere_name: 'Droit',
+2025-11-15 17:13:41:     parcours_name: 'Tronc Commun',
+2025-11-15 17:13:41:     year_value: 'Licence 1'
+2025-11-15 17:13:41:   },
+2025-11-15 17:13:41:   {
+2025-11-15 17:13:41:     id_user: 3,
+2025-11-15 17:13:41:     class_id: null,
+2025-11-15 17:13:41:     matricule: '4485',
+2025-11-15 17:13:41:     name: 'Anil Dama',
+2025-11-15 17:13:41:     lastname: 'TINA',
+2025-11-15 17:13:41:     email: 'anil@gmail.com',
+2025-11-15 17:13:41:     profile_pic: null,
+2025-11-15 17:13:41:     password_hash: '$2b$10$HZ9FVrLKmOJaFd46ZaBh1.lGGgFRMdnW3SZO7y/JNznNkUWgKXELW',
+2025-11-15 17:13:41:     role: 'teacher',
+2025-11-15 17:13:41:     is_active: 1,
+2025-11-15 17:13:41:     created_at: 2025-11-03T18:09:41.000Z,
+2025-11-15 17:13:41:     updated_at: 2025-11-03T18:36:50.000Z,
+2025-11-15 17:13:41:     class_name: null,
+2025-11-15 17:13:41:     filiere_name: null,
+2025-11-15 17:13:41:     parcours_name: null,
+2025-11-15 17:13:41:     year_value: null
+2025-11-15 17:13:41:   },
+2025-11-15 17:13:41:   {
+2025-11-15 17:13:41:     id_user: 2,
+2025-11-15 17:13:41:     class_id: 5,
+2025-11-15 17:13:41:     matricule: '5805',
+2025-11-15 17:13:41:     name: 'John Francio',
+2025-11-15 17:13:41:     lastname: 'RABEMAHAVORY',
+2025-11-15 17:13:41:     email: 'dev.johnfrancio@gmail.com',
+2025-11-15 17:13:41:     profile_pic: 'http://localhost:8000/uploads/profile/1762196621500-191274844-d_unispheres_organigramme.png',
+2025-11-15 17:13:41:     password_hash: '$2b$10$AWeg5P2O4xwrKNT3eMSSmOR/BL0t6Od8q8WC/NyF8hYcZDgVev2NG',
+2025-11-15 17:13:41:     role: 'student',
+2025-11-15 17:13:41:     is_active: 1,
+2025-11-15 17:13:41:     created_at: 2025-11-03T18:02:55.000Z,
+2025-11-15 17:13:41:     updated_at: 2025-11-03T19:03:41.000Z,
+2025-11-15 17:13:41:     class_name: 'INFO L3 DAI',
+2025-11-15 17:13:41:     filiere_name: 'Informatiques',
+2025-11-15 17:13:41:     parcours_name: 'Développement Application Informatique',
+2025-11-15 17:13:41:     year_value: 'Licence 3'
+2025-11-15 17:13:41:   },
+2025-11-15 17:13:41:   {
+2025-11-15 17:13:41:     id_user: 1,
+2025-11-15 17:13:41:     class_id: null,
+2025-11-15 17:13:41:     matricule: null,
+2025-11-15 17:13:41:     name: 'Gaël',
+2025-11-15 17:13:41:     lastname: 'LEDOA',
+2025-11-15 17:13:41:     email: 'ledoagael@gmail.com',
+2025-11-15 17:13:41:     profile_pic: 'http://localhost:8000/uploads/profile/1763213197991-56765435-2baabb046865baffb17aec233926bf09.jpg',
+2025-11-15 17:13:41:     password_hash: '$2b$10$EUnPfU3uYNfkfDxfx.AomO5kZExU2ecEieb/5LdK9xjPheOh.XR.y',
+2025-11-15 17:13:41:     role: 'administrator',
+2025-11-15 17:13:41:     is_active: 1,
+2025-11-15 17:13:41:     created_at: 2025-11-03T16:59:48.000Z,
+2025-11-15 17:13:41:     updated_at: 2025-11-15T13:26:38.000Z,
+2025-11-15 17:13:41:     class_name: null,
+2025-11-15 17:13:41:     filiere_name: null,
+2025-11-15 17:13:41:     parcours_name: null,
+2025-11-15 17:13:41:     year_value: null
+2025-11-15 17:13:41:   }
+2025-11-15 17:13:41: ]
+2025-11-15 17:22:24: [dotenv@17.2.2] injecting env (7) from .env -- tip: ⚙️  override existing env vars with { override: true }
+2025-11-15 17:22:24: [dotenv@17.2.2] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+2025-11-15 17:22:24: ✅ Server running on port 8000
+2025-11-15 17:22:24: ✅ Connexion à la BDD réussie.
+2025-11-15 17:23:40: Listes user by role:  [
+2025-11-15 17:23:40:   {
+2025-11-15 17:23:40:     id_user: 34,
+2025-11-15 17:23:40:     class_id: 22,
+2025-11-15 17:23:40:     matricule: '1234',
+2025-11-15 17:23:40:     name: 'Jacob',
+2025-11-15 17:23:40:     lastname: 'RAKOTO',
+2025-11-15 17:23:40:     email: 'jacob@gmail.com',
+2025-11-15 17:23:40:     profile_pic: null,
+2025-11-15 17:23:40:     password_hash: '$2b$10$NjsIn3pWBJB8c.Ct8tmpVe1V6mty7z18KY26VuDFVijW4Z7cFWuWy',
+2025-11-15 17:23:40:     role: 'student',
+2025-11-15 17:23:40:     is_active: 1,
+2025-11-15 17:23:40:     created_at: 2025-11-04T08:17:46.000Z,
+2025-11-15 17:23:40:     updated_at: 2025-11-04T08:26:47.000Z,
+2025-11-15 17:23:40:     class_name: 'DROIT L1 A',
+2025-11-15 17:23:40:     filiere_name: 'Droit',
+2025-11-15 17:23:40:     parcours_name: 'Tronc Commun',
+2025-11-15 17:23:40:     year_value: 'Licence 1'
+2025-11-15 17:23:40:   },
+2025-11-15 17:23:40:   {
+2025-11-15 17:23:40:     id_user: 2,
+2025-11-15 17:23:40:     class_id: 5,
+2025-11-15 17:23:40:     matricule: '5805',
+2025-11-15 17:23:40:     name: 'John Francio',
+2025-11-15 17:23:40:     lastname: 'RABEMAHAVORY',
+2025-11-15 17:23:40:     email: 'dev.johnfrancio@gmail.com',
+2025-11-15 17:23:40:     profile_pic: 'http://localhost:8000/uploads/profile/1762196621500-191274844-d_unispheres_organigramme.png',
+2025-11-15 17:23:40:     password_hash: '$2b$10$AWeg5P2O4xwrKNT3eMSSmOR/BL0t6Od8q8WC/NyF8hYcZDgVev2NG',
+2025-11-15 17:23:40:     role: 'student',
+2025-11-15 17:23:40:     is_active: 1,
+2025-11-15 17:23:40:     created_at: 2025-11-03T18:02:55.000Z,
+2025-11-15 17:23:40:     updated_at: 2025-11-03T19:03:41.000Z,
+2025-11-15 17:23:40:     class_name: 'INFO L3 DAI',
+2025-11-15 17:23:40:     filiere_name: 'Informatiques',
+2025-11-15 17:23:40:     parcours_name: 'Développement Application Informatique',
+2025-11-15 17:23:40:     year_value: 'Licence 3'
+2025-11-15 17:23:40:   }
+2025-11-15 17:23:40: ]
+2025-11-15 17:23:43: CONTROLLER Annonce : limit :  9
+2025-11-15 17:23:43: CONTROLLER Annonce : offset :  0
+2025-11-15 17:23:43: SERVICE Annonce : limit :  9
+2025-11-15 17:23:43: SERVICE Annonce : offset :  0
+2025-11-15 17:23:43: MODEL Annonce : limit :  9
+2025-11-15 17:23:43: MODEL Annonce : offset :  0
+2025-11-15 17:23:43: Total Annonces :  1
+2025-11-15 17:23:43: Annonces listes :  [
+2025-11-15 17:23:43:   {
+2025-11-15 17:23:43:     id_annonce: 1,
+2025-11-15 17:23:43:     title: 'Sortie De Promotion',
+2025-11-15 17:23:43:     content: "La sortie de promotion de nos étudiants se fera le 08 Décembre 2025. Venez nombreux assistez à cette évènements de l'ASJA",
+2025-11-15 17:23:43:     posted_by: 1,
+2025-11-15 17:23:43:     target_class_id: null,
+2025-11-15 17:23:43:     target_filiere_id: null,
+2025-11-15 17:23:43:     target_year_id: null,
+2025-11-15 17:23:43:     type: 'evenement',
+2025-11-15 17:23:43:     is_visible: 1,
+2025-11-15 17:23:43:     priority: 'medium',
+2025-11-15 17:23:43:     deadline: 2025-12-07T21:00:00.000Z,
+2025-11-15 17:23:43:     created_at: 2025-11-03T18:42:34.000Z,
+2025-11-15 17:23:43:     updated_at: 2025-11-03T18:42:34.000Z,
+2025-11-15 17:23:43:     posted_by_name: 'Gaël',
+2025-11-15 17:23:43:     posted_by_lastname: 'LEDOA',
+2025-11-15 17:23:43:     posted_by_email: 'ledoagael@gmail.com',
+2025-11-15 17:23:43:     profile_pic: 'D:\\WORK\\UniSpheres\\backend\\src\\uploads\\profile\\1763213197991-56765435-2baabb046865baffb17aec233926bf09.jpg',
+2025-11-15 17:23:43:     class_name: null,
+2025-11-15 17:23:43:     filiere_name: null,
+2025-11-15 17:23:43:     year_value: null,
+2025-11-15 17:23:43:     files: []
+2025-11-15 17:23:43:   }
+2025-11-15 17:23:43: ]
+2025-11-15 17:23:43: total count :  1
+2025-11-15 17:23:48: Service.gerUserById : Profile pic :  D:\WORK\UniSpheres\backend\src\uploads\profile\1763213197991-56765435-2baabb046865baffb17aec233926bf09.jpg
+2025-11-15 17:23:48: controller.gerUserById : Profile pic :  http://localhost:8000/uploads/profile/1763213197991-56765435-2baabb046865baffb17aec233926bf09.jpg
+2025-11-15 17:23:48: Service.gerUserById : Profile pic :  D:\WORK\UniSpheres\backend\src\uploads\profile\1763213197991-56765435-2baabb046865baffb17aec233926bf09.jpg
+2025-11-15 17:23:48: controller.gerUserById : Profile pic :  http://localhost:8000/uploads/profile/1763213197991-56765435-2baabb046865baffb17aec233926bf09.jpg
+2025-11-15 17:24:12: ReqParams Id :  1
+2025-11-15 17:24:12: Service.gerUserById : Profile pic :  D:\WORK\UniSpheres\backend\src\uploads\profile\1763213197991-56765435-2baabb046865baffb17aec233926bf09.jpg
+2025-11-15 17:24:12: Données reçues pour update :  {
+2025-11-15 17:24:12:   profile_pic: 'D:\\WORK\\UniSpheres\\backend\\src\\uploads\\profile\\1763216652639-202594913-8bd1afd8b7758fb038c67327e81a24bc.jpg'
+2025-11-15 17:24:12: }
+2025-11-15 17:24:12: UpdatesData :  1
+2025-11-15 17:24:12: UpdatesData :  {
+2025-11-15 17:24:12:   profile_pic: 'D:\\WORK\\UniSpheres\\backend\\src\\uploads\\profile\\1763216652639-202594913-8bd1afd8b7758fb038c67327e81a24bc.jpg'
+2025-11-15 17:24:12: }
+2025-11-15 17:24:12: Service.gerUserById : Profile pic :  D:\WORK\UniSpheres\backend\src\uploads\profile\1763216652639-202594913-8bd1afd8b7758fb038c67327e81a24bc.jpg
+2025-11-15 17:24:12: controller.gerUserById : Profile pic :  http://localhost:8000/uploads/profile/1763216652639-202594913-8bd1afd8b7758fb038c67327e81a24bc.jpg
+2025-11-15 17:32:23: [dotenv@17.2.2] injecting env (7) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+2025-11-15 17:32:24: [dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 auto-backup env with Radar: https://dotenvx.com/radar
+2025-11-15 17:32:24: ✅ Server running on port 8000
+2025-11-15 17:32:24: ✅ Connexion à la BDD réussie.
+2025-11-15 18:06:14: [dotenv@17.2.2] injecting env (7) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+2025-11-15 18:06:14: [dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+2025-11-15 18:06:14: ✅ Server running on port 8000
+2025-11-15 18:06:14: ✅ Connexion à la BDD réussie.
+2025-11-15 18:06:40: Listes user by role:  [
+2025-11-15 18:06:40:   {
+2025-11-15 18:06:40:     id_user: 34,
+2025-11-15 18:06:40:     class_id: 22,
+2025-11-15 18:06:40:     matricule: '1234',
+2025-11-15 18:06:40:     name: 'Jacob',
+2025-11-15 18:06:40:     lastname: 'RAKOTO',
+2025-11-15 18:06:40:     email: 'jacob@gmail.com',
+2025-11-15 18:06:40:     profile_pic: null,
+2025-11-15 18:06:40:     password_hash: '$2b$10$NjsIn3pWBJB8c.Ct8tmpVe1V6mty7z18KY26VuDFVijW4Z7cFWuWy',
+2025-11-15 18:06:40:     role: 'student',
+2025-11-15 18:06:40:     is_active: 1,
+2025-11-15 18:06:40:     created_at: 2025-11-04T08:17:46.000Z,
+2025-11-15 18:06:40:     updated_at: 2025-11-04T08:26:47.000Z,
+2025-11-15 18:06:40:     class_name: 'DROIT L1 A',
+2025-11-15 18:06:40:     filiere_name: 'Droit',
+2025-11-15 18:06:40:     parcours_name: 'Tronc Commun',
+2025-11-15 18:06:40:     year_value: 'Licence 1'
+2025-11-15 18:06:40:   },
+2025-11-15 18:06:40:   {
+2025-11-15 18:06:40:     id_user: 2,
+2025-11-15 18:06:40:     class_id: 5,
+2025-11-15 18:06:40:     matricule: '5805',
+2025-11-15 18:06:40:     name: 'John Francio',
+2025-11-15 18:06:40:     lastname: 'RABEMAHAVORY',
+2025-11-15 18:06:40:     email: 'dev.johnfrancio@gmail.com',
+2025-11-15 18:06:40:     profile_pic: 'http://localhost:8000/uploads/profile/1762196621500-191274844-d_unispheres_organigramme.png',
+2025-11-15 18:06:40:     password_hash: '$2b$10$AWeg5P2O4xwrKNT3eMSSmOR/BL0t6Od8q8WC/NyF8hYcZDgVev2NG',
+2025-11-15 18:06:40:     role: 'student',
+2025-11-15 18:06:40:     is_active: 1,
+2025-11-15 18:06:40:     created_at: 2025-11-03T18:02:55.000Z,
+2025-11-15 18:06:40:     updated_at: 2025-11-03T19:03:41.000Z,
+2025-11-15 18:06:40:     class_name: 'INFO L3 DAI',
+2025-11-15 18:06:40:     filiere_name: 'Informatiques',
+2025-11-15 18:06:40:     parcours_name: 'Développement Application Informatique',
+2025-11-15 18:06:40:     year_value: 'Licence 3'
+2025-11-15 18:06:40:   }
+2025-11-15 18:06:40: ]
+2025-11-15 18:06:45: Service.gerUserById : Profile pic :  D:\WORK\UniSpheres\backend\src\uploads\profile\1763216652639-202594913-8bd1afd8b7758fb038c67327e81a24bc.jpg
+2025-11-15 18:06:45: controller.gerUserById : Profile pic :  http://localhost:8000/uploads/profile/1763216652639-202594913-8bd1afd8b7758fb038c67327e81a24bc.jpg
+2025-11-15 18:06:45: Service.gerUserById : Profile pic :  D:\WORK\UniSpheres\backend\src\uploads\profile\1763216652639-202594913-8bd1afd8b7758fb038c67327e81a24bc.jpg
+2025-11-15 18:06:45: controller.gerUserById : Profile pic :  http://localhost:8000/uploads/profile/1763216652639-202594913-8bd1afd8b7758fb038c67327e81a24bc.jpg
+2025-11-15 19:02:25: Listes user by role:  [
+2025-11-15 19:02:25:   {
+2025-11-15 19:02:25:     id_user: 35,
+2025-11-15 19:02:25:     class_id: null,
+2025-11-15 19:02:25:     matricule: '4567',
+2025-11-15 19:02:25:     name: 'Alexia',
+2025-11-15 19:02:25:     lastname: 'VALERIA',
+2025-11-15 19:02:25:     email: 'alexia@gmail.com',
+2025-11-15 19:02:25:     profile_pic: null,
+2025-11-15 19:02:25:     password_hash: '$2b$10$HNyS72kn43hwVQrdin7Te.I3Vq2bxobHApd1KsFPWSYKU9fZUpIe2',
+2025-11-15 19:02:25:     role: 'teacher',
+2025-11-15 19:02:25:     is_active: 0,
+2025-11-15 19:02:25:     created_at: 2025-11-04T08:18:39.000Z,
+2025-11-15 19:02:25:     updated_at: 2025-11-04T08:18:39.000Z,
+2025-11-15 19:02:25:     class_name: null,
+2025-11-15 19:02:25:     filiere_name: null,
+2025-11-15 19:02:25:     parcours_name: null,
+2025-11-15 19:02:25:     year_value: null
+2025-11-15 19:02:25:   },
+2025-11-15 19:02:25:   {
+2025-11-15 19:02:25:     id_user: 3,
+2025-11-15 19:02:25:     class_id: null,
+2025-11-15 19:02:25:     matricule: '4485',
+2025-11-15 19:02:25:     name: 'Anil Dama',
+2025-11-15 19:02:25:     lastname: 'TINA',
+2025-11-15 19:02:25:     email: 'anil@gmail.com',
+2025-11-15 19:02:25:     profile_pic: null,
+2025-11-15 19:02:25:     password_hash: '$2b$10$HZ9FVrLKmOJaFd46ZaBh1.lGGgFRMdnW3SZO7y/JNznNkUWgKXELW',
+2025-11-15 19:02:25:     role: 'teacher',
+2025-11-15 19:02:25:     is_active: 1,
+2025-11-15 19:02:25:     created_at: 2025-11-03T18:09:41.000Z,
+2025-11-15 19:02:25:     updated_at: 2025-11-03T18:36:50.000Z,
+2025-11-15 19:02:25:     class_name: null,
+2025-11-15 19:02:25:     filiere_name: null,
+2025-11-15 19:02:25:     parcours_name: null,
+2025-11-15 19:02:25:     year_value: null
+2025-11-15 19:02:25:   }
+2025-11-15 19:02:25: ]
+2025-11-16 07:43:30: [dotenv@17.2.2] injecting env (7) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+2025-11-16 07:43:31: [dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 version env with Radar: https://dotenvx.com/radar
+2025-11-16 07:43:31: ✅ Server running on port 8000
+2025-11-16 07:43:31: ✅ Connexion à la BDD réussie.

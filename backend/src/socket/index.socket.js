@@ -5,11 +5,33 @@ const messageSockets = require("./message.socket");
 let io;
 
 const initSockets = (server) => {
+  // Origines autorisées
+  const allowedOrigins = [
+    "http://localhost",
+    "http://localhost:80",
+    "http://localhost:5173",
+    "http://127.0.0.1",
+    "http://127.0.0.1:80",
+    "http://127.0.0.1:5173",
+  ];
+
   io = new Server(server, {
     cors: {
-      origin: "http://localhost:5173",
-      methods: ["GET", "POST"],
+      origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+
+        // Autoriser toutes les IPs du réseau local
+        const allowedPatterns = [
+          /^http:\/\/localhost(:\d+)?$/,
+          /^http:\/\/192\.168\.\d{1,3}\.\d{1,3}(:\d+)?$/,
+          /^http:\/\/10\.\d{1,3}\.\d{1,3}\.\d{1,3}(:\d+)?$/,
+        ];
+
+        const isAllowed = allowedPatterns.some((p) => p.test(origin));
+        callback(null, isAllowed);
+      },
       credentials: true,
+      methods: ["GET", "POST"],
     },
   });
 

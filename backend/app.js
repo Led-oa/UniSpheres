@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
@@ -15,13 +14,46 @@ dotenv.config();
 const app = express();
 
 // Middleware CORS
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+// Configuration CORS pour réseau local
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Autoriser les requêtes sans origine (apps mobiles, Postman)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    // Liste des patterns autorisés
+    const allowedPatterns = [
+      /^http:\/\/localhost(:\d+)?$/, // localhost
+      /^http:\/\/127\.0\.0\.1(:\d+)?$/, // 127.0.0.1
+      /^http:\/\/192\.168\.\d{1,3}\.\d{1,3}(:\d+)?$/, // 192.168.x.x
+      /^http:\/\/10\.\d{1,3}\.\d{1,3}\.\d{1,3}(:\d+)?$/, // 10.x.x.x
+      /^http:\/\/172\.(1[6-9]|2[0-9]|3[0-1])\.\d{1,3}\.\d{1,3}(:\d+)?$/, // 172.16-31.x.x
+    ];
+
+    // Vérifier si l'origine correspond à un pattern
+    const isAllowed = allowedPatterns.some((pattern) => pattern.test(origin));
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.warn(`⚠️  Origine CORS non autorisée: ${origin}`);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Accept",
+    "Origin",
+  ],
+};
+
+// Appliquer CORS
+app.use(cors(corsOptions));
 
 app.use(express.json());
 // Middlewares Body-Parser

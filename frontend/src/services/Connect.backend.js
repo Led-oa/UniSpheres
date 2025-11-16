@@ -1,11 +1,13 @@
 import axios from "axios";
 
 // URL de base du backend
-const API_BASE_URL = "http://localhost:8000/api"; // adapter si nécessaire
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? "http://localhost:8000/api" : "http://localhost/api");
 
 // Création d'une instance Axios
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: `${API_BASE_URL}`,
   timeout: 10000, // 10s
   headers: {
     "Content-Type": "application/json",
