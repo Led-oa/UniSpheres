@@ -372,3 +372,339 @@
 2025-11-16 07:43:31: [dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 version env with Radar: https://dotenvx.com/radar
 2025-11-16 07:43:31: ✅ Server running on port 8000
 2025-11-16 07:43:31: ✅ Connexion à la BDD réussie.
+2025-11-16 07:44:15: Listes user by role:  [
+2025-11-16 07:44:15:   {
+2025-11-16 07:44:15:     id_user: 34,
+2025-11-16 07:44:15:     class_id: 22,
+2025-11-16 07:44:15:     matricule: '1234',
+2025-11-16 07:44:15:     name: 'Jacob',
+2025-11-16 07:44:15:     lastname: 'RAKOTO',
+2025-11-16 07:44:15:     email: 'jacob@gmail.com',
+2025-11-16 07:44:15:     profile_pic: null,
+2025-11-16 07:44:15:     password_hash: '$2b$10$NjsIn3pWBJB8c.Ct8tmpVe1V6mty7z18KY26VuDFVijW4Z7cFWuWy',
+2025-11-16 07:44:15:     role: 'student',
+2025-11-16 07:44:15:     is_active: 1,
+2025-11-16 07:44:15:     created_at: 2025-11-04T08:17:46.000Z,
+2025-11-16 07:44:15:     updated_at: 2025-11-04T08:26:47.000Z,
+2025-11-16 07:44:15:     class_name: 'DROIT L1 A',
+2025-11-16 07:44:15:     filiere_name: 'Droit',
+2025-11-16 07:44:15:     parcours_name: 'Tronc Commun',
+2025-11-16 07:44:15:     year_value: 'Licence 1'
+2025-11-16 07:44:15:   },
+2025-11-16 07:44:15:   {
+2025-11-16 07:44:15:     id_user: 2,
+2025-11-16 07:44:15:     class_id: 5,
+2025-11-16 07:44:15:     matricule: '5805',
+2025-11-16 07:44:15:     name: 'John Francio',
+2025-11-16 07:44:15:     lastname: 'RABEMAHAVORY',
+2025-11-16 07:44:15:     email: 'dev.johnfrancio@gmail.com',
+2025-11-16 07:44:15:     profile_pic: 'http://localhost:8000/uploads/profile/1762196621500-191274844-d_unispheres_organigramme.png',
+2025-11-16 07:44:15:     password_hash: '$2b$10$AWeg5P2O4xwrKNT3eMSSmOR/BL0t6Od8q8WC/NyF8hYcZDgVev2NG',
+2025-11-16 07:44:15:     role: 'student',
+2025-11-16 07:44:15:     is_active: 1,
+2025-11-16 07:44:15:     created_at: 2025-11-03T18:02:55.000Z,
+2025-11-16 07:44:15:     updated_at: 2025-11-03T19:03:41.000Z,
+2025-11-16 07:44:15:     class_name: 'INFO L3 DAI',
+2025-11-16 07:44:15:     filiere_name: 'Informatiques',
+2025-11-16 07:44:15:     parcours_name: 'Développement Application Informatique',
+2025-11-16 07:44:15:     year_value: 'Licence 3'
+2025-11-16 07:44:15:   }
+2025-11-16 07:44:15: ]
+2025-11-16 07:44:31: Controller ME : {
+2025-11-16 07:44:31:   id_user: 1,
+2025-11-16 07:44:31:   class_id: null,
+2025-11-16 07:44:31:   role: 'administrator',
+2025-11-16 07:44:31:   email: 'ledoagael@gmail.com',
+2025-11-16 07:44:31:   is_active: 1,
+2025-11-16 07:44:31:   iat: 1763268246,
+2025-11-16 07:44:31:   exp: 1763354646
+2025-11-16 07:44:31: }
+2025-11-16 07:44:31: Controller ME : {
+2025-11-16 07:44:31:   id_user: 1,
+2025-11-16 07:44:31:   class_id: null,
+2025-11-16 07:44:31:   role: 'administrator',
+2025-11-16 07:44:31:   email: 'ledoagael@gmail.com',
+2025-11-16 07:44:31:   is_active: 1,
+2025-11-16 07:44:31:   iat: 1763268246,
+2025-11-16 07:44:31:   exp: 1763354646
+2025-11-16 07:44:31: }
+2025-11-16 07:44:39: Listes user by role:  [
+2025-11-16 07:44:39:   {
+2025-11-16 07:44:39:     id_user: 35,
+2025-11-16 07:44:39:     class_id: null,
+2025-11-16 07:44:39:     matricule: '4567',
+2025-11-16 07:44:39:     name: 'Alexia',
+2025-11-16 07:44:39:     lastname: 'VALERIA',
+2025-11-16 07:44:39:     email: 'alexia@gmail.com',
+2025-11-16 07:44:39:     profile_pic: null,
+2025-11-16 07:44:39:     password_hash: '$2b$10$HNyS72kn43hwVQrdin7Te.I3Vq2bxobHApd1KsFPWSYKU9fZUpIe2',
+2025-11-16 07:44:39:     role: 'teacher',
+2025-11-16 07:44:39:     is_active: 0,
+2025-11-16 07:44:39:     created_at: 2025-11-04T08:18:39.000Z,
+2025-11-16 07:44:39:     updated_at: 2025-11-04T08:18:39.000Z,
+2025-11-16 07:44:39:     class_name: null,
+2025-11-16 07:44:39:     filiere_name: null,
+2025-11-16 07:44:39:     parcours_name: null,
+2025-11-16 07:44:39:     year_value: null
+2025-11-16 07:44:39:   },
+2025-11-16 07:44:39:   {
+2025-11-16 07:44:39:     id_user: 3,
+2025-11-16 07:44:39:     class_id: null,
+2025-11-16 07:44:39:     matricule: '4485',
+2025-11-16 07:44:39:     name: 'Anil Dama',
+2025-11-16 07:44:39:     lastname: 'TINA',
+2025-11-16 07:44:39:     email: 'anil@gmail.com',
+2025-11-16 07:44:39:     profile_pic: null,
+2025-11-16 07:44:39:     password_hash: '$2b$10$HZ9FVrLKmOJaFd46ZaBh1.lGGgFRMdnW3SZO7y/JNznNkUWgKXELW',
+2025-11-16 07:44:39:     role: 'teacher',
+2025-11-16 07:44:39:     is_active: 1,
+2025-11-16 07:44:39:     created_at: 2025-11-03T18:09:41.000Z,
+2025-11-16 07:44:39:     updated_at: 2025-11-03T18:36:50.000Z,
+2025-11-16 07:44:39:     class_name: null,
+2025-11-16 07:44:39:     filiere_name: null,
+2025-11-16 07:44:39:     parcours_name: null,
+2025-11-16 07:44:39:     year_value: null
+2025-11-16 07:44:39:   }
+2025-11-16 07:44:39: ]
+2025-11-16 07:48:18: Service classe :  {
+2025-11-16 07:48:18:   id_class: 5,
+2025-11-16 07:48:18:   name: 'INFO L3 DAI',
+2025-11-16 07:48:18:   filiere_id: 1,
+2025-11-16 07:48:18:   parcours_id: 1,
+2025-11-16 07:48:18:   year_id: 3,
+2025-11-16 07:48:18:   created_at: 2025-11-03T17:15:15.000Z,
+2025-11-16 07:48:18:   updated_at: 2025-11-03T17:15:15.000Z,
+2025-11-16 07:48:18:   filiere_name: 'Informatiques',
+2025-11-16 07:48:18:   parcours_name: 'Développement Application Informatique',
+2025-11-16 07:48:18:   year_value: 'Licence 3'
+2025-11-16 07:48:18: }
+2025-11-16 07:48:20: CONTROLLER Annonce : limit :  9
+2025-11-16 07:48:20: CONTROLLER Annonce : offset :  0
+2025-11-16 07:48:20: SERVICE Annonce : limit :  9
+2025-11-16 07:48:20: SERVICE Annonce : offset :  0
+2025-11-16 07:48:20: MODEL Annonce : limit :  9
+2025-11-16 07:48:20: MODEL Annonce : offset :  0
+2025-11-16 07:48:20: Total Annonces :  1
+2025-11-16 07:48:20: Annonces listes :  [
+2025-11-16 07:48:20:   {
+2025-11-16 07:48:20:     id_annonce: 1,
+2025-11-16 07:48:20:     title: 'Sortie De Promotion',
+2025-11-16 07:48:20:     content: "La sortie de promotion de nos étudiants se fera le 08 Décembre 2025. Venez nombreux assistez à cette évènements de l'ASJA",
+2025-11-16 07:48:20:     posted_by: 1,
+2025-11-16 07:48:20:     target_class_id: null,
+2025-11-16 07:48:20:     target_filiere_id: null,
+2025-11-16 07:48:20:     target_year_id: null,
+2025-11-16 07:48:20:     type: 'evenement',
+2025-11-16 07:48:20:     is_visible: 1,
+2025-11-16 07:48:20:     priority: 'medium',
+2025-11-16 07:48:20:     deadline: 2025-12-07T21:00:00.000Z,
+2025-11-16 07:48:20:     created_at: 2025-11-03T18:42:34.000Z,
+2025-11-16 07:48:20:     updated_at: 2025-11-03T18:42:34.000Z,
+2025-11-16 07:48:20:     posted_by_name: 'Gaël',
+2025-11-16 07:48:20:     posted_by_lastname: 'LEDOA',
+2025-11-16 07:48:20:     posted_by_email: 'ledoagael@gmail.com',
+2025-11-16 07:48:20:     profile_pic: 'D:\\WORK\\UniSpheres\\backend\\src\\uploads\\profile\\1763216652639-202594913-8bd1afd8b7758fb038c67327e81a24bc.jpg',
+2025-11-16 07:48:20:     class_name: null,
+2025-11-16 07:48:20:     filiere_name: null,
+2025-11-16 07:48:20:     year_value: null,
+2025-11-16 07:48:20:     files: []
+2025-11-16 07:48:20:   }
+2025-11-16 07:48:20: ]
+2025-11-16 07:48:20: total count :  1
+2025-11-16 07:48:22: Service classe :  {
+2025-11-16 07:48:22:   id_class: 5,
+2025-11-16 07:48:22:   name: 'INFO L3 DAI',
+2025-11-16 07:48:22:   filiere_id: 1,
+2025-11-16 07:48:22:   parcours_id: 1,
+2025-11-16 07:48:22:   year_id: 3,
+2025-11-16 07:48:22:   created_at: 2025-11-03T17:15:15.000Z,
+2025-11-16 07:48:22:   updated_at: 2025-11-03T17:15:15.000Z,
+2025-11-16 07:48:22:   filiere_name: 'Informatiques',
+2025-11-16 07:48:22:   parcours_name: 'Développement Application Informatique',
+2025-11-16 07:48:22:   year_value: 'Licence 3'
+2025-11-16 07:48:22: }
+2025-11-16 07:48:22: Classe Id :  5
+2025-11-16 07:48:22: Classe Id :  5
+2025-11-16 07:48:22: Service classe class id :  5
+2025-11-16 07:48:22: Service classe (cleaned profile_pic only):  [
+2025-11-16 07:48:22:   {
+2025-11-16 07:48:22:     id_user: 3,
+2025-11-16 07:48:22:     class_id: null,
+2025-11-16 07:48:22:     matricule: '4485',
+2025-11-16 07:48:22:     name: 'Anil Dama',
+2025-11-16 07:48:22:     lastname: 'TINA',
+2025-11-16 07:48:22:     email: 'anil@gmail.com',
+2025-11-16 07:48:22:     profile_pic: null,
+2025-11-16 07:48:22:     password_hash: '$2b$10$HZ9FVrLKmOJaFd46ZaBh1.lGGgFRMdnW3SZO7y/JNznNkUWgKXELW',
+2025-11-16 07:48:22:     role: 'teacher',
+2025-11-16 07:48:22:     is_active: 1,
+2025-11-16 07:48:22:     created_at: 2025-11-03T18:09:41.000Z,
+2025-11-16 07:48:22:     updated_at: 2025-11-03T18:36:50.000Z
+2025-11-16 07:48:22:   }
+2025-11-16 07:48:22: ]
+2025-11-16 07:48:25: [Model Convo list] rows ::  [
+2025-11-16 07:48:25:   {
+2025-11-16 07:48:25:     id_conversation: 3,
+2025-11-16 07:48:25:     title: null,
+2025-11-16 07:48:25:     type: 'private',
+2025-11-16 07:48:25:     created_at: 2025-11-04T08:27:52.000Z,
+2025-11-16 07:48:25:     last_message: 'Bonjour, Jacob',
+2025-11-16 07:48:25:     display_name: 'Jacob RAKOTO'
+2025-11-16 07:48:25:   },
+2025-11-16 07:48:25:   {
+2025-11-16 07:48:25:     id_conversation: 4,
+2025-11-16 07:48:25:     title: "Groupe D'etude",
+2025-11-16 07:48:25:     type: 'group',
+2025-11-16 07:48:25:     created_at: 2025-11-04T08:29:25.000Z,
+2025-11-16 07:48:25:     last_message: 'Bonjour.',
+2025-11-16 07:48:25:     display_name: "Groupe D'etude"
+2025-11-16 07:48:25:   }
+2025-11-16 07:48:25: ]
+2025-11-16 07:48:25: [Service convo list] data :  [
+2025-11-16 07:48:25:   {
+2025-11-16 07:48:25:     id_conversation: 3,
+2025-11-16 07:48:25:     title: null,
+2025-11-16 07:48:25:     type: 'private',
+2025-11-16 07:48:25:     created_at: 2025-11-04T08:27:52.000Z,
+2025-11-16 07:48:25:     last_message: 'Bonjour, Jacob',
+2025-11-16 07:48:25:     display_name: 'Jacob RAKOTO'
+2025-11-16 07:48:25:   },
+2025-11-16 07:48:25:   {
+2025-11-16 07:48:25:     id_conversation: 4,
+2025-11-16 07:48:25:     title: "Groupe D'etude",
+2025-11-16 07:48:25:     type: 'group',
+2025-11-16 07:48:25:     created_at: 2025-11-04T08:29:25.000Z,
+2025-11-16 07:48:25:     last_message: 'Bonjour.',
+2025-11-16 07:48:25:     display_name: "Groupe D'etude"
+2025-11-16 07:48:25:   }
+2025-11-16 07:48:25: ]
+2025-11-16 07:48:25: [Controller] list convo data :  [
+2025-11-16 07:48:25:   {
+2025-11-16 07:48:25:     id_conversation: 3,
+2025-11-16 07:48:25:     title: null,
+2025-11-16 07:48:25:     type: 'private',
+2025-11-16 07:48:25:     created_at: 2025-11-04T08:27:52.000Z,
+2025-11-16 07:48:25:     last_message: 'Bonjour, Jacob',
+2025-11-16 07:48:25:     display_name: 'Jacob RAKOTO'
+2025-11-16 07:48:25:   },
+2025-11-16 07:48:25:   {
+2025-11-16 07:48:25:     id_conversation: 4,
+2025-11-16 07:48:25:     title: "Groupe D'etude",
+2025-11-16 07:48:25:     type: 'group',
+2025-11-16 07:48:25:     created_at: 2025-11-04T08:29:25.000Z,
+2025-11-16 07:48:25:     last_message: 'Bonjour.',
+2025-11-16 07:48:25:     display_name: "Groupe D'etude"
+2025-11-16 07:48:25:   }
+2025-11-16 07:48:25: ]
+2025-11-16 07:48:25: 🔌 Client connected: 4nP5prtXrR9aSSQoAAAB
+2025-11-16 07:48:25: 🔌 Conversation socket initialized for 4nP5prtXrR9aSSQoAAAB
+2025-11-16 07:48:25: 🟢 Message socket connected: 4nP5prtXrR9aSSQoAAAB
+2025-11-16 07:48:27: Convo id :  4
+2025-11-16 07:48:27: User id :  2
+2025-11-16 07:48:27: 🔌 Client connected: 8ZK8iySDa26gvHnYAAAD
+2025-11-16 07:48:27: 🔌 Conversation socket initialized for 8ZK8iySDa26gvHnYAAAD
+2025-11-16 07:48:27: 🟢 Message socket connected: 8ZK8iySDa26gvHnYAAAD
+2025-11-16 07:48:27: Socket 8ZK8iySDa26gvHnYAAAD joined conversation 4
+2025-11-16 07:48:27: Socket 8ZK8iySDa26gvHnYAAAD joined conversation_4
+2025-11-16 07:48:30: sendMessage event received: { conversationId: 4, hasContent: true, hasFile: false, senderId: 2 }
+2025-11-16 07:48:30: Message created in DB: 6
+2025-11-16 07:48:30: Message broadcasted to conversation: 4
+2025-11-16 08:16:37: Socket 8ZK8iySDa26gvHnYAAAD left conversation 4
+2025-11-16 08:16:37: Socket 8ZK8iySDa26gvHnYAAAD left conversation_4
+2025-11-16 08:16:37: CONTROLLER Annonce : limit :  9
+2025-11-16 08:16:37: CONTROLLER Annonce : offset :  0
+2025-11-16 08:16:37: SERVICE Annonce : limit :  9
+2025-11-16 08:16:37: SERVICE Annonce : offset :  0
+2025-11-16 08:16:37: MODEL Annonce : limit :  9
+2025-11-16 08:16:37: MODEL Annonce : offset :  0
+2025-11-16 08:16:37: Total Annonces :  1
+2025-11-16 08:16:37: Annonces listes :  [
+2025-11-16 08:16:37:   {
+2025-11-16 08:16:37:     id_annonce: 1,
+2025-11-16 08:16:37:     title: 'Sortie De Promotion',
+2025-11-16 08:16:37:     content: "La sortie de promotion de nos étudiants se fera le 08 Décembre 2025. Venez nombreux assistez à cette évènements de l'ASJA",
+2025-11-16 08:16:37:     posted_by: 1,
+2025-11-16 08:16:37:     target_class_id: null,
+2025-11-16 08:16:37:     target_filiere_id: null,
+2025-11-16 08:16:37:     target_year_id: null,
+2025-11-16 08:16:37:     type: 'evenement',
+2025-11-16 08:16:37:     is_visible: 1,
+2025-11-16 08:16:37:     priority: 'medium',
+2025-11-16 08:16:37:     deadline: 2025-12-07T21:00:00.000Z,
+2025-11-16 08:16:37:     created_at: 2025-11-03T18:42:34.000Z,
+2025-11-16 08:16:37:     updated_at: 2025-11-03T18:42:34.000Z,
+2025-11-16 08:16:37:     posted_by_name: 'Gaël',
+2025-11-16 08:16:37:     posted_by_lastname: 'LEDOA',
+2025-11-16 08:16:37:     posted_by_email: 'ledoagael@gmail.com',
+2025-11-16 08:16:37:     profile_pic: 'D:\\WORK\\UniSpheres\\backend\\src\\uploads\\profile\\1763216652639-202594913-8bd1afd8b7758fb038c67327e81a24bc.jpg',
+2025-11-16 08:16:37:     class_name: null,
+2025-11-16 08:16:37:     filiere_name: null,
+2025-11-16 08:16:37:     year_value: null,
+2025-11-16 08:16:37:     files: []
+2025-11-16 08:16:37:   }
+2025-11-16 08:16:37: ]
+2025-11-16 08:16:37: total count :  1
+2025-11-16 08:16:39: Service classe :  {
+2025-11-16 08:16:39:   id_class: 5,
+2025-11-16 08:16:39:   name: 'INFO L3 DAI',
+2025-11-16 08:16:39:   filiere_id: 1,
+2025-11-16 08:16:39:   parcours_id: 1,
+2025-11-16 08:16:39:   year_id: 3,
+2025-11-16 08:16:39:   created_at: 2025-11-03T17:15:15.000Z,
+2025-11-16 08:16:39:   updated_at: 2025-11-03T17:15:15.000Z,
+2025-11-16 08:16:39:   filiere_name: 'Informatiques',
+2025-11-16 08:16:39:   parcours_name: 'Développement Application Informatique',
+2025-11-16 08:16:39:   year_value: 'Licence 3'
+2025-11-16 08:16:39: }
+2025-11-16 08:16:39: Classe Id :  5
+2025-11-16 08:16:39: Classe Id :  5
+2025-11-16 08:16:39: Service classe class id :  5
+2025-11-16 08:16:39: Service classe (cleaned profile_pic only):  [
+2025-11-16 08:16:39:   {
+2025-11-16 08:16:39:     id_user: 3,
+2025-11-16 08:16:39:     class_id: null,
+2025-11-16 08:16:39:     matricule: '4485',
+2025-11-16 08:16:39:     name: 'Anil Dama',
+2025-11-16 08:16:39:     lastname: 'TINA',
+2025-11-16 08:16:39:     email: 'anil@gmail.com',
+2025-11-16 08:16:39:     profile_pic: null,
+2025-11-16 08:16:39:     password_hash: '$2b$10$HZ9FVrLKmOJaFd46ZaBh1.lGGgFRMdnW3SZO7y/JNznNkUWgKXELW',
+2025-11-16 08:16:39:     role: 'teacher',
+2025-11-16 08:16:39:     is_active: 1,
+2025-11-16 08:16:39:     created_at: 2025-11-03T18:09:41.000Z,
+2025-11-16 08:16:39:     updated_at: 2025-11-03T18:36:50.000Z
+2025-11-16 08:16:39:   }
+2025-11-16 08:16:39: ]
+2025-11-16 08:16:43: Controller course for class :  [
+2025-11-16 08:16:43:   {
+2025-11-16 08:16:43:     id_course: 102,
+2025-11-16 08:16:43:     title: 'Programmation Dynamique',
+2025-11-16 08:16:43:     content: 'Programmation Dynamique',
+2025-11-16 08:16:43:     duration: 45,
+2025-11-16 08:16:43:     credits: 8,
+2025-11-16 08:16:43:     teach_by: 3,
+2025-11-16 08:16:43:     class_id: 5,
+2025-11-16 08:16:43:     created_at: 2025-11-04T08:20:14.000Z,
+2025-11-16 08:16:43:     updated_at: 2025-11-04T08:20:14.000Z,
+2025-11-16 08:16:43:     class_name: 'INFO L3 DAI',
+2025-11-16 08:16:43:     filiere_name: 'Informatiques',
+2025-11-16 08:16:43:     parcours_name: 'Développement Application Informatique',
+2025-11-16 08:16:43:     year_name: 'Licence 3',
+2025-11-16 08:16:43:     teacher_id: 3,
+2025-11-16 08:16:43:     teacher_name: 'Anil Dama',
+2025-11-16 08:16:43:     teacher_lastname: 'TINA',
+2025-11-16 08:16:43:     teacher_email: 'anil@gmail.com'
+2025-11-16 08:16:43:   }
+2025-11-16 08:16:43: ]
+2025-11-16 10:54:02: 🔴 Message socket disconnected: 4nP5prtXrR9aSSQoAAAB
+2025-11-16 10:54:02: 🔌 Client disconnected: 4nP5prtXrR9aSSQoAAAB
+2025-11-16 10:54:02: 🔴 Message socket disconnected: 8ZK8iySDa26gvHnYAAAD
+2025-11-16 10:54:02: 🔌 Client disconnected: 8ZK8iySDa26gvHnYAAAD
+2025-11-16 14:06:20: [dotenv@17.2.2] injecting env (7) from .env -- tip: 📡 auto-backup env with Radar: https://dotenvx.com/radar
+2025-11-16 14:06:20: [dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 observe env with Radar: https://dotenvx.com/radar
+2025-11-16 14:06:20: ✅ Server running on port 8000
+2025-11-16 14:06:20: ✅ Connexion à la BDD réussie.
+2025-11-16 14:13:17: [dotenv@17.2.2] injecting env (7) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+2025-11-16 14:13:17: [dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+2025-11-16 14:13:17: ✅ Server running on port 8000
+2025-11-16 14:13:18: ✅ Connexion à la BDD réussie.
